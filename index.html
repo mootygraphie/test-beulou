@@ -189,48 +189,40 @@ select.in{appearance:none}
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
 const CFG={apiKey:"AIzaSyB5Fozxa9grXSkPTwCZwBaWtWsD2dNfj6c",authDomain:"beulou-test.firebaseapp.com",projectId:"beulou-test",appId:"1:789329554038:web:7ed8ccdb6eae677f59cd57"};
+const SALT="beulou-test-v1:",HASH="1d265c88f523d9e63f2a2df03ccf8b9a90a470c920d8602ac5ffa815fb82302e"; // empreinte du code admin
 const RN=['Manche 1','Manche 2','Manche 3','Finale'],BT=30,BR=60;
 const ADMIN=location.hash==='#admin';
 if(ADMIN)document.body.classList.add('adm');
 const app=document.getElementById('app');
 const BRAND=big=>`<div class="brand ${big?'big':''}"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<h1 class=ttl>BEULOU TEST</h1>'"></div>`;
-/* connexion admin : compte Firebase Auth (email + mot de passe) */
-async function adminLogin(au){
- await new Promise(r=>{const u=au.onAuthStateChanged(()=>{u();r()})});
- if(au.currentUser)return;
- return new Promise(res=>{const o=document.createElement('div');o.className='ov';
-  o.innerHTML='<div class="md"><h2>Accès admin</h2><label>Email</label><input class="in" type="email" id="em" autocomplete="username"><label style="margin-top:10px">Mot de passe</label><input class="in" type="password" id="pin" autocomplete="current-password"><p class="er" id="pe"></p><button class="btn blk" id="pb">Entrer</button></div>';
-  document.body.appendChild(o);const em=o.querySelector('#em'),pin=o.querySelector('#pin'),pe=o.querySelector('#pe'),md=o.querySelector('.md');
-  const go=async()=>{pe.textContent='';try{await au.signInWithEmailAndPassword(em.value.trim(),pin.value);o.remove();res()}
-   catch(e){pe.textContent='Identifiants incorrects';pin.value='';md.classList.remove('sh');void md.offsetWidth;md.classList.add('sh')}};
-  o.querySelector('#pb').onclick=go;[em,pin].forEach(x=>x.onkeydown=e=>{if(e.key==='Enter')go()});setTimeout(()=>em.focus(),50)})}
+function askPin(){return new Promise(res=>{const o=document.createElement('div');o.className='ov';
+ o.innerHTML='<div class="md"><h2>Accès admin</h2><input class="in" type="password" id="pin" placeholder="Code" autocomplete="current-password"><p class="er" id="pe"></p><button class="btn blk" id="pb">Entrer</button></div>';
+ document.body.appendChild(o);const pin=o.querySelector('#pin'),pe=o.querySelector('#pe'),md=o.querySelector('.md');
+ const go=async()=>{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(SALT+pin.value));
+  const x=[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
+  if(x===HASH){o.remove();res(true)}else{pe.textContent='Code incorrect';pin.value='';md.classList.remove('sh');void md.offsetWidth;md.classList.add('sh')}};
+ o.querySelector('#pb').onclick=go;pin.onkeydown=e=>{if(e.key==='Enter')go()};setTimeout(()=>pin.focus(),50)})}
 if(!CFG.apiKey){app.innerHTML='<div class="c"><h2>Config Firebase manquante</h2></div>'}
 else (async()=>{
+if(ADMIN){app.innerHTML=BRAND(true);if(!await askPin())return;app.innerHTML=BRAND(true)}
 firebase.initializeApp(CFG);
-if(ADMIN){app.innerHTML=BRAND(true);await adminLogin(firebase.auth());app.innerHTML=BRAND(true)}
 const fs=firebase.firestore(),FV=firebase.firestore.FieldValue;
-const sdoc=()=>fs.collection('bt_sessions').doc(sid),tcol=()=>sdoc().collection('teams'),pdoc=()=>sdoc().collection('private').doc('cfg');
+const sdoc=()=>fs.collection('bt_sessions').doc(sid),tcol=()=>sdoc().collection('teams');
 const Q=new URLSearchParams(location.search);
-let sessions=[],sready=false,sid=null,view='list',g=null,gl=false,teams=[],tready=false,unG,unT,unP,pv=null,pl=true,cfg=null,cfgI=null,tab='prep',draft={},mk={},gk={},exp={},me=null;
+let sessions=[],sready=false,sid=null,view='list',g=null,gl=false,teams=[],tready=false,unG,unT,cfg=null,cfgI=null,tab='prep',draft={},mk={},gk={},exp={},me=null;
 const popped=new Set(),cheered=new Set();
-/* public = ce que voient les équipes : ni réponses attendues, ni noms secrets. privé = config complète (admin seul). */
-const pubR=R=>Object.fromEntries(Object.entries(R||{}).map(([r,a])=>[r,(a||[]).map(x=>({n:x.sx?'':x.n||'',ea:!!x.ea,et:!!x.et,sx:!!x.sx}))]));
-const pubI=I=>Object.fromEntries(Object.entries(I||{}).filter(([,x])=>x).map(([r,x])=>[r,{sx:!!x.sx,n:x.sx?'':x.n||''}]));
 const filled=R=>Object.values(R||{}).some(a=>(a||[]).some(x=>(x.q||[]).some(q=>q.a||q.t)));
 const clone=o=>JSON.parse(JSON.stringify(o||{}));
-async function saveCfg(R,I){const bt=fs.batch();bt.set(pdoc(),{rounds:R,rinfo:I});bt.update(sdoc(),{rounds:pubR(R),rinfo:pubI(I),ready:filled(R)});await bt.commit()}
 const timers={};
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
 const sum=a=>a.reduce((x,y)=>x+y,0);
 const ERR=e=>{app.innerHTML='<div class="c"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'};
 const blank=()=>({n:'',ea:true,et:true,sx:false,q:[0,1,2,3,4,5].map(()=>({a:'',t:''}))});
-const src=()=>ADMIN&&pv?pv:g;
-const th=r=>(src().rounds?.[r]||[]).map(x=>{const q=[...(x.q||[])];while(q.length<6)q.push({a:'',t:''});return{n:x.n||'',ea:!!x.ea,et:!!x.et,sx:!!x.sx,q:q.slice(0,6),pts:x.ea&&x.et?1:2}});
-const ri=r=>src().rinfo?.[r]||{};
+const th=r=>(g.rounds?.[r]||[]).map(x=>{const q=[...(x.q||[])];while(q.length<6)q.push({a:'',t:''});return{n:x.n||'',ea:!!x.ea,et:!!x.et,sx:!!x.sx,q:q.slice(0,6),pts:x.ea&&x.et?1:2}});
+const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
 const isSec=k=>k[0]==='R'?!!ri(+k.slice(1)).sx:!!th(+k.split('_')[0])[+k.split('_')[1]]?.sx;
 const bonus=(t,r)=>Object.entries(t.gok||{}).reduce((s,[k,v])=>{if(!v||!isSec(k))return s;const R=k[0]==='R',rr=R?+k.slice(1):+k.split('_')[0];return(r!=null&&rr!==r)?s:s+(R?BR:BT)},0);
@@ -250,12 +242,10 @@ const GC=(t,sub)=>`<div class="gm"><h2>${t}</h2>${sub?`<p>${sub}</p>`:''}</div>`
 const gset=o=>sdoc().set(o,{merge:true});
 
 function bind(id){
- unG&&unG();unT&&unT();unP&&unP();unP=null;sid=id||null;g=null;gl=false;teams=[];tready=false;pv=null;pl=!ADMIN;cfg=null;cfgI=null;mk={};gk={};me=null;
+ unG&&unG();unT&&unT();sid=id||null;g=null;gl=false;teams=[];tready=false;cfg=null;cfgI=null;mk={};gk={};me=null;
  if(!sid)return;try{me=localStorage.getItem('bt_me_'+sid)}catch(x){}
- const init=()=>{if(!g||!pl||cfg)return;const S=pv||g;cfg=clone(S.rounds);cfgI=clone(S.rinfo);
-  if(ADMIN&&!pv)saveCfg(clone(g.rounds),clone(g.rinfo)).catch(ERR)}; // migration : anciennes sessions tout-public
- if(ADMIN)unP=pdoc().onSnapshot(x=>{pv=x.exists?x.data():null;pl=true;init();render()},ERR);
- unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{},rinfo:{},rev:{}},x.data()):null;gl=true;init();render()},ERR);
+ const init=()=>{if(g&&!cfg){cfg=clone(g.rounds);cfgI=clone(g.rinfo)}};
+ unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{},rinfo:{}},x.data()):null;gl=true;init();render()},ERR);
  unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()},ERR);
 }
 if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,...d.data()}));sready=true;render()},ERR);
@@ -266,7 +256,7 @@ function render(){
  const a=document.activeElement,k=a&&a.dataset&&a.dataset.k,p=a&&a.selectionStart;
  let h;
  if(ADMIN){if(view==='sess'&&gl&&!g){view='list';bind(null)}
-  h=view==='list'?alist():(gl&&tready&&pl&&(!g||cfg)?asess():'<div class="c">Chargement...</div>')}
+  h=view==='list'?alist():(gl&&tready&&(!g||cfg)?asess():'<div class="c">Chargement...</div>')}
  else h=team();
  app.innerHTML=h;
  if(!ADMIN)cheer();
@@ -277,17 +267,17 @@ function render(){
 const guessBox=(t,key,label,pts)=>{const k='g|'+key;return`<div class="gs"><div class="gs-l"><span>${label}</span><b>+${pts} pts</b></div><input class="in" data-k="${k}" autocomplete="off" placeholder="Ta proposition..." value="${esc(draft[k]??t.guess?.[key]??'')}"></div>`};
 /* confettis une seule fois par secret trouvé */
 function cheer(){
- const t=g&&teams.find(x=>x.id===me);if(!t||g.rd?.[g.r]!=='validated')return;
- const hit=Object.keys(g.rev||{}).filter(k=>t.gok?.[k]&&isSec(k)&&!cheered.has(sid+k));if(!hit.length)return;
+ const t=g&&teams.find(x=>x.id===me),r=g?.r;if(!t||g.rd?.[r]!=='validated')return;
+ const hit=['R'+r,...th(r).map((_,i)=>`${r}_${i}`)].filter(k=>t.gok?.[k]&&isSec(k)&&!cheered.has(sid+k));if(!hit.length)return;
  hit.forEach(k=>cheered.add(sid+k));
  const C=['#ff0a8c','#00e8ff','#ffe600','#3dffa5','#fff'];
  for(let i=0;i<70;i++){const e=document.createElement('i');e.className='cf';
   e.style.cssText=`left:${Math.random()*100}vw;background:${C[i%5]};--dx:${(Math.random()-.5)*160}px;--rt:${Math.random()*900-450}deg;animation-delay:${Math.random()*.5}s;border-radius:${i%3?'2px':'50%'}`;
   document.body.appendChild(e);setTimeout(()=>e.remove(),2600)}}
 function reveal(t,r){
- const it=[],I=ri(r),V=g.rev||{};
- if(I.sx&&V['R'+r])it.push(['Thème de la manche',V['R'+r],t.gok?.['R'+r],BR]);
- th(r).forEach((x,i)=>{const k=`${r}_${i}`;if(x.sx&&V[k])it.push([`Thème ${i+1}`,V[k],t.gok?.[k],BT])});
+ const it=[],I=ri(r);
+ if(I.sx&&I.n)it.push(['Thème de la manche',I.n,t.gok?.['R'+r],BR]);
+ th(r).forEach((x,i)=>{if(x.sx&&x.n)it.push([`Thème ${i+1}`,x.n,t.gok?.[`${r}_${i}`],BT])});
  if(!it.length)return'';
  return`<div class="rv"><h3>Thèmes secrets</h3>${it.map(([l,n,ok,p])=>`<div><span>${l}<br><b>${esc(n)}</b></span><span class="chip ${ok?'ok':''}">${ok?'Trouvé +'+p:'Raté'}</span></div>`).join('')}</div>`}
 function team(){
@@ -330,10 +320,9 @@ function team(){
 
 /* ============ ADMIN ============ */
 const stat=s=>{const rd=s.rd||{};if(rd[3]==='validated')return['Terminée','cy'];if(Object.keys(rd).length)return['En cours','pk'];
- return (s.ready??filled(s.rounds))?['Prête','ok']:['Brouillon','']};
+ return filled(s.rounds)?['Prête','ok']:['Brouillon','']};
 function alist(){
  let h=BRAND(true)+`<h1 class="a-h1">Sessions</h1><p class="a-sub">Crée, prépare et pilote tes soirées blind test.</p>`;
- const au=firebase.auth().currentUser;if(au)h+=`<p class="a-sub" style="margin:-14px 0 22px">Connecté : ${esc(au.email)} · <button class="btn gh sm" data-a="logout" style="margin:0">Déconnexion</button></p>`;
  h+=`<div class="c"><h2>Nouvelle session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="nn" placeholder="Ex : Soirée équipe Marketing" value="${esc(draft.nn||'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="nt" placeholder="Ex : Beulou Test #4" value="${esc(draft.nt||'')}"></div></div><div style="margin-top:14px"><button class="btn" data-a="newsess">Créer la session</button></div></div>`;
  if(!sessions.length)h+=`<div class="c mut">Aucune session pour le moment.</div>`;
  sessions.forEach(s=>{const[l,c]=stat(s);
@@ -341,8 +330,8 @@ function alist(){
  return h;
 }
 function asess(){
- const tabs=[['prep','Préparer'],...RN.map((n,i)=>[String(i),i<3?'Manche '+(i+1):'Finale']),['teams','Équipes'],['rank','Classement']];
- let h=`<div class="a-head"><div class="a-strip"></div><div class="a-top"><button class="btn gh sm" data-a="back">← Sessions</button><div class="a-tt"><b>${esc(g.name||'')}</b><small>${esc(g.title||'')}</small></div><img src="logo.png" alt=""><button class="btn gh sm" data-a="logout" title="Déconnexion" style="margin:0">⏻</button></div><div class="a-tabs">${tabs.map(([k,n])=>{const st=/^\d$/.test(k)?g.rd?.[k]:'';return`<button class="a-tab ${tab===k?'on':''}" data-a="tab" data-v="${k}">${n}<i class="${st==='validated'?'ok':st==='open'?'live':''}"></i></button>`}).join('')}</div></div>`;
+ const tabs=[['prep','Préparer'],['teams','Équipes'],...RN.map((n,i)=>[String(i),i<3?'Manche '+(i+1):'Finale']),['rank','Classement']];
+ let h=`<div class="a-head"><div class="a-strip"></div><div class="a-top"><button class="btn gh sm" data-a="back">← Sessions</button><div class="a-tt"><b>${esc(g.name||'')}</b><small>${esc(g.title||'')}</small></div><img src="logo.png" alt=""></div><div class="a-tabs">${tabs.map(([k,n])=>{const st=/^\d$/.test(k)?g.rd?.[k]:'';return`<button class="a-tab ${tab===k?'on':''}" data-a="tab" data-v="${k}">${n}<i class="${st==='validated'?'ok':st==='open'?'live':''}"></i></button>`}).join('')}</div></div>`;
  if(tab==='prep')return h+prep();
  if(tab==='teams')return h+teamsTab();
  if(tab==='rank')return h+(rankHtml()||'<div class="c mut">Aucune manche validée pour le moment.</div>');
@@ -429,7 +418,7 @@ async function delTeams(){const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().
 async function resetRound(r){
  const D=FV.delete(),keys=th(r).map((_,i)=>`${r}_${i}`),bt=fs.batch();
  teams.forEach(t=>{const o={['x2.'+r]:D,['guess.R'+r]:D,['gok.R'+r]:D};keys.forEach(k=>{o['answers.'+k]=D;o['done.'+k]=D;o['marks.'+k]=D;o['guess.'+k]=D;o['gok.'+k]=D});bt.update(tcol().doc(t.id),o)});
- const so={['rd.'+r]:D,['rev.R'+r]:D};keys.forEach(k=>{so['th.'+k]=D;so['rev.'+k]=D});if(g.r===r)so.r=-1;bt.update(sdoc(),so);
+ const so={['rd.'+r]:D};keys.forEach(k=>so['th.'+k]=D);if(g.r===r)so.r=-1;bt.update(sdoc(),so);
  await bt.commit();mk={};gk={};
 }
 const later=(key,fn)=>{clearTimeout(timers[key]);timers[key]=setTimeout(fn,500)};
@@ -454,9 +443,7 @@ document.addEventListener('click',async e=>{
  if(a==='done'){const key=`${g.r}_${t}`;await flush(key);exp[key]=false;tcol().doc(me).set({done:{[key]:true}},{merge:true})}
  if(a==='newsess'){const n=(draft.nn||'').trim()||'Session '+new Date().toLocaleDateString('fr-FR');
   const rounds={};RN.forEach((_,i)=>rounds[i]=[blank(),blank(),blank()]);
-  const ref=fs.collection('bt_sessions').doc(),bt=fs.batch();
-  bt.set(ref,{name:n,title:(draft.nt||'').trim()||n,created:Date.now(),rounds:pubR(rounds),rinfo:{},r:-1,th:{},rd:{},rev:{}});
-  bt.set(ref.collection('private').doc('cfg'),{rounds,rinfo:{}});await bt.commit();
+  const ref=fs.collection('bt_sessions').doc();await ref.set({name:n,title:(draft.nt||'').trim()||n,created:Date.now(),rounds,rinfo:{},r:-1,th:{},rd:{}});
   draft.nn=draft.nt='';view='sess';tab='prep';bind(ref.id);render()}
  if(a==='opens'){view='sess';tab='prep';draft={};bind(b.dataset.id);render()}
  if(a==='back'){view='list';bind(null);render()}
@@ -466,8 +453,7 @@ document.addEventListener('click',async e=>{
  if(a==='tg'){const x=cfg[r][t],f=b.dataset.f;x[f]=!x[f];if(f!=='sx'&&!x.ea&&!x.et)x[f]=true;render()}
  if(a==='addth'){(cfg[r]=cfg[r]||[]).push(blank());render()}
  if(a==='rmth'&&confirm('Supprimer ce thème ?')){cfg[r].splice(t,1);render()}
- if(a==='savecfg'){await saveCfg(cfg,cfgI);b.textContent='Questions enregistrées ✓'}
- if(a==='logout'){await firebase.auth().signOut();location.reload()}
+ if(a==='savecfg'){await gset({rounds:cfg,rinfo:cfgI});b.textContent='Questions enregistrées ✓'}
  if(a==='launch')gset({r,rd:{[r]:'open'}});
  if(a==='closeround'){const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'}})}
  if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});o[`${r}_${t}`]='open';gset({th:o})}
@@ -476,16 +462,16 @@ document.addEventListener('click',async e=>{
  if(a==='mk'){const m=mk[b.dataset.m],i=+b.dataset.i;m[i]=m[i]?0:1;render()}
  if(a==='gk'){const k=b.dataset.m;gk[k]=gk[k]?0:1;render()}
  if(a==='validate'){
-  const bt=fs.batch(),I=ri(r),rev={};if(I.sx)rev['R'+r]=I.n||'';th(r).forEach((x,i)=>{if(x.sx)rev[`${r}_${i}`]=x.n||''});
+  const bt=fs.batch(),I=ri(r);
   teams.forEach(tt=>{const o={marks:{},gok:{}};
    th(r).forEach((x,i)=>{const key=`${r}_${i}`;o.marks[key]=getMk(tt,key,x);if(x.sx)o.gok[key]=getGk(tt,key,x.n)});
    if(I.sx)o.gok['R'+r]=getGk(tt,'R'+r,I.n);
    bt.set(tcol().doc(tt.id),o,{merge:true})});
-  await bt.commit();gset({rd:{[r]:'validated'},rev});
+  await bt.commit();gset({rd:{[r]:'validated'}});
  }
  if(a==='resetround'&&confirm('Réinitialiser '+RN[r]+' ? Réponses, x2 et points de cette manche seront effacés.'))resetRound(r);
  if(a==='clrteams'&&confirm('Effacer toutes les équipes et leurs réponses ?'))delTeams();
- if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},rev:{}})}
+ if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{}})}
  if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){await delTeams();await sdoc().delete();view='list';bind(null);render()}
 });
 })();
