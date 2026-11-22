@@ -1,75 +1,94 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0e2a">
 <title>Beulou Test</title>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--p:#ff1493;--c:#00f5ff;--y:#fff200;--n:#0b0f3b;--n2:#171b5e}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;color:#fff;font-family:Rubik,sans-serif;
-background:radial-gradient(rgba(255,20,147,.14) 1.5px,transparent 2px) 0 0/14px 14px,
-linear-gradient(rgba(0,245,255,.08) 1px,transparent 1px) 0 0/34px 34px,
-linear-gradient(90deg,rgba(0,245,255,.08) 1px,transparent 1px) 0 0/34px 34px,
-radial-gradient(circle at 15% 0,#4a1280 0,transparent 55%),var(--n);
+:root{--p:#ff2e97;--c:#00f0ff;--y:#ffee00;--n:#0c0e2a;--g:#3dffa5;--mut:rgba(255,255,255,.62)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;color:#fff;font:500 16px/1.4 Rubik,sans-serif;background-color:var(--n);
+background-image:radial-gradient(ellipse at 15% -10%,rgba(255,46,151,.22),transparent 55%),radial-gradient(ellipse at 100% 0,rgba(0,240,255,.14),transparent 50%),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' fill='none' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' opacity='.13'%3E%3Cpath d='M20 44l14-18 14 18 14-18 14 18' stroke='%23ffee00'/%3E%3Cpath d='M190 40q15-22 30 0t30 0 30 0' stroke='%2300f0ff'/%3E%3Ccircle cx='262' cy='130' r='11' stroke='%23ff2e97'/%3E%3Cpath d='M56 214l24-40 24 40z' stroke='%238b8bff'/%3E%3Cpath d='M176 272q32-44 76 0' stroke='%23ff2e97'/%3E%3Cpath d='M26 290q10-20 20 0t20 0 20 0' stroke='%238b8bff'/%3E%3Ccircle cx='150' cy='132' r='9' stroke='%23ffee00'/%3E%3Cpath d='M120 40v0M132 52v0M108 56v0' stroke='%23ffee00' stroke-width='6'/%3E%3Cpath d='M236 220l16 20-10 18' stroke='%2300f0ff'/%3E%3C/svg%3E") 0 0/340px,
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' fill='none' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' opacity='.13'%3E%3Cpath d='M20 44l14-18 14 18 14-18 14 18' stroke='%23ffee00'/%3E%3Cpath d='M190 40q15-22 30 0t30 0 30 0' stroke='%2300f0ff'/%3E%3Ccircle cx='262' cy='130' r='11' stroke='%23ff2e97'/%3E%3Cpath d='M56 214l24-40 24 40z' stroke='%238b8bff'/%3E%3Cpath d='M176 272q32-44 76 0' stroke='%23ff2e97'/%3E%3C/svg%3E") 170px 190px/340px;
 padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-body:after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px)}
-#app{max-width:600px;margin:0 auto;padding:14px}
-.adm #app{max-width:960px}
-.logo{text-align:center;margin:4px 0 14px}.logo img{max-width:240px;width:70%}
-.ttl{font-family:Bungee;font-style:italic;color:var(--c);font-size:44px;margin:0;transform:skew(-8deg);text-shadow:3px 3px 0 var(--p),5px 5px 0 #000}
-.ttl small{display:block;color:var(--y);font-size:28px}
-.card{background:var(--n2);border:3px solid #000;border-radius:14px;box-shadow:5px 5px 0 var(--p);padding:14px;margin:0 0 16px}
-h2,h3{font-family:Bungee;color:var(--y);margin:0 0 10px;font-weight:400;text-shadow:2px 2px 0 #000}
-h3{color:var(--c);font-size:15px}
-input,textarea,select{width:100%;padding:12px;margin:0 0 8px;border:3px solid var(--c);border-radius:10px;background:#070a2a;color:#fff;font:600 16px Rubik}
-textarea{min-height:90px}label{font-size:12px;color:var(--c);text-transform:uppercase;letter-spacing:1px}
-button{font-family:Bungee;font-size:14px;cursor:pointer;background:var(--c);color:var(--n);border:3px solid #000;border-radius:10px;padding:10px 14px;box-shadow:3px 3px 0 var(--p);transform:skew(-5deg);margin:2px 4px 2px 0}
-button:active{transform:skew(-5deg) translate(2px,2px);box-shadow:1px 1px 0 var(--p)}
-button.y{background:var(--y)}button.p{background:var(--p);color:#fff}button.off{background:#2a2e70;color:#8a8fd0;box-shadow:none}
-button.ok{background:#39ff88;color:#04210f}button.s{font-size:12px;padding:6px 10px}
-.dr{border:3px solid #000;border-radius:12px;margin:0 0 10px;background:#0e1248;overflow:hidden}
-.dh{padding:12px;display:flex;justify-content:space-between;align-items:center;font-family:Bungee;font-size:14px}
-.dr.open{border-color:var(--c);box-shadow:0 0 14px var(--c)}.dr.open .dh{background:var(--c);color:var(--n)}
-.db{padding:12px}.bd{font:700 11px Rubik;padding:3px 8px;border-radius:20px;background:var(--p);color:#fff}
-.wait{text-align:center;padding:30px 10px}.wait h2{font-size:22px;animation:bl 1.4s infinite}
-@keyframes bl{50%{opacity:.4}}
-.rk{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px dashed rgba(255,255,255,.2);font-weight:700}
-.rk.me{background:rgba(255,242,0,.18)}.rk .pos{font-family:Bungee;color:var(--y);width:28px}.rk .nm{flex:1}
-.up{color:#39ff88}.dn{color:#ff4d6d}.eq{color:#9aa0e0}.gn{color:var(--c);min-width:56px;text-align:right}.tt{font-family:Bungee;min-width:36px;text-align:right}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0}.row b{min-width:110px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.good{color:#39ff88;font-size:13px}.tabs{margin-bottom:14px}
-.lk{word-break:break-all;color:var(--y);font-size:13px}
+#app{max-width:480px;margin:0 auto;padding:14px 14px 48px}
+.adm #app{max-width:760px}
+.brand{text-align:center;margin:6px 0 4px}.brand img{height:72px;max-width:80%;object-fit:contain}
+.ttl{font:400 34px Bungee;font-style:italic;color:var(--c);margin:0;text-shadow:2px 2px 0 var(--p)}
+.st{font:400 20px Bungee;text-align:center;color:var(--y);margin:6px 0 16px}
+.c{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:16px;margin:0 0 14px;backdrop-filter:blur(8px)}
+h2,h3{font:400 16px Bungee;margin:0 0 10px;color:var(--c)}h3 small{color:var(--mut);font:500 12px Rubik}
+label{display:block;font-size:12px;color:var(--mut);margin:8px 0 4px}
+.in{width:100%;height:52px;padding:0 14px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.35);color:#fff;font:500 16px Rubik;margin:0 0 6px}
+.in:focus{outline:0;border-color:var(--c);box-shadow:0 0 0 3px rgba(0,240,255,.2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 20px;border-radius:999px;border:0;background:var(--c);color:var(--n);font:700 15px Rubik;cursor:pointer;margin:4px 6px 4px 0}
+.btn:active{transform:scale(.97)}.btn.blk{display:flex;width:100%;margin-right:0}
+.btn.pk{background:var(--p);color:#fff}.btn.y{background:var(--y)}.btn.gh{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.28)}
+.btn.sm{min-height:38px;padding:0 14px;font-size:13px}.btn.on{background:var(--g)}.btn.dg{background:transparent;color:#ff7a9c;border:1px solid #ff7a9c}
+.chip{display:inline-block;font:700 11px Rubik;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;white-space:nowrap}
+.chip.pk{background:var(--p)}.chip.ok{background:var(--g);color:#04210f}.chip.cy{background:var(--c);color:var(--n)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}.row>.f{flex:1;min-width:0}
+small,.mut{color:var(--mut);font-size:13px}
+.dw{border:1px solid rgba(255,255,255,.14);border-radius:16px;margin:0 0 10px;overflow:hidden}
+.dw.open{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 6px 24px rgba(0,240,255,.12)}
+.dh{padding:14px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700}
+.db{padding:2px 14px 14px}
+.qi{display:flex;align-items:center;gap:10px;margin:0 0 8px}.qi i{flex:none;width:30px;height:30px;border-radius:50%;background:var(--p);font:400 13px/30px Bungee;text-align:center;font-style:normal}
+.qi .in{margin:0}
+.rk{display:flex;align-items:center;gap:8px;padding:11px 8px;border-bottom:1px solid rgba(255,255,255,.1);font-weight:700}
+.rk.me{background:rgba(255,238,0,.14);border-radius:12px}.rk .pos{font:400 15px Bungee;color:var(--y);width:26px}.rk .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.up{color:var(--g)}.dn{color:#ff6b8b}.eq{color:var(--mut)}.tt{font:400 16px Bungee;min-width:34px;text-align:right}.gn{color:var(--c);min-width:50px;text-align:right;font-size:14px}
+.tabs{position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:0 0 10px;background:linear-gradient(var(--n) 70%,transparent)}
+.tabs .btn{flex:none;margin:0}
+.qb{display:flex;gap:10px;align-items:center;background:rgba(0,240,255,.12);border:1px solid rgba(0,240,255,.4);border-radius:14px;padding:10px 12px;margin:14px 0 4px}
+.qb i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--c);color:var(--n);font:400 12px/26px Bungee;text-align:center;font-style:normal}.qb b{font-weight:700}
+.ln{display:flex;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ln .t{flex:1;min-width:0}.ln .t small{display:block;color:var(--c);font-size:12px}.ln .t span{display:block;font-weight:700;word-break:break-word}
+.x{background:var(--p);border-radius:6px;padding:0 5px;font-size:11px;color:#fff}
+.ab{flex:none;width:48px;height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);font-size:22px;cursor:pointer;opacity:.55}
+.ab.on{background:var(--g);border-color:var(--g);opacity:1}
+.sm2{font-size:13px;color:var(--mut);margin-top:10px}.sm2 b{color:#fff}
+.lk{word-break:break-all;color:var(--y);font-size:13px;margin:6px 0}
+select.in{appearance:none}
+.mire{--bars:linear-gradient(90deg,#fff 0 12.5%,#ff0 0 25%,#0ff 0 37.5%,#0f0 0 50%,#f0f 0 62.5%,#f00 0 75%,#00f 0 87.5%,#000 0);position:relative;height:220px;border-radius:20px;overflow:hidden;margin:0 0 14px;background:var(--bars);filter:saturate(.85) brightness(.85)}
+.mire b{position:absolute;left:-8%;width:116%;background:var(--bars);animation:gl 1.1s steps(1) infinite}
+.mire b:nth-child(1){top:10%;height:9%}.mire b:nth-child(2){top:36%;height:14%;animation-duration:.8s;animation-delay:-.3s}
+.mire b:nth-child(3){top:62%;height:6%;animation-duration:1.6s}.mire b:nth-child(4){top:80%;height:13%;animation-duration:1.3s;animation-delay:-.7s}
+@keyframes gl{0%{transform:translateX(0)}15%{transform:translateX(-5%);filter:hue-rotate(90deg)}30%{transform:translateX(4%)}45%{transform:translateX(-2%);filter:hue-rotate(-60deg)}60%{transform:translateX(6%)}75%{transform:translateX(0)}88%{transform:translateX(-4%);filter:invert(.15)}}
+.mire .nz{position:absolute;inset:0;opacity:.4;mix-blend-mode:overlay;animation:nz .5s steps(5) infinite;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes nz{0%{background-position:0 0}20%{background-position:-40px 30px}40%{background-position:30px -50px}60%{background-position:-70px -20px}80%{background-position:50px 60px}}
+.mire:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}
+.mt{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);width:86%;background:rgba(8,10,40,.84);padding:16px 18px;border-radius:16px;text-align:center}
+.mt h2{color:#fff;margin:0;font-size:17px}.mt p{margin:6px 0 0;color:var(--mut);font-size:13px}
+@media (prefers-reduced-motion:reduce){.mire,.mire b,.mire .nz{animation:none}}
 </style></head>
-<body><div id="app">Chargement... (si rien ne change après 10 secondes, recharge la page)</div>
+<body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
-// Colle ici la config Web de ton projet Firebase
 const CFG={apiKey:"AIzaSyB5Fozxa9grXSkPTwCZwBaWtWsD2dNfj6c",authDomain:"beulou-test.firebaseapp.com",projectId:"beulou-test",appId:"1:789329554038:web:7ed8ccdb6eae677f59cd57"};
 const SALT="beulou-test-v1:",HASH="1d265c88f523d9e63f2a2df03ccf8b9a90a470c920d8602ac5ffa815fb82302e"; // empreinte du code admin
 const RN=['Manche 1','Manche 2','Manche 3','Finale'];
 const ADMIN=location.hash==='#admin';
 if(ADMIN)document.body.classList.add('adm');
 const app=document.getElementById('app');
-if(!CFG.apiKey){app.innerHTML='<div class="card"><h2>Config Firebase manquante</h2>Renseigne CFG en haut du fichier.</div>'}
+if(!CFG.apiKey){app.innerHTML='<div class="c"><h2>Config Firebase manquante</h2></div>'}
 else (async()=>{
 if(ADMIN){const v=prompt('Code admin')||'';const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(SALT+v));
  const x=[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
  if(x!==HASH){app.textContent='Accès refusé';return}}
 firebase.initializeApp(CFG);
-const fs=firebase.firestore(),mdoc=fs.collection('bt').doc('meta');
+const fs=firebase.firestore(),FV=firebase.firestore.FieldValue;
 const sdoc=()=>fs.collection('bt_sessions').doc(sid),tcol=()=>sdoc().collection('teams');
 const Q=new URLSearchParams(location.search);
-let meta={},sessions=[],sid=null,g=null,teams=[],unG,unT,mready=false,tready=false,cfg=null,tab='prep',draft={},cr=0,mk={},me=null;
+let sessions=[],sready=false,sid=null,view='list',g=null,gl=false,teams=[],tready=false,unG,unT,cfg=null,tab='prep',draft={},cr=0,mk={},me=null;
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
 const sum=a=>a.reduce((x,y)=>x+y,0);
-const prs=x=>{const both=x.ea&&x.et,m=6;
- const L=(x.songs||'').split('\n').map(l=>l.trim()).filter(Boolean),k=Math.min(L.length,m);
- const s=L.slice(0,m).map(l=>{const[a,...t]=l.split(' - ');return{a:a.trim(),t:t.join(' - ').trim()}});
- while(s.length<m)s.push({a:'',t:''});
- const f=[];s.forEach((_,j)=>{x.ea&&f.push([j,0]);x.et&&f.push([j,1])});return{n:x.n||'',s,f,pts:both?1:2,k,m,extra:L.length>m}};
-const th=r=>(g.rounds?.[r]||[]).map(prs);
+const ERR=e=>{app.innerHTML='<div class="c"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'};
+const blank=()=>({n:'',ea:true,et:true,q:[0,1,2,3,4,5].map(()=>({a:'',t:''}))});
+const th=r=>(g.rounds?.[r]||[]).map(x=>{const q=[...(x.q||[])];while(q.length<6)q.push({a:'',t:''});return{n:x.n||'',ea:!!x.ea,et:!!x.et,q:q.slice(0,6),pts:x.ea&&x.et?1:2}});
 const tn=(x,i)=>x.n||'Thème '+(i+1);
 const score=(t,r)=>Object.entries(t.marks||{}).reduce((s,[k,m])=>{const[rr,tt]=k.split('_');if(r!=null&&+rr!==r)return s;const x=th(+rr)[+tt];return s+sum(m)*(x?x.pts:1)*(t.x2?.[rr]==tt?2:1)},0);
 const vr=()=>[0,1,2,3].filter(r=>g.rd?.[r]==='validated');
@@ -77,163 +96,188 @@ const place=u=>{const a=teams.map(t=>({id:t.id,name:t.name,sc:sum(vr().filter(r=
 function rankHtml(){
  const v=vr();if(!v.length||!teams.length)return'';
  const L=v[v.length-1],cur=place(L),pv=v.length>1?Object.fromEntries(place(v[v.length-2]).map(x=>[x.id,x.pos])):null;
- return`<div class="card"><h2>Classement</h2><p style="margin:0 0 8px;font-size:13px">Après ${RN[L]}</p>${cur.map(x=>{
+ return`<div class="c"><h2>Classement</h2><p class="mut" style="margin:-4px 0 8px">Après ${RN[L]}</p>${cur.map(x=>{
   const t=teams.find(z=>z.id===x.id),gn=score(t,L);
   const ar=!pv?'':x.pos<pv[x.id]?'<span class="up">▲</span>':x.pos>pv[x.id]?'<span class="dn">▼</span>':'<span class="eq">=</span>';
   return`<div class="rk ${x.id===me?'me':''}"><span class="pos">${x.pos}</span><span class="nm">${esc(x.name)}</span>${ar}<span class="tt">${x.sc}</span><span class="gn">(+${gn})</span></div>`}).join('')}</div>`}
+const MIRE=(t,s)=>`<div class="mire"><b></b><b></b><b></b><b></b><div class="nz"></div><div class="mt"><h2>${t}</h2>${s?`<p>${s}</p>`:''}</div></div>`;
+const BRAND=`<div class="brand"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<h1 class=ttl>BEULOU TEST</h1>'"></div>`;
 const gset=o=>sdoc().set(o,{merge:true});
 
-function bind(){
- const s=ADMIN?(localStorage.getItem('bt_a')||meta.sid):(Q.get('s')||meta.sid);
- if(s===sid)return;
- unG&&unG();unT&&unT();sid=s||null;g=null;teams=[];tready=false;cfg=null;mk={};
- me=sid&&localStorage.getItem('bt_me_'+sid);if(!sid)return;
- unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{}},x.data()):null;if(g&&!cfg)cfg=JSON.parse(JSON.stringify(g.rounds||{}));render()},e=>{app.innerHTML='<div class="card"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'});
- unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()},e=>{app.innerHTML='<div class="card"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'});
+function bind(id){
+ unG&&unG();unT&&unT();sid=id||null;g=null;gl=false;teams=[];tready=false;cfg=null;mk={};me=null;
+ if(!sid)return;me=localStorage.getItem('bt_me_'+sid);
+ unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{}},x.data()):null;gl=true;if(g&&!cfg)cfg=JSON.parse(JSON.stringify(g.rounds||{}));render()},ERR);
+ unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()},ERR);
 }
-mdoc.onSnapshot(x=>{meta=x.data()||{};mready=true;bind();render()},e=>{app.innerHTML='<div class="card"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'});
-if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,name:d.data().name}));render()});
+if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,...d.data()}));sready=true;render()},ERR);
+else bind(Q.get('s'));
 
 function render(){
- if(!mready)return;
+ if(ADMIN&&!sready)return;
  const a=document.activeElement,k=a&&a.dataset&&a.dataset.k,p=a&&a.selectionStart;
  let h;
- if(!sid&&!ADMIN)h=LOGO+'<div class="card wait"><h2>Pas de session pour le moment</h2></div>';
- else if(sid&&(!g||!tready)&&!(ADMIN&&!g))h='<div class="card">Chargement...</div>';
- else h=ADMIN?admin():team();
+ if(ADMIN){if(view==='sess'&&gl&&!g){view='list';bind(null)}
+  h=view==='list'?alist():(gl&&tready?asess():'<div class="c">Chargement...</div>')}
+ else h=team();
  app.innerHTML=h;
  if(k){const e=document.querySelector(`[data-k="${k}"]`);if(e){e.focus();try{e.setSelectionRange(p,p)}catch(x){}}}
 }
-const LOGO=`<div class="logo"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<h1 class=ttl>BEULOU<small>TEST</small></h1>'"></div>`;
 
 function team(){
- if(!g)return LOGO+'<div class="card wait"><h2>Session introuvable</h2></div>';
- if(!me)return LOGO+`<div class="card"><h2>Ton équipe</h2><label>Nom d'équipe</label><input data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="y" data-a="join">C'est parti</button></div>`;
+ if(!sid)return BRAND+`<div class="c" style="text-align:center"><h3>Pas de session</h3><p class="mut">Ouvre le lien de ta soirée pour rejoindre la partie.</p></div>`;
+ if(!gl||!tready)return BRAND+'<div class="c">Chargement...</div>';
+ if(!g)return BRAND+`<div class="c" style="text-align:center"><h3>Session introuvable</h3><p class="mut">Vérifie ton lien.</p></div>`;
+ const H=BRAND+(g.title?`<h1 class="st">${esc(g.title)}</h1>`:'');
+ if(!me)return H+`<div class="c"><h3>Ton équipe</h3><label>Nom d'équipe</label><input class="in" data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="btn blk" data-a="join">C'est parti</button></div>`;
  const t=teams.find(x=>x.id===me);
- if(!t)return LOGO+`<div class="card"><h2>Équipe introuvable</h2><button data-a="leave">Recommencer</button></div>`;
- let h=LOGO+`<div class="card"><h3>Équipe</h3><h2 style="margin:0">${esc(t.name)}</h2></div>`;
+ if(!t)return H+`<div class="c"><h3>Équipe introuvable</h3><p class="mut">La partie a été réinitialisée.</p><button class="btn blk" data-a="leave">Rejoindre à nouveau</button></div>`;
+ const head=`<div class="row"><span class="chip cy">Équipe</span><b>${esc(t.name)}</b></div>`;
  const r=g.r,st=g.rd?.[r];
- if(r<0)return h+`<div class="card wait"><h2>Patience, la manche va commencer</h2><p>Garde l'oreille tendue.</p></div>`+rankHtml();
- if(st==='closed'||st==='validated')return h+`<div class="card wait"><h2>${RN[r]} terminée</h2><p>${st==='closed'?'Pause, on calcule les scores...':'Scores validés.'}</p></div>`+rankHtml();
- h+=`<div class="card"><h2>${RN[r]}</h2>`;
+ if(r<0)return H+head+MIRE('Patience, la manche va commencer','Garde l\'oreille tendue')+rankHtml();
+ if(st==='closed'||st==='validated')return H+head+MIRE(RN[r]+' terminée',st==='closed'?'On calcule les scores...':'Scores validés')+rankHtml();
+ let h=H+head+`<div class="c"><h3>${RN[r]}</h3>`;
  th(r).forEach((x,i)=>{
   const key=`${r}_${i}`,s=g.th?.[key],done=t.done?.[key],isOpen=s==='open'&&!done;
   const xi=t.x2?.[r],xlock=xi!=null&&t.done?.[`${r}_${xi}`];
-  h+=`<div class="dr ${isOpen?'open':''}"><div class="dh"><span>${i+1}. ${esc(tn(x,i))}</span><span class="bd">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
+  h+=`<div class="dw ${isOpen?'open':''}"><div class="dh"><span>${i+1}. ${esc(tn(x,i))}${xi===i?' <span class="x">x2</span>':''}</span><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
   if(isOpen){
    h+=`<div class="db">`;
-   x.f.forEach(([j,q],i2)=>{const kk=`a|${key}|${i2}`;h+=`<label>${q?'Titre':'Artiste'} ${j+1}</label><input data-k="${kk}" autocomplete="off" value="${esc(draft[kk]??t.answers?.[key]?.[i2]??'')}">`});
-   if(xi===i)h+=`<button class="p" data-a="x2" data-t="${i}" data-v="-1">x2 actif</button>`;
-   else if(!xlock)h+=`<button class="y" data-a="x2" data-t="${i}">Mettre mon x2 ici</button>`;
-   h+=`<button data-a="done" data-t="${i}">Valider ce thème</button></div>`;
+   for(let j=0;j<6;j++){const kk=`a|${key}|${j}`;h+=`<div class="qi"><i>${j+1}</i><input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="Artiste - Titre" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}"></div>`}
+   if(xi===i)h+=`<button class="btn pk blk" data-a="x2" data-t="${i}" data-v="-1">x2 activé sur ce thème</button>`;
+   else if(!xlock)h+=`<button class="btn gh blk" data-a="x2" data-t="${i}">Mettre mon x2 ici</button>`;
+   h+=`<button class="btn blk" data-a="done" data-t="${i}">Valider ce thème</button></div>`;
   }
   h+=`</div>`;
  });
  return h+`</div>`+rankHtml();
 }
 
-function admin(){
- let h=`<div class="logo"><h1 class="ttl" style="font-size:34px">BEULOU TEST<small style="font-size:18px">ADMIN</small></h1></div>`;
- h+=`<div class="tabs">${[['prep','Préparer'],['pilot','Pilotage'],['corr','Corrections'],['rank','Classement']].map(([k,n])=>`<button class="${tab===k?'y':'off'}" data-a="tab" data-v="${k}">${n}</button>`).join('')}</div>`;
+const stat=s=>{const rd=s.rd||{};if(rd[3]==='validated')return['Terminée','cy'];if(Object.keys(rd).length)return['En cours','pk'];
+ return Object.values(s.rounds||{}).some(a=>(a||[]).some(x=>(x.q||[]).some(q=>q.a||q.t)))?['Prête','ok']:['Brouillon','']};
+function alist(){
+ let h=BRAND+`<h1 class="st">Sessions</h1>`;
+ h+=`<div class="c"><h3>Nouvelle session</h3><label>Nom interne (pour toi)</label><input class="in" data-k="nn" placeholder="Ex : Soirée équipe Marketing" value="${esc(draft.nn||'')}"><label>Titre affiché aux équipes</label><input class="in" data-k="nt" placeholder="Ex : Beulou Test #4" value="${esc(draft.nt||'')}"><button class="btn blk" data-a="newsess">Créer la session</button></div>`;
+ if(!sessions.length)h+=`<div class="c mut">Aucune session pour le moment.</div>`;
+ sessions.forEach(s=>{const[l,c]=stat(s);
+  h+=`<div class="c"><div class="row"><div class="f"><b>${esc(s.name||'Sans nom')}</b><br><small>${esc(s.title||'')} · ${new Date(s.created||0).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}</small></div><span class="chip ${c}">${l}</span></div><button class="btn blk" data-a="opens" data-id="${s.id}">Ouvrir</button></div>`});
+ return h;
+}
+
+function asess(){
+ let h=`<div class="row"><button class="btn gh sm" data-a="back">← Sessions</button><b class="f">${esc(g.name||'')}</b></div>`;
+ h+=`<div class="tabs">${[['prep','Préparer'],['pilot','Pilotage'],['corr','Corrections'],['rank','Classement']].map(([k,n])=>`<button class="btn sm ${tab===k?'':'gh'}" data-a="tab" data-v="${k}">${n}</button>`).join('')}</div>`;
  if(tab==='prep'){
-  h+=`<div class="card"><h2>Session</h2>`;
-  if(sessions.length)h+=`<select data-a="pick">${sessions.map(s=>`<option value="${s.id}" ${s.id===sid?'selected':''}>${esc(s.name)}${s.id===meta.sid?' (active)':''}</option>`).join('')}</select>`;
-  if(sid&&meta.sid!==sid)h+=`<button class="y" data-a="activate">Activer cette session pour les équipes</button>`;
-  if(sid&&meta.sid===sid)h+=`<p class="good">Session active : les équipes qui ouvrent le lien arrivent ici.</p>`;
-  h+=`<label>Nouvelle session</label><input data-k="ns" placeholder="Ex : Soirée du 5 décembre" value="${esc(draft.ns||'')}"><button data-a="newsess">Créer</button>`;
-  if(sid)h+=`<p style="margin:10px 0 2px">Lien équipes :</p><div class="lk">${esc(location.origin+location.pathname)}</div>`;
-  h+=`</div>`;
-  if(sid&&g&&cfg)RN.forEach((n,r)=>{
-   h+=`<div class="card"><h2>${n}</h2>`;
-   (cfg[r]||[]).forEach((x,i)=>{const p=prs(x);
-    h+=`<div class="dr"><div class="db"><label>Thème ${i+1}</label><input data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}">
-    <button class="s ${x.ea?'ok':'off'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="ea">Artiste</button><button class="s ${x.et?'ok':'off'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="et">Titre</button>
-    <button class="s off" data-a="rmth" data-r="${r}" data-t="${i}">Supprimer</button>
-    <label style="display:block;margin-top:6px">Une chanson par ligne : Artiste - Titre (6 lignes)</label><textarea data-k="s|${r}|${i}">${esc(x.songs)}</textarea>
-    <span class="good">${p.k}/6 chansons saisies, ${p.f.length} réponses, ${p.f.length*p.pts} pts max (${p.pts} pt par réponse)</span>${p.k<p.m?'<br><span style="color:var(--y);font-size:13px">Il en manque '+(p.m-p.k)+' pour avoir 6 chansons.</span>':''}${p.extra?'<br><span style="color:var(--y);font-size:13px">Les lignes en trop sont ignorées.</span>':''}</div></div>`});
-   h+=`<button class="s" data-a="addth" data-r="${r}">+ Thème</button></div>`;
+  const url=location.origin+location.pathname+'?s='+sid;
+  h+=`<div class="c"><h3>Lien des équipes</h3><div class="lk">${esc(url)}</div><button class="btn sm" data-a="copy">Copier</button><a class="btn sm gh" href="${esc(url)}" target="_blank" style="text-decoration:none">Tester</a><p class="mut" style="margin:6px 0 0">Ce lien est propre à cette session : les équipes ne voient que celle-ci.</p></div>`;
+  h+=`<div class="c"><h3>Session</h3><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"><button class="btn sm" data-a="saveinfo">Enregistrer</button></div>`;
+  RN.forEach((n,r)=>{
+   h+=`<div class="c"><h3>${n}</h3>`;
+   (cfg[r]||[]).forEach((x,i)=>{
+    h+=`<div class="dw"><div class="db" style="padding-top:14px"><label>Thème ${i+1}</label><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}">
+    <button class="btn sm ${x.ea?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="ea">Artiste</button><button class="btn sm ${x.et?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="et">Titre</button><button class="btn sm dg" data-a="rmth" data-r="${r}" data-t="${i}">Supprimer</button>
+    <p class="mut" style="margin:6px 0">${x.ea&&x.et?'1 point par réponse (12 pts max)':'2 points par réponse (12 pts max)'}</p>`;
+    for(let j=0;j<6;j++){const q=(x.q||[])[j]||{a:'',t:''};
+     h+=`<div class="qi"><i>${j+1}</i>${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}</div>`}
+    h+=`</div></div>`});
+   h+=`<button class="btn sm gh" data-a="addth" data-r="${r}">+ Thème</button></div>`;
   });
-  if(sid)h+=`<button class="y" data-a="savecfg">Enregistrer les questions</button><button class="off" data-a="reset">Réinitialiser la session (équipes et scores)</button>`;
+  h+=`<button class="btn blk y" data-a="savecfg">Enregistrer les questions</button>
+  <div class="c" style="margin-top:14px"><h3>Nettoyage</h3><button class="btn sm gh" data-a="clrteams">Effacer les équipes</button><button class="btn sm gh" data-a="reset">Tout réinitialiser</button><button class="btn sm dg" data-a="delsess">Supprimer la session</button></div>`;
   return h;
  }
- if(!sid||!g)return h+`<div class="card">Crée d'abord une session dans l'onglet Préparer.</div>`;
  if(tab==='pilot'){
-  h+=`<div class="card"><h2>Pilotage</h2><p>${teams.length} équipe(s) : ${teams.map(t=>esc(t.name)).join(', ')||'aucune'}</p>`;
+  h+=`<div class="c"><h3>Pilotage <small>${teams.length} équipe(s)${teams.length?' : '+teams.map(t=>esc(t.name)).join(', '):''}</small></h3>`;
   RN.forEach((n,r)=>{
-   const st=g.rd?.[r];
-   h+=`<div class="row"><b>${n}</b><button class="${g.r===r&&st==='open'?'p':''}" data-a="launch" data-r="${r}">${g.r===r&&st==='open'?'En cours':'Ouvrir la manche'}</button>`;
-   if(g.r===r&&st==='open')h+=`<button class="off" data-a="closeround" data-r="${r}">Clôturer la manche</button>`;
-   h+=`<span class="bd">${st||'à venir'}</span></div>`;
-   if(g.r===r&&st==='open')th(r).forEach((x,i)=>{const o=g.th?.[`${r}_${i}`];
-    h+=`<div class="row" style="margin-left:20px"><span style="min-width:200px">${i+1}. ${esc(tn(x,i))}</span><button class="${o==='open'?'p':''}" data-a="topen" data-r="${r}" data-t="${i}">${o==='open'?'Ouvert':'Ouvrir'}</button><button class="off" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button><span class="bd">${o||'-'}</span></div>`});
+   const st=g.rd?.[r],on=g.r===r&&st==='open';
+   h+=`<div class="dw"><div class="dh"><span>${n}</span><span class="chip ${st==='validated'?'ok':on?'pk':''}">${st==='validated'?'Validée':st==='closed'?'Clôturée':on?'En cours':'À venir'}</span></div><div class="db">`;
+   h+=`<button class="btn sm ${on?'pk':''}" data-a="launch" data-r="${r}">${on?'Manche en cours':'Ouvrir la manche'}</button>`;
+   if(on)h+=`<button class="btn sm gh" data-a="closeround" data-r="${r}">Clôturer la manche</button>`;
+   h+=`<button class="btn sm dg" data-a="resetround" data-r="${r}">Réinitialiser</button>`;
+   if(on)th(r).forEach((x,i)=>{const o=g.th?.[`${r}_${i}`];
+    h+=`<div class="row"><span class="f">${i+1}. ${esc(tn(x,i))}</span><button class="btn sm ${o==='open'?'pk':'gh'}" data-a="topen" data-r="${r}" data-t="${i}">${o==='open'?'Ouvert':'Ouvrir'}</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`});
+   h+=`</div></div>`;
   });
-  return h+`<button class="off" data-a="idle">Écran d'attente pour tout le monde</button></div>`;
+  return h+`<button class="btn sm gh" data-a="idle">Écran d'attente pour tout le monde</button></div>`;
  }
  if(tab==='corr'){
-  h+=`<div class="card"><h2>Corrections</h2><select data-a="cr">${RN.map((n,r)=>`<option value="${r}" ${cr===r?'selected':''}>${n}${g.rd?.[cr]==='validated'&&r===cr?' (validée)':''}</option>`).join('')}</select>`;
-  th(cr).forEach((x,i)=>{
+  h+=`<div class="c"><select class="in" data-a="cr">${RN.map((n,r)=>`<option value="${r}" ${cr===r?'selected':''}>${n}${g.rd?.[r]==='validated'?' (validée)':''}</option>`).join('')}</select></div>`;
+  const T=th(cr);if(!T.length)return h+'<div class="c mut">Aucun thème dans cette manche.</div>';
+  T.forEach((x,i)=>{
    const key=`${cr}_${i}`;
-   h+=`<h3>${i+1}. ${esc(tn(x,i))}</h3><p class="good">${x.s.map(s=>[(x.f.some(f=>f[1]===0)?s.a:''),(x.f.some(f=>f[1]===1)?s.t:'')].filter(Boolean).join(' - ')).filter(Boolean).map(esc).join(' | ')}</p>`;
-   teams.forEach(t=>{
-    const m0=sid+t.id+key;
-    if(!mk[m0])mk[m0]=t.marks?.[key]||x.f.map(([j,q],i2)=>{const v=t.answers?.[key]?.[i2];return v&&norm(v)===norm(q?x.s[j].t:x.s[j].a)?1:0});
-    const m=mk[m0],x2=t.x2?.[cr]==i;
-    h+=`<div class="dr"><div class="dh"><span>${esc(t.name)} ${x2?'<span class="bd">x2</span>':''}</span><span>${sum(m)*x.pts*(x2?2:1)} pts</span></div><div class="db g2">`;
-    x.f.forEach(([j,q],i2)=>{const v=t.answers?.[key]?.[i2]||'';h+=`<button class="${m[i2]?'ok':'off'}" data-a="mk" data-m="${m0}" data-i="${i2}">${esc(v)||'(vide)'}</button>`});
-    h+=`</div></div>`;
+   h+=`<div class="c"><h3>${i+1}. ${esc(tn(x,i))}</h3>`;
+   x.q.forEach((q,j)=>{
+    const ca=[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - ');
+    h+=`<div class="qb"><i>${j+1}</i><b>${esc(ca)||'(non renseigné)'}</b></div>`;
+    teams.forEach(t=>{const m=getMk(t,key,x),v=t.answers?.[key]?.[j]||'';
+     h+=`<div class="ln"><div class="t"><small>${esc(t.name)}${t.x2?.[cr]==i?' <span class="x">x2</span>':''}</small><span>${v?esc(v):'<i class="mut">(vide)</i>'}</span></div>`+
+     (x.ea?`<button class="ab ${m[j*2]?'on':''}" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}">👨‍🎤</button>`:'')+
+     (x.et?`<button class="ab ${m[j*2+1]?'on':''}" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2+1}">🎶</button>`:'')+`</div>`});
    });
+   h+=`<div class="sm2">${teams.map(t=>`${esc(t.name)} : <b>${sum(getMk(t,key,x))*x.pts*(t.x2?.[cr]==i?2:1)}</b>`).join(' · ')}</div></div>`;
   });
-  return h+`<button class="y" data-a="validate">Valider les corrections de la manche</button></div>`;
+  return h+`<button class="btn blk y" data-a="validate">Valider les corrections de la manche</button>`;
  }
- return h+(rankHtml()||'<div class="card">Aucune manche validée pour le moment.</div>');
+ return h+(rankHtml()||'<div class="c mut">Aucune manche validée pour le moment.</div>');
 }
+function getMk(t,key,x){const k=sid+'|'+t.id+'|'+key;
+ if(!mk[k])mk[k]=t.marks?.[key]?[...t.marks[key]]:x.q.flatMap((q,j)=>{const an=norm(t.answers?.[key]?.[j]);return[x.ea&&q.a&&an.includes(norm(q.a))?1:0,x.et&&q.t&&an.includes(norm(q.t))?1:0]});
+ return mk[k]}
 
 let tm;
 function flush(key){
- const[r,t]=key.split('_'),n=th(+r)[+t].f.length,cur=teams.find(x=>x.id===me);
- const arr=[...Array(n)].map((_,i)=>draft[`a|${key}|${i}`]??cur?.answers?.[key]?.[i]??'');
+ const cur=teams.find(x=>x.id===me);
+ const arr=[0,1,2,3,4,5].map(j=>draft[`a|${key}|${j}`]??cur?.answers?.[key]?.[j]??'');
  return tcol().doc(me).set({answers:{[key]:arr}},{merge:true});
 }
-const blank=()=>({n:'',ea:true,et:true,songs:''});
+async function delTeams(){const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().doc(x.id)));await bt.commit();mk={}}
+async function resetRound(r){
+ const D=FV.delete(),keys=th(r).map((_,i)=>`${r}_${i}`),bt=fs.batch();
+ teams.forEach(t=>{const o={['x2.'+r]:D};keys.forEach(k=>{o['answers.'+k]=D;o['done.'+k]=D;o['marks.'+k]=D});bt.update(tcol().doc(t.id),o)});
+ const so={['rd.'+r]:D};keys.forEach(k=>so['th.'+k]=D);if(g.r===r)so.r=-1;bt.update(sdoc(),so);
+ await bt.commit();mk={};
+}
 document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;const v=e.target.value;
- if(k==='nm'||k==='ns')draft[k]=v;
+ if(['nm','nn','nt','sn','stt'].includes(k))draft[k]=v;
  else if(k.startsWith('a|')){draft[k]=v;clearTimeout(tm);const key=k.split('|')[1];tm=setTimeout(()=>flush(key),500)}
- else{const[f,r,i]=k.split('|');cfg[r][i][f==='n'?'n':'songs']=v}});
-document.addEventListener('change',e=>{const a=e.target.dataset.a;
- if(a==='cr'){cr=+e.target.value;render()}
- if(a==='pick'){localStorage.setItem('bt_a',e.target.value);bind();render()}});
+ else if(k.startsWith('n|')){const[,r,i]=k.split('|');cfg[r][i].n=v}
+ else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v}});
+document.addEventListener('change',e=>{if(e.target.dataset.a==='cr'){cr=+e.target.value;render()}});
 document.addEventListener('click',async e=>{
- const b=e.target.closest('[data-a]');if(!b||b.tagName==='SELECT')return;
+ const b=e.target.closest('button[data-a]');if(!b)return;
  const a=b.dataset.a,r=+b.dataset.r,t=+b.dataset.t;
  if(a==='tab'){tab=b.dataset.v;render()}
  if(a==='join'){const n=(draft.nm||'').trim();if(!n)return;me='t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);localStorage.setItem('bt_me_'+sid,me);await tcol().doc(me).set({name:n,answers:{},done:{},x2:{},marks:{}})}
  if(a==='leave'){localStorage.removeItem('bt_me_'+sid);me=null;render()}
  if(a==='x2')tcol().doc(me).set({x2:{[g.r]:b.dataset.v?null:t}},{merge:true});
  if(a==='done'){const key=`${g.r}_${t}`;await flush(key);tcol().doc(me).set({done:{[key]:true}},{merge:true})}
- if(a==='newsess'){const n=(draft.ns||'').trim()||'Session '+new Date().toLocaleDateString('fr-FR');
+ if(a==='newsess'){const n=(draft.nn||'').trim()||'Session '+new Date().toLocaleDateString('fr-FR');
   const rounds={};RN.forEach((_,i)=>rounds[i]=[blank(),blank(),blank()]);
-  const ref=fs.collection('bt_sessions').doc();await ref.set({name:n,created:Date.now(),rounds,r:-1,th:{},rd:{}});
-  localStorage.setItem('bt_a',ref.id);await mdoc.set({sid:ref.id});draft.ns='';bind();render()}
- if(a==='activate')mdoc.set({sid});
- if(a==='tg'){cfg[r][t][b.dataset.f]=!cfg[r][t][b.dataset.f];if(!cfg[r][t].ea&&!cfg[r][t].et)cfg[r][t][b.dataset.f]=true;render()}
- if(a==='addth'){cfg[r]=cfg[r]||[];cfg[r].push(blank());render()}
+  const ref=fs.collection('bt_sessions').doc();await ref.set({name:n,title:(draft.nt||'').trim()||n,created:Date.now(),rounds,r:-1,th:{},rd:{}});
+  draft.nn=draft.nt='';view='sess';tab='prep';bind(ref.id);render()}
+ if(a==='opens'){view='sess';tab='prep';draft={};bind(b.dataset.id);render()}
+ if(a==='back'){view='list';bind(null);render()}
+ if(a==='copy'){try{await navigator.clipboard.writeText(location.origin+location.pathname+'?s='+sid);b.textContent='Copié'}catch(x){b.textContent='Copie impossible'}}
+ if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim()});draft.sn=draft.stt=undefined;b.textContent='Enregistré'}
+ if(a==='tg'){const x=cfg[r][t],f=b.dataset.f;x[f]=!x[f];if(!x.ea&&!x.et)x[f]=true;render()}
+ if(a==='addth'){(cfg[r]=cfg[r]||[]).push(blank());render()}
  if(a==='rmth'&&confirm('Supprimer ce thème ?')){cfg[r].splice(t,1);render()}
- if(a==='savecfg'){await gset({rounds:cfg});alert('Questions enregistrées')}
+ if(a==='savecfg'){await gset({rounds:cfg});b.textContent='Questions enregistrées'}
  if(a==='launch')gset({r,rd:{[r]:'open'}});
  if(a==='closeround'){const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'}})}
  if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});o[`${r}_${t}`]='open';gset({th:o})}
  if(a==='tclose')gset({th:{[`${r}_${t}`]:'closed'}});
  if(a==='idle')gset({r:-1});
- if(a==='mk'){const m=mk[b.dataset.m];m[+b.dataset.i]=m[+b.dataset.i]?0:1;render()}
+ if(a==='mk'){const m=mk[b.dataset.m],i=+b.dataset.i;m[i]=m[i]?0:1;render()}
  if(a==='validate'){
   const bt=fs.batch();
-  teams.forEach(tt=>th(cr).forEach((_,i)=>{const key=`${cr}_${i}`;if(mk[sid+tt.id+key])bt.set(tcol().doc(tt.id),{marks:{[key]:mk[sid+tt.id+key]}},{merge:true})}));
+  teams.forEach(tt=>th(cr).forEach((x,i)=>{const key=`${cr}_${i}`;bt.set(tcol().doc(tt.id),{marks:{[key]:getMk(tt,key,x)}},{merge:true})}));
   await bt.commit();gset({rd:{[cr]:'validated'}});
  }
- if(a==='reset'&&confirm('Supprimer toutes les équipes et remettre les scores à zéro ?')){
-  const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().doc(x.id)));await bt.commit();
-  mk={};await sdoc().update({r:-1,th:{},rd:{}});
- }
+ if(a==='resetround'&&confirm('Réinitialiser '+RN[r]+' ? Réponses, x2 et points de cette manche seront effacés.'))resetRound(r);
+ if(a==='clrteams'&&confirm('Effacer toutes les équipes et leurs réponses ?'))delTeams();
+ if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{}})}
+ if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){await delTeams();await sdoc().delete();view='list';bind(null);render()}
 });
 })();
 </script></body></html>
