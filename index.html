@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Beulou Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#ff1493;--c:#00f5ff;--y:#fff200;--n:#0b0f3b;--n2:#171b5e}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:#fff;font-family:Rubik,sans-serif;
+background:radial-gradient(rgba(255,20,147,.14) 1.5px,transparent 2px) 0 0/14px 14px,
+linear-gradient(rgba(0,245,255,.08) 1px,transparent 1px) 0 0/34px 34px,
+linear-gradient(90deg,rgba(0,245,255,.08) 1px,transparent 1px) 0 0/34px 34px,
+radial-gradient(circle at 15% 0,#4a1280 0,transparent 55%),var(--n);
+padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px)}
+#app{max-width:600px;margin:0 auto;padding:14px}
+.adm #app{max-width:960px}
+.logo{text-align:center;margin:4px 0 14px}.logo img{max-width:240px;width:70%}
+.ttl{font-family:Bungee;font-style:italic;color:var(--c);font-size:44px;margin:0;transform:skew(-8deg);text-shadow:3px 3px 0 var(--p),5px 5px 0 #000}
+.ttl small{display:block;color:var(--y);font-size:28px}
+.card{background:var(--n2);border:3px solid #000;border-radius:14px;box-shadow:5px 5px 0 var(--p);padding:14px;margin:0 0 16px}
+h2,h3{font-family:Bungee;color:var(--y);margin:0 0 10px;font-weight:400;text-shadow:2px 2px 0 #000}
+h3{color:var(--c);font-size:15px}
+input,textarea,select{width:100%;padding:12px;margin:0 0 8px;border:3px solid var(--c);border-radius:10px;background:#070a2a;color:#fff;font:600 16px Rubik}
+textarea{min-height:90px}label{font-size:12px;color:var(--c);text-transform:uppercase;letter-spacing:1px}
+button{font-family:Bungee;font-size:14px;cursor:pointer;background:var(--c);color:var(--n);border:3px solid #000;border-radius:10px;padding:10px 14px;box-shadow:3px 3px 0 var(--p);transform:skew(-5deg);margin:2px 4px 2px 0}
+button:active{transform:skew(-5deg) translate(2px,2px);box-shadow:1px 1px 0 var(--p)}
+button.y{background:var(--y)}button.p{background:var(--p);color:#fff}button.off{background:#2a2e70;color:#8a8fd0;box-shadow:none}
+button.ok{background:#39ff88;color:#04210f}button.s{font-size:12px;padding:6px 10px}
+.dr{border:3px solid #000;border-radius:12px;margin:0 0 10px;background:#0e1248;overflow:hidden}
+.dh{padding:12px;display:flex;justify-content:space-between;align-items:center;font-family:Bungee;font-size:14px}
+.dr.open{border-color:var(--c);box-shadow:0 0 14px var(--c)}.dr.open .dh{background:var(--c);color:var(--n)}
+.db{padding:12px}.bd{font:700 11px Rubik;padding:3px 8px;border-radius:20px;background:var(--p);color:#fff}
+.wait{text-align:center;padding:30px 10px}.wait h2{font-size:22px;animation:bl 1.4s infinite}
+@keyframes bl{50%{opacity:.4}}
+.rk{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px dashed rgba(255,255,255,.2);font-weight:700}
+.rk.me{background:rgba(255,242,0,.18)}.rk .pos{font-family:Bungee;color:var(--y);width:28px}.rk .nm{flex:1}
+.up{color:#39ff88}.dn{color:#ff4d6d}.eq{color:#9aa0e0}.gn{color:var(--c);min-width:56px;text-align:right}.tt{font-family:Bungee;min-width:36px;text-align:right}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0}.row b{min-width:110px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.good{color:#39ff88;font-size:13px}.tabs{margin-bottom:14px}
+.lk{word-break:break-all;color:var(--y);font-size:13px}
+</style></head>
+<body><div id="app">Chargement...</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// Colle ici la config Web de ton projet Firebase
+const CFG={apiKey:"AIzaSyB5Fozxa9grXSkPTwCZwBaWtWsD2dNfj6c",authDomain:"beulou-test.firebaseapp.com",projectId:"beulou-test",appId:"1:789329554038:web:7ed8ccdb6eae677f59cd57"};
+const SALT="beulou-test-v1:",HASH="1d265c88f523d9e63f2a2df03ccf8b9a90a470c920d8602ac5ffa815fb82302e"; // empreinte du code admin
+const RN=['Manche 1','Manche 2','Manche 3','Finale'];
+const ADMIN=location.hash==='#admin';
+if(ADMIN)document.body.classList.add('adm');
+const app=document.getElementById('app');
+if(!CFG.apiKey){app.innerHTML='<div class="card"><h2>Config Firebase manquante</h2>Renseigne CFG en haut du fichier.</div>'}
+else (async()=>{
+if(ADMIN){const v=prompt('Code admin')||'';const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(SALT+v));
+ const x=[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
+ if(x!==HASH){app.textContent='Accès refusé';return}}
+firebase.initializeApp(CFG);
+const fs=firebase.firestore(),mdoc=fs.collection('bt').doc('meta');
+const sdoc=()=>fs.collection('bt_sessions').doc(sid),tcol=()=>sdoc().collection('teams');
+const Q=new URLSearchParams(location.search);
+let meta={},sessions=[],sid=null,g=null,teams=[],unG,unT,mready=false,tready=false,cfg=null,tab='prep',draft={},cr=0,mk={},me=null;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const prs=x=>{const s=(x.songs||'').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const[a,...t]=l.split(' - ');return{a:a.trim(),t:t.join(' - ').trim()}});
+ const f=[];s.forEach((_,j)=>{x.ea&&f.push([j,0]);x.et&&f.push([j,1])});return{n:x.n||'',s,f,pts:x.ea&&x.et?1:2}};
+const th=r=>(g.rounds?.[r]||[]).map(prs);
+const tn=(x,i)=>x.n||'Thème '+(i+1);
+const score=(t,r)=>Object.entries(t.marks||{}).reduce((s,[k,m])=>{const[rr,tt]=k.split('_');if(r!=null&&+rr!==r)return s;const x=th(+rr)[+tt];return s+sum(m)*(x?x.pts:1)*(t.x2?.[rr]==tt?2:1)},0);
+const vr=()=>[0,1,2,3].filter(r=>g.rd?.[r]==='validated');
+const place=u=>{const a=teams.map(t=>({id:t.id,name:t.name,sc:sum(vr().filter(r=>r<=u).map(r=>score(t,r)))})).sort((x,y)=>y.sc-x.sc||x.name.localeCompare(y.name));a.forEach((x,i)=>x.pos=i&&a[i-1].sc===x.sc?a[i-1].pos:i+1);return a};
+function rankHtml(){
+ const v=vr();if(!v.length||!teams.length)return'';
+ const L=v[v.length-1],cur=place(L),pv=v.length>1?Object.fromEntries(place(v[v.length-2]).map(x=>[x.id,x.pos])):null;
+ return`<div class="card"><h2>Classement</h2><p style="margin:0 0 8px;font-size:13px">Après ${RN[L]}</p>${cur.map(x=>{
+  const t=teams.find(z=>z.id===x.id),gn=score(t,L);
+  const ar=!pv?'':x.pos<pv[x.id]?'<span class="up">▲</span>':x.pos>pv[x.id]?'<span class="dn">▼</span>':'<span class="eq">=</span>';
+  return`<div class="rk ${x.id===me?'me':''}"><span class="pos">${x.pos}</span><span class="nm">${esc(x.name)}</span>${ar}<span class="tt">${x.sc}</span><span class="gn">(+${gn})</span></div>`}).join('')}</div>`}
+const gset=o=>sdoc().set(o,{merge:true});
+
+function bind(){
+ const s=ADMIN?(localStorage.getItem('bt_a')||meta.sid):(Q.get('s')||meta.sid);
+ if(s===sid)return;
+ unG&&unG();unT&&unT();sid=s||null;g=null;teams=[];tready=false;cfg=null;mk={};
+ me=sid&&localStorage.getItem('bt_me_'+sid);if(!sid)return;
+ unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{}},x.data()):null;if(g&&!cfg)cfg=JSON.parse(JSON.stringify(g.rounds||{}));render()});
+ unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()});
+}
+mdoc.onSnapshot(x=>{meta=x.data()||{};mready=true;bind();render()});
+if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,name:d.data().name}));render()});
+
+function render(){
+ if(!mready)return;
+ const a=document.activeElement,k=a&&a.dataset&&a.dataset.k,p=a&&a.selectionStart;
+ let h;
+ if(!sid&&!ADMIN)h=LOGO+'<div class="card wait"><h2>Pas de session pour le moment</h2></div>';
+ else if(sid&&(!g||!tready)&&!(ADMIN&&!g))h='<div class="card">Chargement...</div>';
+ else h=ADMIN?admin():team();
+ app.innerHTML=h;
+ if(k){const e=document.querySelector(`[data-k="${k}"]`);if(e){e.focus();try{e.setSelectionRange(p,p)}catch(x){}}}
+}
+const LOGO=`<div class="logo"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<h1 class=ttl>BEULOU<small>TEST</small></h1>'"></div>`;
+
+function team(){
+ if(!g)return LOGO+'<div class="card wait"><h2>Session introuvable</h2></div>';
+ if(!me)return LOGO+`<div class="card"><h2>Ton équipe</h2><label>Nom d'équipe</label><input data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="y" data-a="join">C'est parti</button></div>`;
+ const t=teams.find(x=>x.id===me);
+ if(!t)return LOGO+`<div class="card"><h2>Équipe introuvable</h2><button data-a="leave">Recommencer</button></div>`;
+ let h=LOGO+`<div class="card"><h3>Équipe</h3><h2 style="margin:0">${esc(t.name)}</h2></div>`;
+ const r=g.r,st=g.rd?.[r];
+ if(r<0)return h+`<div class="card wait"><h2>Patience, la manche va commencer</h2><p>Garde l'oreille tendue.</p></div>`+rankHtml();
+ if(st==='closed'||st==='validated')return h+`<div class="card wait"><h2>${RN[r]} terminée</h2><p>${st==='closed'?'Pause, on calcule les scores...':'Scores validés.'}</p></div>`+rankHtml();
+ h+=`<div class="card"><h2>${RN[r]}</h2>`;
+ th(r).forEach((x,i)=>{
+  const key=`${r}_${i}`,s=g.th?.[key],done=t.done?.[key],isOpen=s==='open'&&!done;
+  const xi=t.x2?.[r],xlock=xi!=null&&t.done?.[`${r}_${xi}`];
+  h+=`<div class="dr ${isOpen?'open':''}"><div class="dh"><span>${i+1}. ${esc(tn(x,i))}</span><span class="bd">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
+  if(isOpen){
+   h+=`<div class="db">`;
+   x.f.forEach(([j,q],i2)=>{const kk=`a|${key}|${i2}`;h+=`<label>${q?'Titre':'Artiste'} ${j+1}</label><input data-k="${kk}" autocomplete="off" value="${esc(draft[kk]??t.answers?.[key]?.[i2]??'')}">`});
+   if(xi===i)h+=`<button class="p" data-a="x2" data-t="${i}" data-v="-1">x2 actif</button>`;
+   else if(!xlock)h+=`<button class="y" data-a="x2" data-t="${i}">Mettre mon x2 ici</button>`;
+   h+=`<button data-a="done" data-t="${i}">Valider ce thème</button></div>`;
+  }
+  h+=`</div>`;
+ });
+ return h+`</div>`+rankHtml();
+}
+
+function admin(){
+ let h=`<div class="logo"><h1 class="ttl" style="font-size:34px">BEULOU TEST<small style="font-size:18px">ADMIN</small></h1></div>`;
+ h+=`<div class="tabs">${[['prep','Préparer'],['pilot','Pilotage'],['corr','Corrections'],['rank','Classement']].map(([k,n])=>`<button class="${tab===k?'y':'off'}" data-a="tab" data-v="${k}">${n}</button>`).join('')}</div>`;
+ if(tab==='prep'){
+  h+=`<div class="card"><h2>Session</h2>`;
+  if(sessions.length)h+=`<select data-a="pick">${sessions.map(s=>`<option value="${s.id}" ${s.id===sid?'selected':''}>${esc(s.name)}${s.id===meta.sid?' (active)':''}</option>`).join('')}</select>`;
+  if(sid&&meta.sid!==sid)h+=`<button class="y" data-a="activate">Activer cette session pour les équipes</button>`;
+  if(sid&&meta.sid===sid)h+=`<p class="good">Session active : les équipes qui ouvrent le lien arrivent ici.</p>`;
+  h+=`<label>Nouvelle session</label><input data-k="ns" placeholder="Ex : Soirée du 5 décembre" value="${esc(draft.ns||'')}"><button data-a="newsess">Créer</button>`;
+  if(sid)h+=`<p style="margin:10px 0 2px">Lien équipes :</p><div class="lk">${esc(location.origin+location.pathname)}</div>`;
+  h+=`</div>`;
+  if(sid&&g&&cfg)RN.forEach((n,r)=>{
+   h+=`<div class="card"><h2>${n}</h2>`;
+   (cfg[r]||[]).forEach((x,i)=>{const p=prs(x);
+    h+=`<div class="dr"><div class="db"><label>Thème ${i+1}</label><input data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}">
+    <button class="s ${x.ea?'ok':'off'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="ea">Artiste</button><button class="s ${x.et?'ok':'off'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="et">Titre</button>
+    <button class="s off" data-a="rmth" data-r="${r}" data-t="${i}">Supprimer</button>
+    <label style="display:block;margin-top:6px">Une chanson par ligne : Artiste - Titre</label><textarea data-k="s|${r}|${i}">${esc(x.songs)}</textarea>
+    <span class="good">${p.s.length} chansons, ${p.f.length} réponses, ${p.f.length*p.pts} pts max (${p.pts} pt par réponse)</span></div></div>`});
+   h+=`<button class="s" data-a="addth" data-r="${r}">+ Thème</button></div>`;
+  });
+  if(sid)h+=`<button class="y" data-a="savecfg">Enregistrer les questions</button><button class="off" data-a="reset">Réinitialiser la session (équipes et scores)</button>`;
+  return h;
+ }
+ if(!sid||!g)return h+`<div class="card">Crée d'abord une session dans l'onglet Préparer.</div>`;
+ if(tab==='pilot'){
+  h+=`<div class="card"><h2>Pilotage</h2><p>${teams.length} équipe(s) : ${teams.map(t=>esc(t.name)).join(', ')||'aucune'}</p>`;
+  RN.forEach((n,r)=>{
+   const st=g.rd?.[r];
+   h+=`<div class="row"><b>${n}</b><button class="${g.r===r&&st==='open'?'p':''}" data-a="launch" data-r="${r}">${g.r===r&&st==='open'?'En cours':'Ouvrir la manche'}</button>`;
+   if(g.r===r&&st==='open')h+=`<button class="off" data-a="closeround" data-r="${r}">Clôturer la manche</button>`;
+   h+=`<span class="bd">${st||'à venir'}</span></div>`;
+   if(g.r===r&&st==='open')th(r).forEach((x,i)=>{const o=g.th?.[`${r}_${i}`];
+    h+=`<div class="row" style="margin-left:20px"><span style="min-width:200px">${i+1}. ${esc(tn(x,i))}</span><button class="${o==='open'?'p':''}" data-a="topen" data-r="${r}" data-t="${i}">${o==='open'?'Ouvert':'Ouvrir'}</button><button class="off" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button><span class="bd">${o||'-'}</span></div>`});
+  });
+  return h+`<button class="off" data-a="idle">Écran d'attente pour tout le monde</button></div>`;
+ }
+ if(tab==='corr'){
+  h+=`<div class="card"><h2>Corrections</h2><select data-a="cr">${RN.map((n,r)=>`<option value="${r}" ${cr===r?'selected':''}>${n}${g.rd?.[cr]==='validated'&&r===cr?' (validée)':''}</option>`).join('')}</select>`;
+  th(cr).forEach((x,i)=>{
+   const key=`${cr}_${i}`;
+   h+=`<h3>${i+1}. ${esc(tn(x,i))}</h3><p class="good">${x.s.map(s=>[(x.f.some(f=>f[1]===0)?s.a:''),(x.f.some(f=>f[1]===1)?s.t:'')].filter(Boolean).join(' - ')).map(esc).join(' | ')}</p>`;
+   teams.forEach(t=>{
+    const m0=sid+t.id+key;
+    if(!mk[m0])mk[m0]=t.marks?.[key]||x.f.map(([j,q],i2)=>{const v=t.answers?.[key]?.[i2];return v&&norm(v)===norm(q?x.s[j].t:x.s[j].a)?1:0});
+    const m=mk[m0],x2=t.x2?.[cr]==i;
+    h+=`<div class="dr"><div class="dh"><span>${esc(t.name)} ${x2?'<span class="bd">x2</span>':''}</span><span>${sum(m)*x.pts*(x2?2:1)} pts</span></div><div class="db g2">`;
+    x.f.forEach(([j,q],i2)=>{const v=t.answers?.[key]?.[i2]||'';h+=`<button class="${m[i2]?'ok':'off'}" data-a="mk" data-m="${m0}" data-i="${i2}">${esc(v)||'(vide)'}</button>`});
+    h+=`</div></div>`;
+   });
+  });
+  return h+`<button class="y" data-a="validate">Valider les corrections de la manche</button></div>`;
+ }
+ return h+(rankHtml()||'<div class="card">Aucune manche validée pour le moment.</div>');
+}
+
+let tm;
+function flush(key){
+ const[r,t]=key.split('_'),n=th(+r)[+t].f.length,cur=teams.find(x=>x.id===me);
+ const arr=[...Array(n)].map((_,i)=>draft[`a|${key}|${i}`]??cur?.answers?.[key]?.[i]??'');
+ return tcol().doc(me).set({answers:{[key]:arr}},{merge:true});
+}
+const blank=()=>({n:'',ea:true,et:true,songs:''});
+document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;const v=e.target.value;
+ if(k==='nm'||k==='ns')draft[k]=v;
+ else if(k.startsWith('a|')){draft[k]=v;clearTimeout(tm);const key=k.split('|')[1];tm=setTimeout(()=>flush(key),500)}
+ else{const[f,r,i]=k.split('|');cfg[r][i][f==='n'?'n':'songs']=v}});
+document.addEventListener('change',e=>{const a=e.target.dataset.a;
+ if(a==='cr'){cr=+e.target.value;render()}
+ if(a==='pick'){localStorage.setItem('bt_a',e.target.value);bind();render()}});
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-a]');if(!b||b.tagName==='SELECT')return;
+ const a=b.dataset.a,r=+b.dataset.r,t=+b.dataset.t;
+ if(a==='tab'){tab=b.dataset.v;render()}
+ if(a==='join'){const n=(draft.nm||'').trim();if(!n)return;me='t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);localStorage.setItem('bt_me_'+sid,me);await tcol().doc(me).set({name:n,answers:{},done:{},x2:{},marks:{}})}
+ if(a==='leave'){localStorage.removeItem('bt_me_'+sid);me=null;render()}
+ if(a==='x2')tcol().doc(me).set({x2:{[g.r]:b.dataset.v?null:t}},{merge:true});
+ if(a==='done'){const key=`${g.r}_${t}`;await flush(key);tcol().doc(me).set({done:{[key]:true}},{merge:true})}
+ if(a==='newsess'){const n=(draft.ns||'').trim()||'Session '+new Date().toLocaleDateString('fr-FR');
+  const rounds={};RN.forEach((_,i)=>rounds[i]=[blank(),blank(),blank()]);
+  const ref=fs.collection('bt_sessions').doc();await ref.set({name:n,created:Date.now(),rounds,r:-1,th:{},rd:{}});
+  localStorage.setItem('bt_a',ref.id);await mdoc.set({sid:ref.id});draft.ns='';bind();render()}
+ if(a==='activate')mdoc.set({sid});
+ if(a==='tg'){cfg[r][t][b.dataset.f]=!cfg[r][t][b.dataset.f];if(!cfg[r][t].ea&&!cfg[r][t].et)cfg[r][t][b.dataset.f]=true;render()}
+ if(a==='addth'){cfg[r]=cfg[r]||[];cfg[r].push(blank());render()}
+ if(a==='rmth'&&confirm('Supprimer ce thème ?')){cfg[r].splice(t,1);render()}
+ if(a==='savecfg'){await gset({rounds:cfg});alert('Questions enregistrées')}
+ if(a==='launch')gset({r,rd:{[r]:'open'}});
+ if(a==='closeround'){const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'}})}
+ if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});o[`${r}_${t}`]='open';gset({th:o})}
+ if(a==='tclose')gset({th:{[`${r}_${t}`]:'closed'}});
+ if(a==='idle')gset({r:-1});
+ if(a==='mk'){const m=mk[b.dataset.m];m[+b.dataset.i]=m[+b.dataset.i]?0:1;render()}
+ if(a==='validate'){
+  const bt=fs.batch();
+  teams.forEach(tt=>th(cr).forEach((_,i)=>{const key=`${cr}_${i}`;if(mk[sid+tt.id+key])bt.set(tcol().doc(tt.id),{marks:{[key]:mk[sid+tt.id+key]}},{merge:true})}));
+  await bt.commit();gset({rd:{[cr]:'validated'}});
+ }
+ if(a==='reset'&&confirm('Supprimer toutes les équipes et remettre les scores à zéro ?')){
+  const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().doc(x.id)));await bt.commit();
+  mk={};await sdoc().update({r:-1,th:{},rd:{}});
+ }
+});
+})();
+</script></body></html>
