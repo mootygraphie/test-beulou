@@ -434,8 +434,9 @@ function team(){
  if(!opn)h+=`<p class="hint">Tu peux modifier tes réponses et placer ton x2 jusqu'à la fin de la manche.</p>`;
  th(r).forEach((x,i)=>{
   const key=`${r}_${i}`,s=g.th?.[key],done=t.done?.[key],play=s==='open'&&!done,xi=t.x2?.[r];
+  const known=s==='closed'; // nom du thème caché tant qu'il n'est pas terminé (secrets : jamais ici)
   const shown=s?(exp[key]??play):false,pop=play&&!popped.has(sid+key);if(pop)popped.add(sid+key);
-  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''} ${x.sx?'sx':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème secret':esc(tn(x,i))}<small>${x.sx?'Devine-le : +'+BT+' pts':'Thème '+(i+1)}${x.eb?' · bonus '+esc(bLab(x)):''}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
+  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''} ${x.sx?'sx':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème secret':known?esc(tn(x,i)):'Thème '+(i+1)}<small>${x.sx?'Devine-le : +'+BT+' pts':known&&x.n?'Thème '+(i+1):s==='open'?'Nom révélé à la fin du thème':'À venir'}${x.eb?' · bonus '+esc(bLab(x)):''}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
   if(shown){
    h+=`<div class="db">`+(x.sx?guessBox(t,key,'Nom du thème',BT):'');
    if(x.eb)h+=`<p class="bnh">Bonus : <b>${esc(bLab(x))}</b> · +1 pt par bonus trouvé</p>`;
