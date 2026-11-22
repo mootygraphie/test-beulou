@@ -170,9 +170,9 @@ select.in{appearance:none}
 .a-tbr .btn{margin:0;min-width:48px}.a-tbr .btn:disabled{opacity:.35}
 .a-tbn{min-width:44px;text-align:center;font:900 22px Poppins;color:var(--y)}
 /* écran tie break */
-.tbs{display:flex;flex-direction:column;gap:14px;padding:0 0 30px;margin:0 -14px;min-height:100vh}
-.tbs>.a-strip{margin-bottom:10px}
-.tbs-h{font:900 46px/1 Poppins;text-align:center;text-transform:uppercase;color:var(--y);letter-spacing:-.01em;text-shadow:-3px 0 var(--p),3px 0 var(--c);animation:chroma 3.5s steps(1) infinite;margin:10px 14px 0}
+.tbs{display:flex;flex-direction:column;gap:14px;padding:0 0 18px;margin:18px 0 0;border-radius:24px;overflow:hidden;background:rgba(7,11,48,.96);border:2px solid var(--y);box-shadow:0 0 40px rgba(255,230,0,.15);scroll-margin-top:90px}
+.tbs>.a-strip{margin-bottom:6px}
+.tbs-h{font:900 40px/1 Poppins;text-align:center;text-transform:uppercase;color:var(--y);letter-spacing:-.01em;text-shadow:-3px 0 var(--p),3px 0 var(--c);animation:chroma 3.5s steps(1) infinite;margin:10px 14px 0}
 .tbs-s{font:500 15px/1.45 Poppins;color:var(--mut);text-align:center;margin:0 22px}.tbs-s b{color:#fff}
 .tbc{margin:0 14px;padding:16px;border-radius:22px;background:var(--n2);border:2px solid var(--line)}
 .tbc.lead{border-color:var(--y);box-shadow:0 0 30px rgba(255,230,0,.2)}
@@ -430,7 +430,6 @@ const IC={
  rank:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M12 14v3M8 20h8"/></svg>'};
 const liveR=()=>{if(g.r>=0)return g.r;const n=[0,1,2,3].find(r=>g.rd?.[r]!=='validated');return n??3};
 function asess(){
- if(g.tb&&!fin()&&g.rd?.[3]==='validated')return tbScreen();
  const inG=/^\d$/.test(tab),live=g.r>=0&&g.rd?.[g.r]==='open';
  const head={prep:['Préparer','Questions'],teams:['Équipes',teams.length+' inscrite'+(teams.length>1?'s':'')],rank:['Résultats','Classement']}[tab]||['La soirée',RN[+tab]];
  let h=`<div class="a-head"><div class="a-strip"></div><div class="a-top"><button class="btn gh sm" data-a="back" aria-label="Retour aux sessions" style="margin:0">‹</button><div class="a-tt"><span class="a-kick">${esc(g.name||'')} · ${head[0]}</span><b>${head[1]}</b></div><img src="logo.png" alt=""></div>`;
@@ -513,20 +512,21 @@ function rscreen(r){
  return h;
 }
 /* tie break : écran plein, rien d'autre de cliquable que les points et la validation */
-function tbScreen(){
- const P=place(3).filter(x=>inFinal(x.id)),tied=P.length>1&&P[0].sc===P[1].sc;
- return`<div class="tbs"><div class="a-strip"></div><h1 class="tbs-h">Tie break</h1><p class="tbs-s">Touche <b>+1</b> pour donner un point à l'équipe qui trouve. Les points s'ajoutent au classement final.</p>
- ${P.map(x=>{const t=teams.find(z=>z.id===x.id),n=tbp(t);return`<section class="tbc ${!tied&&x.pos===1?'lead':''}"><div class="tbc-h"><div class="f"><b>${esc(x.name)}</b><small>${x.sc} pts au total${!tied&&x.pos===1?' · en tête':''}</small></div><span class="tbc-n">${n}</span></div>
+function tbBlock(){
+ const S=place(3),P=finalists().map(id=>S.find(x=>x.id===id)).filter(Boolean); // ordre fixe : les cartes ne bougent jamais
+ const top=Math.max(...P.map(x=>x.sc)),lead=P.filter(x=>x.sc===top),tied=lead.length>1;
+ return`<section class="tbs" id="tb"><div class="a-strip"></div><h1 class="tbs-h">Tie break</h1><p class="tbs-s">Touche <b>+1</b> pour donner un point à l'équipe qui trouve. Les points s'ajoutent au classement final.</p>
+ ${P.map(x=>{const t=teams.find(z=>z.id===x.id),n=tbp(t),ld=!tied&&x.sc===top;return`<section class="tbc ${ld?'lead':''}"><div class="tbc-h"><div class="f"><b>${esc(x.name)}</b><small>${x.sc} pts au total${ld?' · en tête':''}</small></div><span class="tbc-n">${n}</span></div>
   <div class="tbc-b"><button class="tbm" data-a="tbp" data-id="${x.id}" data-d="-1" aria-label="Retirer un point à ${esc(x.name)}" ${n?'':'disabled'}>−1</button><button class="tbp" data-a="tbp" data-id="${x.id}" data-d="1" aria-label="Ajouter un point à ${esc(x.name)}">+1</button></div></section>`}).join('')}
- <p class="tbs-st ${tied?'eq':''}">${tied?'Toujours à égalité':esc(P[0]?.name||'')+' passe devant'}</p>
+ <p class="tbs-st ${tied?'eq':''}">${tied?'Toujours à égalité':esc(lead[0]?.name||'')+' passe devant'}</p>
  <button class="btn blk y tbs-ok" data-a="tbok" ${tied?'disabled':''}>Valider et clôturer la soirée</button>
- <button class="tbs-x" data-a="tbcancel">Annuler le tie break</button></div>`;
+ <button class="tbs-x" data-a="tbcancel">Annuler le tie break</button></section>`;
 }
 /* fin de soirée : clôture directe ou tie break en cas d'égalité parfaite */
 function endBlock(TM){
  const P=place(3).filter(x=>inFinal(x.id)),tied=P.length>1&&P[0].sc===P[1].sc;
  if(fin())return`<div class="c a-end"><h2>Soirée terminée</h2><p class="a-p">Le classement final et le podium sont affichés chez les équipes.</p><button class="btn blk y" data-a="tab" data-v="rank">Voir le classement final</button></div>`;
- if(g.tb)return`<div class="c a-end a-tb2"><h2>Tie break</h2><p class="a-p">Attribue les points manuellement, puis valide : ils s'ajoutent au classement final.</p>${P.map(x=>{const t=teams.find(z=>z.id===x.id);return`<div class="a-tbr"><div class="f"><b>${esc(x.name)}</b><small>${x.sc} pts au total</small></div><button class="btn sm gh" data-a="tbp" data-id="${x.id}" data-d="-1" aria-label="Retirer un point" ${tbp(t)?'':'disabled'}>−1</button><span class="a-tbn">${tbp(t)}</span><button class="btn sm" data-a="tbp" data-id="${x.id}" data-d="1" aria-label="Ajouter un point">+1</button></div>`}).join('')}${tied?'<p class="a-warn" style="margin:10px 0 0">Toujours à égalité.</p>':''}<div style="margin-top:14px"><button class="btn blk y" data-a="tbok">Valider le tie break et clôturer</button></div></div>`;
+ if(g.tb)return tbBlock();
  return`<div class="c a-end"><h2>Fin de la soirée</h2>${P.map(x=>`<div class="a-tbr"><div class="f"><b>${esc(x.name)}</b></div><span class="a-tbn">${x.sc} pts</span></div>`).join('')}
   ${tied?`<p class="a-warn" style="margin:10px 0 12px">Égalité parfaite entre ${P.filter(x=>x.sc===P[0].sc).map(x=>esc(x.name)).join(' et ')}.</p><button class="btn blk" data-a="tiebreak">Aller au tie break</button>`:'<div style="height:12px"></div>'}
   <button class="btn blk ${tied?'gh':'y'}" data-a="closenight" style="margin-top:8px">Clôturer la soirée</button></div>`;
@@ -587,7 +587,7 @@ document.addEventListener('click',async e=>{
  if(a==='savecfg'){await gset({rounds:cfg,rinfo:cfgI});b.textContent='Questions enregistrées ✓'}
  if(a==='launch')gset(r===3?{r,rd:{3:'open'},fz:place(2).filter(x=>x.pos<=2).map(x=>x.id)}:{r,rd:{[r]:'open'}});
  if(a==='closenight'){await gset({over:true});tab='rank';render();window.scrollTo(0,0)}
- if(a==='tiebreak'){await gset({tb:true,tbp:{}});window.scrollTo(0,0)}
+ if(a==='tiebreak'){await gset({tb:true,tbp:{}});setTimeout(()=>document.getElementById('tb')?.scrollIntoView({behavior:'smooth',block:'start'}),250)}
  if(a==='tbcancel'&&confirm('Annuler le tie break ? Les points de tie break seront effacés.'))gset({tb:FV.delete(),tbp:FV.delete()});
  if(a==='tbp'){const id=b.dataset.id,d=+b.dataset.d;if(d<0&&!(g.tbp?.[id]>0))return;gset({tbp:{[id]:FV.increment(d)}})}
  if(a==='tbok'&&confirm('Valider le tie break et clôturer la soirée ?')){await gset({over:true});tab='rank';render();window.scrollTo(0,0)}
