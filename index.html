@@ -40,7 +40,7 @@ button.ok{background:#39ff88;color:#04210f}button.s{font-size:12px;padding:6px 1
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.good{color:#39ff88;font-size:13px}.tabs{margin-bottom:14px}
 .lk{word-break:break-all;color:var(--y);font-size:13px}
 </style></head>
-<body><div id="app">Chargement...</div>
+<body><div id="app">Chargement... (si rien ne change après 10 secondes, recharge la page)</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
@@ -64,8 +64,11 @@ let meta={},sessions=[],sid=null,g=null,teams=[],unG,unT,mready=false,tready=fal
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
 const sum=a=>a.reduce((x,y)=>x+y,0);
-const prs=x=>{const s=(x.songs||'').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const[a,...t]=l.split(' - ');return{a:a.trim(),t:t.join(' - ').trim()}});
- const f=[];s.forEach((_,j)=>{x.ea&&f.push([j,0]);x.et&&f.push([j,1])});return{n:x.n||'',s,f,pts:x.ea&&x.et?1:2}};
+const prs=x=>{const both=x.ea&&x.et,m=both?3:6;
+ const L=(x.songs||'').split('\n').map(l=>l.trim()).filter(Boolean),k=Math.min(L.length,m);
+ const s=L.slice(0,m).map(l=>{const[a,...t]=l.split(' - ');return{a:a.trim(),t:t.join(' - ').trim()}});
+ while(s.length<m)s.push({a:'',t:''});
+ const f=[];s.forEach((_,j)=>{x.ea&&f.push([j,0]);x.et&&f.push([j,1])});return{n:x.n||'',s,f,pts:both?1:2,k,m,extra:L.length>m}};
 const th=r=>(g.rounds?.[r]||[]).map(prs);
 const tn=(x,i)=>x.n||'Thème '+(i+1);
 const score=(t,r)=>Object.entries(t.marks||{}).reduce((s,[k,m])=>{const[rr,tt]=k.split('_');if(r!=null&&+rr!==r)return s;const x=th(+rr)[+tt];return s+sum(m)*(x?x.pts:1)*(t.x2?.[rr]==tt?2:1)},0);
@@ -85,10 +88,10 @@ function bind(){
  if(s===sid)return;
  unG&&unG();unT&&unT();sid=s||null;g=null;teams=[];tready=false;cfg=null;mk={};
  me=sid&&localStorage.getItem('bt_me_'+sid);if(!sid)return;
- unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{}},x.data()):null;if(g&&!cfg)cfg=JSON.parse(JSON.stringify(g.rounds||{}));render()});
- unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()});
+ unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{}},x.data()):null;if(g&&!cfg)cfg=JSON.parse(JSON.stringify(g.rounds||{}));render()},e=>{app.innerHTML='<div class="card"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'});
+ unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()},e=>{app.innerHTML='<div class="card"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'});
 }
-mdoc.onSnapshot(x=>{meta=x.data()||{};mready=true;bind();render()});
+mdoc.onSnapshot(x=>{meta=x.data()||{};mready=true;bind();render()},e=>{app.innerHTML='<div class="card"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'});
 if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,name:d.data().name}));render()});
 
 function render(){
@@ -146,8 +149,8 @@ function admin(){
     h+=`<div class="dr"><div class="db"><label>Thème ${i+1}</label><input data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}">
     <button class="s ${x.ea?'ok':'off'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="ea">Artiste</button><button class="s ${x.et?'ok':'off'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="et">Titre</button>
     <button class="s off" data-a="rmth" data-r="${r}" data-t="${i}">Supprimer</button>
-    <label style="display:block;margin-top:6px">Une chanson par ligne : Artiste - Titre</label><textarea data-k="s|${r}|${i}">${esc(x.songs)}</textarea>
-    <span class="good">${p.s.length} chansons, ${p.f.length} réponses, ${p.f.length*p.pts} pts max (${p.pts} pt par réponse)</span></div></div>`});
+    <label style="display:block;margin-top:6px">Une chanson par ligne : Artiste - Titre (3 lignes si artiste et titre, 6 lignes si un seul des deux)</label><textarea data-k="s|${r}|${i}">${esc(x.songs)}</textarea>
+    <span class="good">${p.k}/${p.m} chansons saisies, 6 réponses, ${6*p.pts} pts max (${p.pts} pt par réponse)</span>${p.k<p.m?'<br><span style="color:var(--y);font-size:13px">Il en manque '+(p.m-p.k)+' pour avoir 6 réponses.</span>':''}${p.extra?'<br><span style="color:var(--y);font-size:13px">Les lignes en trop sont ignorées.</span>':''}</div></div>`});
    h+=`<button class="s" data-a="addth" data-r="${r}">+ Thème</button></div>`;
   });
   if(sid)h+=`<button class="y" data-a="savecfg">Enregistrer les questions</button><button class="off" data-a="reset">Réinitialiser la session (équipes et scores)</button>`;
@@ -170,7 +173,7 @@ function admin(){
   h+=`<div class="card"><h2>Corrections</h2><select data-a="cr">${RN.map((n,r)=>`<option value="${r}" ${cr===r?'selected':''}>${n}${g.rd?.[cr]==='validated'&&r===cr?' (validée)':''}</option>`).join('')}</select>`;
   th(cr).forEach((x,i)=>{
    const key=`${cr}_${i}`;
-   h+=`<h3>${i+1}. ${esc(tn(x,i))}</h3><p class="good">${x.s.map(s=>[(x.f.some(f=>f[1]===0)?s.a:''),(x.f.some(f=>f[1]===1)?s.t:'')].filter(Boolean).join(' - ')).map(esc).join(' | ')}</p>`;
+   h+=`<h3>${i+1}. ${esc(tn(x,i))}</h3><p class="good">${x.s.map(s=>[(x.f.some(f=>f[1]===0)?s.a:''),(x.f.some(f=>f[1]===1)?s.t:'')].filter(Boolean).join(' - ')).filter(Boolean).map(esc).join(' | ')}</p>`;
    teams.forEach(t=>{
     const m0=sid+t.id+key;
     if(!mk[m0])mk[m0]=t.marks?.[key]||x.f.map(([j,q],i2)=>{const v=t.answers?.[key]?.[i2];return v&&norm(v)===norm(q?x.s[j].t:x.s[j].a)?1:0});
