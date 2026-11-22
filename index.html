@@ -169,6 +169,23 @@ select.in{appearance:none}
 .a-tbr .f{flex:1;min-width:0}.a-tbr b{display:block;font:800 var(--t4) Poppins}.a-tbr small{font:500 12px Poppins}
 .a-tbr .btn{margin:0;min-width:48px}.a-tbr .btn:disabled{opacity:.35}
 .a-tbn{min-width:44px;text-align:center;font:900 22px Poppins;color:var(--y)}
+/* écran tie break */
+.tbs{display:flex;flex-direction:column;gap:14px;padding:0 0 30px;margin:0 -14px;min-height:100vh}
+.tbs>.a-strip{margin-bottom:10px}
+.tbs-h{font:900 46px/1 Poppins;text-align:center;text-transform:uppercase;color:var(--y);letter-spacing:-.01em;text-shadow:-3px 0 var(--p),3px 0 var(--c);animation:chroma 3.5s steps(1) infinite;margin:10px 14px 0}
+.tbs-s{font:500 15px/1.45 Poppins;color:var(--mut);text-align:center;margin:0 22px}.tbs-s b{color:#fff}
+.tbc{margin:0 14px;padding:16px;border-radius:22px;background:var(--n2);border:2px solid var(--line)}
+.tbc.lead{border-color:var(--y);box-shadow:0 0 30px rgba(255,230,0,.2)}
+.tbc-h{display:flex;align-items:center;gap:12px;margin:0 0 14px}.tbc-h .f{flex:1;min-width:0}
+.tbc-h b{display:block;font:900 22px/1.15 Poppins;word-break:break-word}.tbc-h small{font:600 13px Poppins;color:var(--mut)}
+.tbc-n{flex:none;min-width:72px;text-align:center;font:900 58px/1 Poppins;color:var(--y);text-shadow:3px 3px 0 var(--p)}
+.tbc-b{display:grid;grid-template-columns:84px 1fr;gap:12px}
+.tbm,.tbp{height:92px;border-radius:20px;font:900 30px Poppins;cursor:pointer;touch-action:manipulation}
+.tbm{border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff}.tbm:disabled{opacity:.25;cursor:default}
+.tbp{border:0;background:var(--p);color:#fff;box-shadow:0 6px 0 #9c0055}.tbp:active{transform:translateY(5px);box-shadow:0 1px 0 #9c0055}
+.tbs-st{text-align:center;font:800 16px Poppins;color:var(--g);margin:4px 0 0}.tbs-st.eq{color:var(--y)}
+.tbs-ok{margin:0 14px!important;width:auto!important;min-height:72px!important;font-size:17px!important}.tbs-ok:disabled{opacity:.35}
+.tbs-x{align-self:center;margin-top:18px;background:none;border:0;color:var(--mut);font:600 13px Poppins;text-decoration:underline;cursor:pointer;padding:10px}
 /* équipes */
 .a-team{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:16px;margin:0 0 10px;background:rgba(0,0,0,.18);flex-wrap:wrap}
 .a-team .av{flex:none;width:40px;height:40px;border-radius:12px;background:var(--c);color:var(--n);font:800 15px/40px Poppins;text-align:center}
@@ -253,12 +270,13 @@ const ADMIN=location.hash==='#admin';
 if(ADMIN)document.body.classList.add('adm');
 const app=document.getElementById('app');
 const BRAND=big=>`<div class="brand ${big?'big':''}"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<h1 class=ttl>BEULOU TEST</h1>'"></div>`;
-function askPin(){return new Promise(res=>{const o=document.createElement('div');o.className='ov';
+function askPin(){try{if(localStorage.getItem('bt_admin')===HASH)return Promise.resolve(true)}catch(x){}
+ return new Promise(res=>{const o=document.createElement('div');o.className='ov';
  o.innerHTML='<div class="md"><h2>Accès admin</h2><input class="in" type="password" id="pin" placeholder="Code" autocomplete="current-password"><p class="er" id="pe"></p><button class="btn blk" id="pb">Entrer</button></div>';
  document.body.appendChild(o);const pin=o.querySelector('#pin'),pe=o.querySelector('#pe'),md=o.querySelector('.md');
  const go=async()=>{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(SALT+pin.value));
   const x=[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('');
-  if(x===HASH){o.remove();res(true)}else{pe.textContent='Code incorrect';pin.value='';md.classList.remove('sh');void md.offsetWidth;md.classList.add('sh')}};
+  if(x===HASH){try{localStorage.setItem('bt_admin',HASH)}catch(e){}o.remove();res(true)}else{pe.textContent='Code incorrect';pin.value='';md.classList.remove('sh');void md.offsetWidth;md.classList.add('sh')}};
  o.querySelector('#pb').onclick=go;pin.onkeydown=e=>{if(e.key==='Enter')go()};setTimeout(()=>pin.focus(),50)})}
 if(!CFG.apiKey){app.innerHTML='<div class="c"><h2>Config Firebase manquante</h2></div>'}
 else (async()=>{
@@ -398,6 +416,7 @@ const stat=s=>{const rd=s.rd||{};if(rd[3]==='validated')return['Terminée','cy']
  return filled(s.rounds)?['Prête','ok']:['Brouillon','']};
 function alist(){
  let h=BRAND(true)+`<h1 class="a-h1">Sessions</h1><p class="a-sub">Crée, prépare et pilote tes soirées blind test.</p>`;
+ h+=`<p class="a-sub" style="margin:-14px 0 22px"><button class="btn gh sm" data-a="logout" style="margin:0">Se déconnecter</button></p>`;
  h+=`<div class="c"><h2>Nouvelle session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="nn" placeholder="Ex : Soirée équipe Marketing" value="${esc(draft.nn||'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="nt" placeholder="Ex : Beulou Test #4" value="${esc(draft.nt||'')}"></div></div><div style="margin-top:14px"><button class="btn" data-a="newsess">Créer la session</button></div></div>`;
  if(!sessions.length)h+=`<div class="c mut">Aucune session pour le moment.</div>`;
  sessions.forEach(s=>{const[l,c]=stat(s);
@@ -411,6 +430,7 @@ const IC={
  rank:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M12 14v3M8 20h8"/></svg>'};
 const liveR=()=>{if(g.r>=0)return g.r;const n=[0,1,2,3].find(r=>g.rd?.[r]!=='validated');return n??3};
 function asess(){
+ if(g.tb&&!fin()&&g.rd?.[3]==='validated')return tbScreen();
  const inG=/^\d$/.test(tab),live=g.r>=0&&g.rd?.[g.r]==='open';
  const head={prep:['Préparer','Questions'],teams:['Équipes',teams.length+' inscrite'+(teams.length>1?'s':'')],rank:['Résultats','Classement']}[tab]||['La soirée',RN[+tab]];
  let h=`<div class="a-head"><div class="a-strip"></div><div class="a-top"><button class="btn gh sm" data-a="back" aria-label="Retour aux sessions" style="margin:0">‹</button><div class="a-tt"><span class="a-kick">${esc(g.name||'')} · ${head[0]}</span><b>${head[1]}</b></div><img src="logo.png" alt=""></div>`;
@@ -492,6 +512,16 @@ function rscreen(r){
  if(r===3&&st==='validated')h+=endBlock(TM);
  return h;
 }
+/* tie break : écran plein, rien d'autre de cliquable que les points et la validation */
+function tbScreen(){
+ const P=place(3).filter(x=>inFinal(x.id)),tied=P.length>1&&P[0].sc===P[1].sc;
+ return`<div class="tbs"><div class="a-strip"></div><h1 class="tbs-h">Tie break</h1><p class="tbs-s">Touche <b>+1</b> pour donner un point à l'équipe qui trouve. Les points s'ajoutent au classement final.</p>
+ ${P.map(x=>{const t=teams.find(z=>z.id===x.id),n=tbp(t);return`<section class="tbc ${!tied&&x.pos===1?'lead':''}"><div class="tbc-h"><div class="f"><b>${esc(x.name)}</b><small>${x.sc} pts au total${!tied&&x.pos===1?' · en tête':''}</small></div><span class="tbc-n">${n}</span></div>
+  <div class="tbc-b"><button class="tbm" data-a="tbp" data-id="${x.id}" data-d="-1" aria-label="Retirer un point à ${esc(x.name)}" ${n?'':'disabled'}>−1</button><button class="tbp" data-a="tbp" data-id="${x.id}" data-d="1" aria-label="Ajouter un point à ${esc(x.name)}">+1</button></div></section>`}).join('')}
+ <p class="tbs-st ${tied?'eq':''}">${tied?'Toujours à égalité':esc(P[0]?.name||'')+' passe devant'}</p>
+ <button class="btn blk y tbs-ok" data-a="tbok" ${tied?'disabled':''}>Valider et clôturer la soirée</button>
+ <button class="tbs-x" data-a="tbcancel">Annuler le tie break</button></div>`;
+}
 /* fin de soirée : clôture directe ou tie break en cas d'égalité parfaite */
 function endBlock(TM){
  const P=place(3).filter(x=>inFinal(x.id)),tied=P.length>1&&P[0].sc===P[1].sc;
@@ -533,6 +563,7 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
 document.addEventListener('click',async e=>{
  const b=e.target.closest('button[data-a]');if(!b)return;
  const a=b.dataset.a,r=+b.dataset.r,t=+b.dataset.t;
+ if(a==='logout'&&confirm('Se déconnecter de l\'admin sur cet appareil ?')){try{localStorage.removeItem('bt_admin')}catch(x){}location.reload()}
  if(a==='tab'){tab=b.dataset.v;render();window.scrollTo(0,0)}
  if(a==='join'){const n=(draft.nm||'').trim();if(!n)return;me='t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);localStorage.setItem('bt_me_'+sid,me);await tcol().doc(me).set({name:n,answers:{},done:{},x2:{},guess:{}})}
  if(a==='leave'){localStorage.removeItem('bt_me_'+sid);me=null;render()}
@@ -556,8 +587,9 @@ document.addEventListener('click',async e=>{
  if(a==='savecfg'){await gset({rounds:cfg,rinfo:cfgI});b.textContent='Questions enregistrées ✓'}
  if(a==='launch')gset(r===3?{r,rd:{3:'open'},fz:place(2).filter(x=>x.pos<=2).map(x=>x.id)}:{r,rd:{[r]:'open'}});
  if(a==='closenight'){await gset({over:true});tab='rank';render();window.scrollTo(0,0)}
- if(a==='tiebreak')gset({tb:true,tbp:{}});
- if(a==='tbp'){const id=b.dataset.id,v=Math.max(0,(g.tbp?.[id]||0)+(+b.dataset.d));gset({tbp:{[id]:v}})}
+ if(a==='tiebreak'){await gset({tb:true,tbp:{}});window.scrollTo(0,0)}
+ if(a==='tbcancel'&&confirm('Annuler le tie break ? Les points de tie break seront effacés.'))gset({tb:FV.delete(),tbp:FV.delete()});
+ if(a==='tbp'){const id=b.dataset.id,d=+b.dataset.d;if(d<0&&!(g.tbp?.[id]>0))return;gset({tbp:{[id]:FV.increment(d)}})}
  if(a==='tbok'&&confirm('Valider le tie break et clôturer la soirée ?')){await gset({over:true});tab='rank';render();window.scrollTo(0,0)}
  if(a==='closeround'){const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'}})}
  if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});o[`${r}_${t}`]='open';gset({th:o})}
