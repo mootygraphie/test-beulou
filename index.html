@@ -102,6 +102,17 @@ h2,h3{font-size:22px;letter-spacing:.6px;font-weight:400}
 .frame .st{margin-top:0}.frame .sep{border-top:1px dashed rgba(255,255,255,.2);margin:16px 0 12px}.frame h3,.frame h2{margin-top:2px}
 .gm{text-align:center;padding:14px 0 4px}.gm h2{font-size:34px;line-height:1.05;letter-spacing:1px;margin:0}
 .gm p{margin:12px 0 0;font:400 17px 'Gloria Hallelujah',cursive;color:var(--y)}
+
+.st,.gm h2,.rh{color:var(--y);-webkit-text-stroke:8px #060a2a;paint-order:stroke fill;text-shadow:4px 4px 0 var(--p);text-transform:uppercase}
+.gbg~.st{text-shadow:4px 4px 0 var(--p)}
+.st{text-align:center;font-size:40px;line-height:1.08;margin:6px 4px 16px}.st.sm{font-size:28px;margin:2px 4px 12px}
+.gm{text-align:center;padding:0;margin:0 0 18px}.gm h2{font-size:38px;line-height:1.08;margin:0 4px}
+.gm p{display:inline-block;margin:16px 0 0;padding:8px 18px;border-radius:999px;background:rgba(10,15,58,.9);border:1px solid rgba(255,230,0,.35);font:400 17px 'Gloria Hallelujah',cursive;color:var(--y)}
+.rk{padding:10px 8px;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.rk .pos{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:18px;background:rgba(255,255,255,.1);color:#fff}
+.rk .pos.p1{background:var(--y);color:var(--n)}.rk .pos.p2{background:var(--c);color:var(--n)}.rk .pos.p3{background:var(--p);color:#fff}
+.rk.me{background:linear-gradient(90deg,rgba(255,10,140,.4),rgba(255,10,140,.06));border-radius:14px;border-bottom-color:transparent;box-shadow:inset 3px 0 0 var(--y)}
+.frame h2{color:var(--c)}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -145,7 +156,7 @@ function rankInner(){
  return`<h2>Classement</h2><p class="mut" style="margin:-4px 0 8px">Après ${RN[L]}</p>${cur.map(x=>{
   const t=teams.find(z=>z.id===x.id),gn=score(t,L);
   const ar=!pv?'':x.pos<pv[x.id]?'<span class="up">▲</span>':x.pos>pv[x.id]?'<span class="dn">▼</span>':'<span class="eq">=</span>';
-  return`<div class="rk ${x.id===me?'me':''}"><span class="pos">${x.pos}</span><span class="nm">${esc(x.name)}</span>${ar}<span class="tt">${x.sc}</span><span class="gn">(+${gn})</span></div>`}).join('')}`}
+  return`<div class="rk ${x.id===me?'me':''}"><span class="pos p${x.pos}">${x.pos}</span><span class="nm">${esc(x.name)}</span>${ar}<span class="tt">${x.sc}</span><span class="gn">(+${gn})</span></div>`}).join('')}`}
 const rankHtml=()=>{const i=rankInner();return i?`<div class="c">${i}</div>`:''};
 const GB='<div class="gbg"><b></b><b></b><b></b><b></b><b></b><b></b><div class="nz"></div></div>';
 const GC=(t,sub)=>`<div class="gm"><h2>${t}</h2>${sub?`<p>${sub}</p>`:''}</div>`;
@@ -175,21 +186,22 @@ function render(){
 function team(){
  const FR=x=>`<div class="frame">${x}</div>`;
  if(!sid)return BRAND(true)+FR(`<h3>Pas de session</h3><p class="mut hand">Ouvre le lien de ta soirée pour rejoindre la partie.</p>`);
- if(!gl||!tready)return GB+BRAND(true)+FR(GC('Chargement','Une seconde...'));
+ if(!gl||!tready)return GB+BRAND(true)+GC('Chargement','Une seconde...');
  if(!g)return BRAND(true)+FR(`<h3>Session introuvable</h3><p class="mut hand">Vérifie ton lien.</p>`);
  const T=g.title?`<h1 class="st">${esc(g.title)}</h1>`:'',Ts=g.title?`<h1 class="st sm">${esc(g.title)}</h1>`:'';
- if(!me)return BRAND(true)+FR(T+`<h3>Ton équipe</h3><label>Nom d'équipe</label><input class="in" data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="btn blk" data-a="join">C'est parti</button>`);
+ if(!me)return BRAND(true)+T+FR(`<h3>Ton équipe</h3><label>Nom d'équipe</label><input class="in" data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="btn blk" data-a="join">C'est parti</button>`);
  const t=teams.find(x=>x.id===me);
- if(!t)return BRAND(true)+FR(T+`<h3>Équipe introuvable</h3><p class="mut hand">La partie a été réinitialisée.</p><button class="btn blk" data-a="leave">Rejoindre à nouveau</button>`);
+ if(!t)return BRAND(true)+T+FR(`<h3>Équipe introuvable</h3><p class="mut hand">La partie a été réinitialisée.</p><button class="btn blk" data-a="leave">Rejoindre à nouveau</button>`);
  const head=`<div class="row"><span class="chip cy">Équipe</span><b>${esc(t.name)}</b></div>`;
  const rk=rankInner(),RKB=rk?`<div class="sep"></div>${rk}`:'';
  const r=g.r,st=g.rd?.[r];
- if(r<0)return GB+BRAND(true)+FR(T+head+GC('Patience, la manche va commencer','Garde l\'oreille tendue')+RKB);
- if(st==='closed'||st==='validated')return GB+BRAND(true)+FR(T+head+(st==='closed'?GC('On calcule les scores','Les points arrivent, ne bouge pas'):GC('Scores validés','La manche suivante va commencer bientôt'))+RKB);
+ const W=(m)=>GB+BRAND(true)+T+m+FR(head+RKB);
+ if(r<0)return W(GC('Patience, la manche va commencer','Garde l\'oreille tendue'));
+ if(st==='closed'||st==='validated')return W(st==='closed'?GC('On calcule les scores','Les points arrivent, ne bouge pas'):GC('Scores validés','La manche suivante va commencer bientôt'));
  const ids=th(r).map((_,i)=>`${r}_${i}`),opn=ids.some(k=>g.th?.[k]==='open'&&!t.done?.[k]);
  if(!opn){const wd=ids.some(k=>g.th?.[k]==='open'&&t.done?.[k]),stt=ids.some(k=>g.th?.[k]);
-  return GB+BRAND(true)+FR(T+head+(wd?GC('Thème validé','On attend le prochain thème'):stt?GC('Le prochain thème va commencer','Garde l\'oreille tendue'):GC('La manche va commencer','Garde l\'oreille tendue'))+RKB)}
- let h=Ts+head+`<h3 style="margin-top:12px">${RN[r]}</h3>`;
+  return W(wd?GC('Thème validé','On attend le prochain thème'):stt?GC('Le prochain thème va commencer','Garde l\'oreille tendue'):GC('La manche va commencer','Garde l\'oreille tendue'))}
+ let h=head+`<h3 style="margin-top:12px">${RN[r]}</h3>`;
  th(r).forEach((x,i)=>{
   const key=`${r}_${i}`,s=g.th?.[key],done=t.done?.[key],isOpen=s==='open'&&!done;
   const xi=t.x2?.[r],xlock=xi!=null&&t.done?.[`${r}_${xi}`];
@@ -203,7 +215,7 @@ function team(){
   }
   h+=`</div>`;
  });
- return BRAND(false)+FR(h+RKB);
+ return BRAND(false)+Ts+FR(h+RKB);
 }
 
 const stat=s=>{const rd=s.rd||{};if(rd[3]==='validated')return['Terminée','cy'];if(Object.keys(rd).length)return['En cours','pk'];
