@@ -25,11 +25,14 @@ button{font-family:var(--fb)}
 /* titres côté équipes */
 .st{font-size:var(--t1);line-height:1.12;text-align:center;color:var(--y);text-shadow:4px 4px 0 var(--p);-webkit-text-stroke:5px #060a2a;paint-order:stroke fill;letter-spacing:.5px;margin:6px 4px 16px}
 .st.sm{font-size:var(--t2);margin:2px 4px 12px}
-.gm{background:rgba(9,14,60,.94);border:2px solid rgba(0,232,255,.4);border-radius:24px;padding:20px 16px;margin:0 0 16px;text-align:center;box-shadow:0 0 0 4px rgba(255,10,140,.25),0 14px 40px rgba(0,0,0,.45)}
-.gm h2{font:400 28px/1.2 var(--fb);color:var(--y);text-transform:none;margin:0}
-.gm p{margin:10px 0 0;font:400 var(--t3)/1.3 var(--fb);color:#fff}
-.frame{background:rgba(9,14,60,.94);border:2px solid rgba(0,232,255,.4);border-radius:26px;padding:18px 16px;margin:0 0 16px;box-shadow:0 0 0 4px rgba(255,10,140,.28),0 18px 50px rgba(0,0,0,.5)}
-.frame h2,.frame h3{color:var(--c);font-size:var(--t3);letter-spacing:.5px;margin:2px 0 10px}
+.gm{position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#0d1450,#04061c 80%);border:3px solid #1d2470;border-radius:30px;padding:30px 18px 26px;margin:0 0 18px;text-align:center;box-shadow:0 0 0 3px var(--p),6px 6px 0 3px var(--y),0 0 50px rgba(0,232,255,.25),inset 0 0 60px rgba(0,232,255,.14)}
+.gm:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px)}
+@keyframes chroma{0%,90%{text-shadow:-2px 0 var(--p),2px 0 var(--c);transform:none}92%{text-shadow:-6px 0 var(--p),6px 0 var(--c);transform:translateX(3px) skewX(-8deg)}95%{text-shadow:4px 0 var(--p),-4px 0 var(--c);transform:translateX(-2px)}}
+@keyframes blink{50%{opacity:0}}
+.gm h2{font:400 30px/1.15 var(--fb);color:var(--y);text-transform:none;margin:0;text-shadow:-2px 0 var(--p),2px 0 var(--c);animation:chroma 3.5s steps(1) infinite}
+.gm p{margin:12px 0 0;font:400 var(--t4)/1.35 var(--fb);color:rgba(255,255,255,.9)}.gm p:after{content:"▮";margin-left:6px;color:var(--c);animation:blink 1s steps(1) infinite}
+.frame{background:rgba(7,11,48,.92);border:1.5px solid rgba(0,232,255,.4);border-radius:24px;padding:18px 16px;margin:0 0 18px;box-shadow:6px 6px 0 rgba(255,10,140,.75),0 18px 50px rgba(0,0,0,.5);backdrop-filter:blur(6px)}
+.frame h2,.frame h3{color:var(--y);font-size:var(--t3);letter-spacing:.5px;margin:2px 0 12px;text-shadow:2px 2px 0 var(--p)}
 .sep{border-top:1px dashed rgba(255,255,255,.22);margin:16px 0 12px}
 .hand{font-family:var(--fb)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}.row>.f{flex:1;min-width:0}
@@ -40,18 +43,20 @@ select.in{appearance:none}
 /* boutons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 20px;border-radius:999px;border:0;background:var(--p);color:#fff;font:400 var(--t4) var(--fb);cursor:pointer;margin:4px 6px 4px 0;box-shadow:0 3px 0 #9c0055}
 .btn:active{box-shadow:none;transform:translateY(3px)}.btn.blk{display:flex;width:100%;margin-right:0;font:400 var(--t3) var(--fh);text-transform:uppercase;letter-spacing:.6px;min-height:54px}
-.btn.pk{background:var(--c);color:var(--n);box-shadow:0 3px 0 #0090a0}.btn.y{background:var(--y);color:var(--n);box-shadow:0 3px 0 #b3a100}
+.btn.pk{background:var(--c);color:var(--n);box-shadow:0 3px 0 #0090a0}.btn.y{background:var(--y);color:var(--n);box-shadow:0 5px 0 #b3a100}
 .btn.on{background:var(--g);color:#04210f;box-shadow:0 3px 0 #1c9c63}.btn.gh,.btn.dg{background:transparent;box-shadow:none;border:1.5px solid rgba(255,255,255,.3)}
 .btn.dg{color:#ff7a9c;border-color:#ff7a9c}.btn.sm{min-height:38px;padding:0 14px;font-size:var(--t5)}
 .chip{display:inline-block;font:400 var(--t6) var(--fb);padding:4px 11px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;white-space:nowrap}
 .chip.pk{background:var(--p)}.chip.ok{background:var(--g);color:#04210f}.chip.cy{background:var(--c);color:var(--n)}.chip.yl{background:var(--y);color:var(--n)}
 /* manche / thèmes côté équipe */
-.rb{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:14px 0 10px}
-.rb-n{font:400 var(--t2) var(--fh);text-transform:uppercase;color:var(--y);text-shadow:3px 3px 0 var(--p)}
-.rb-s{font:400 var(--t5) var(--fb);color:var(--c);text-align:right}
-.dw{border:1.5px solid var(--line);border-radius:18px;margin:0 0 12px;overflow:hidden;background:rgba(255,255,255,.04)}
-.dw.open{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 8px 26px rgba(0,232,255,.16);background:rgba(0,232,255,.06)}
-.dh{display:flex;align-items:center;gap:8px;padding:12px}
+.rb{display:flex;align-items:center;gap:14px;margin:6px 0 16px;padding:14px 18px;border-radius:22px;background:linear-gradient(120deg,var(--p),#8a0b6b 55%,var(--n3));box-shadow:5px 5px 0 var(--y),0 14px 30px rgba(0,0,0,.4)}
+.rb-k{font:400 50px/1 var(--fh);color:transparent;-webkit-text-stroke:2px var(--y);text-shadow:3px 3px 0 var(--n);min-width:40px;text-align:center}
+.rb-n{font:400 var(--t2)/1.05 var(--fh);text-transform:uppercase;color:#fff}
+.rb-s{font:400 var(--t5) var(--fb);color:var(--y);margin-top:2px}
+.dw{position:relative;border:1.5px solid rgba(255,255,255,.14);border-radius:20px;margin:0 0 12px;overflow:hidden;background:rgba(7,11,48,.9);backdrop-filter:blur(6px)}
+.dw:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--y)}.dw.sx:before{background:var(--p)}
+.dw.open{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 28px rgba(0,232,255,.35),5px 5px 0 var(--p);background:rgba(10,22,78,.96)}
+.dh{display:flex;align-items:center;gap:8px;padding:12px 12px 12px 17px}
 .dhb{flex:1;min-width:0;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:0;color:#fff;cursor:pointer;padding:0}
 .dhb:disabled{cursor:default;opacity:.6}
 .tnum{flex:none;width:38px;height:38px;border-radius:12px;background:var(--y);color:var(--n);font:400 19px/38px var(--fh);text-align:center}
@@ -60,14 +65,14 @@ select.in{appearance:none}
 .tname small{display:block;font:400 var(--t6) var(--fb);color:var(--c);text-transform:none;margin-top:2px}
 .x2p{flex:none;min-width:46px;height:32px;padding:0 10px;border-radius:999px;border:0;font:400 15px var(--fh);text-transform:uppercase;background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:pointer}
 .x2p:disabled{opacity:.35;cursor:default}.x2p.on{background:var(--y);color:var(--n);box-shadow:0 0 14px rgba(255,230,0,.55),2px 2px 0 var(--p)}
-.db{padding:2px 12px 14px}
+.db{padding:4px 14px 16px 17px}
 .qi{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center;margin:0 0 8px}
 .qi i{width:32px;height:32px;border-radius:50%;background:var(--p);font:400 15px/32px var(--fh);text-align:center;font-style:normal}.qi .in{margin:0}
-.gs{background:var(--cream);color:var(--n);border-radius:16px;padding:12px;margin:2px 0 12px;border:2px solid var(--p)}
-.gs-l{display:flex;justify-content:space-between;align-items:center;font:400 var(--t5) var(--fh);text-transform:uppercase;margin-bottom:8px}
-.gs-l b{background:var(--p);color:#fff;border-radius:999px;padding:3px 10px;font:400 14px var(--fh)}
-.gs .in{background:#fff;color:var(--n);border-color:var(--n);margin:0}
-.rv{background:rgba(9,14,60,.94);border:2px solid var(--y);border-radius:22px;padding:14px;margin:0 0 16px}
+.gs{background:repeating-linear-gradient(45deg,rgba(255,230,0,.08) 0 10px,transparent 10px 20px),#17123f;color:#fff;border-radius:18px;padding:14px 12px 12px;margin:4px 0 14px;border:2px dashed var(--y)}
+.gs-l{display:flex;justify-content:space-between;align-items:center;gap:8px;font:400 var(--t5) var(--fh);text-transform:uppercase;color:var(--y);margin-bottom:10px}.gs-l i{font-style:normal;display:inline-grid;place-items:center;width:26px;height:26px;margin-right:8px;border-radius:8px;background:var(--p);color:#fff;transform:rotate(-6deg)}
+.gs-l b{flex:none;background:var(--y);color:var(--n);border-radius:999px;padding:3px 10px;font:400 14px var(--fh)}
+.gs .in{background:rgba(0,0,0,.45);color:#fff;border-color:rgba(255,230,0,.55);margin:0}
+.rv{background:rgba(7,11,48,.94);border:2px solid var(--y);border-radius:22px;padding:16px;margin:0 0 18px;box-shadow:6px 6px 0 var(--p)}
 .rv h3{color:var(--y);font-size:var(--t4);margin:0 0 8px}
 .rv div{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}.rv b{font-weight:400;font-size:var(--t3)}
 /* classement */
@@ -91,7 +96,17 @@ select.in{appearance:none}
 .gbg:before{content:"";position:absolute;left:0;right:0;height:18%;z-index:1;background:linear-gradient(transparent,rgba(255,255,255,.22),transparent);animation:roll 4s linear infinite}
 @keyframes roll{from{top:-20%}to{top:110%}}
 .gbg~.brand img{filter:drop-shadow(0 4px 14px rgba(0,0,0,.7))}
-@media (prefers-reduced-motion:reduce){.gbg b,.gbg .nz,.gbg:before,.a-strip{animation:none}}
+.gbg.dim{filter:saturate(.8) brightness(.3)}
+/* joueurs : barre d'équipe, logo glitché */
+.tbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;margin:-14px -14px 8px;padding:10px 16px;background:rgba(5,8,34,.9);backdrop-filter:blur(12px);border-bottom:2px solid var(--c);box-shadow:0 2px 0 var(--p),0 10px 30px rgba(0,0,0,.45)}
+.tbar .tm{flex:1;min-width:0}.tbar small{display:block;font-size:12px;color:var(--c);letter-spacing:.1em;text-transform:uppercase}
+.tbar .tm b{display:block;font:400 19px/1.1 var(--fh);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tsc{text-align:right}.tsc b{display:block;font:400 26px/1 var(--fh);color:var(--y);text-shadow:2px 2px 0 var(--p)}
+.tpos{flex:none;width:46px;height:46px;border-radius:14px;background:var(--p);display:grid;place-items:center;font:400 19px var(--fh);transform:rotate(-5deg);box-shadow:3px 3px 0 var(--y)}
+.brand img{animation:lg 5s steps(1) infinite}
+@keyframes lg{0%,93%{transform:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.7))}95%{transform:translateX(-4px) skewX(6deg);filter:drop-shadow(-4px 0 0 #ff0a8c) drop-shadow(4px 0 0 #00e8ff)}97%{transform:translateX(3px);filter:drop-shadow(3px 0 0 #ff0a8c) drop-shadow(-3px 0 0 #00e8ff)}}
+.hint{font-size:var(--t6);color:var(--mut);text-align:center;margin:0 0 14px}
+@media (prefers-reduced-motion:reduce){.gbg b,.gbg .nz,.gbg:before,.a-strip,.gm h2,.gm p:after,.brand img{animation:none}}
 /* pop-in code */
 .ov{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,7,28,.85);backdrop-filter:blur(8px)}
 .md{width:100%;max-width:360px;background:#14173f;border:1px solid rgba(255,255,255,.18);border-radius:24px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
@@ -107,7 +122,7 @@ select.in{appearance:none}
 .adm .btn{font:700 var(--t5) Poppins;border-radius:12px;min-height:42px;padding:0 16px;text-transform:none;letter-spacing:.01em;box-shadow:none}
 .adm .btn:active{transform:scale(.97)}.adm .btn.blk{font:800 14px Poppins;letter-spacing:.05em;text-transform:uppercase;min-height:50px;border-radius:14px}
 .adm .btn.sm{min-height:34px;padding:0 12px;font-size:12px}
-.adm .btn.pk{box-shadow:none}.adm .btn.y{box-shadow:none}
+.adm .btn.pk{box-shadow:none}.adm .btn.y{box-shadow:none}.adm .brand img{animation:none}
 .adm .chip{font:700 var(--t6) Poppins;letter-spacing:.04em}
 .adm .mut,.adm small{font:500 var(--t5) Poppins}
 .a-strip{height:4px;background:linear-gradient(90deg,var(--p),var(--y),var(--c),var(--p));background-size:300% 100%;animation:slide 8s linear infinite}
@@ -264,7 +279,7 @@ function render(){
 }
 
 /* ============ ÉQUIPES ============ */
-const guessBox=(t,key,label,pts)=>{const k='g|'+key;return`<div class="gs"><div class="gs-l"><span>${label}</span><b>+${pts} pts</b></div><input class="in" data-k="${k}" autocomplete="off" placeholder="Ta proposition..." value="${esc(draft[k]??t.guess?.[key]??'')}"></div>`};
+const guessBox=(t,key,label,pts)=>{const k='g|'+key;return`<div class="gs"><div class="gs-l"><span><i>?</i>${label}</span><b>+${pts} pts</b></div><input class="in" data-k="${k}" autocomplete="off" placeholder="Ta proposition..." value="${esc(draft[k]??t.guess?.[key]??'')}"></div>`};
 /* confettis une seule fois par secret trouvé */
 function cheer(){
  const t=g&&teams.find(x=>x.id===me),r=g?.r;if(!t||g.rd?.[r]!=='validated')return;
@@ -281,41 +296,43 @@ function reveal(t,r){
  if(!it.length)return'';
  return`<div class="rv"><h3>Thèmes secrets</h3>${it.map(([l,n,ok,p])=>`<div><span>${l}<br><b>${esc(n)}</b></span><span class="chip ${ok?'ok':''}">${ok?'Trouvé +'+p:'Raté'}</span></div>`).join('')}</div>`}
 function team(){
- const FR=x=>`<div class="frame">${x}</div>`;
- if(!sid)return BRAND(true)+FR(`<h3>Pas de session</h3><p class="mut">Ouvre le lien de ta soirée pour rejoindre la partie.</p>`);
- if(!gl||!tready)return GB+BRAND(true)+GC('Chargement','Une seconde...');
- if(!g)return BRAND(true)+FR(`<h3>Session introuvable</h3><p class="mut">Vérifie ton lien.</p>`);
+ const FR=x=>`<div class="frame">${x}</div>`,GD=GB.replace('gbg','gbg dim');
+ if(!sid)return GD+BRAND(true)+FR(`<h3>Pas de session</h3><p class="mut">Ouvre le lien de ta soirée pour rejoindre la partie.</p>`);
+ if(!gl||!tready)return GB+BRAND(true)+GC('Chargement','Une seconde');
+ if(!g)return GD+BRAND(true)+FR(`<h3>Session introuvable</h3><p class="mut">Vérifie ton lien.</p>`);
  const T=g.title?`<h1 class="st">${esc(g.title)}</h1>`:'',Ts=g.title?`<h1 class="st sm">${esc(g.title)}</h1>`:'';
- if(!me)return BRAND(true)+T+FR(`<h3>Ton équipe</h3><label>Nom d'équipe</label><input class="in" data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="btn blk" data-a="join">C'est parti</button>`);
+ if(!me)return GB+BRAND(true)+T+FR(`<h3>Ton équipe</h3><label>Nom d'équipe</label><input class="in" data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="btn blk y" data-a="join">C'est parti</button>`);
  const t=teams.find(x=>x.id===me);
- if(!t)return BRAND(true)+T+FR(`<h3>Équipe introuvable</h3><p class="mut">La partie a été réinitialisée.</p><button class="btn blk" data-a="leave">Rejoindre à nouveau</button>`);
- const head=`<div class="row"><span class="chip cy">Équipe</span><b style="font-size:19px">${esc(t.name)}</b></div>`;
- const rk=rankInner(),RKB=rk?`<div class="sep"></div>${rk}`:'';
+ if(!t)return GD+BRAND(true)+T+FR(`<h3>Équipe introuvable</h3><p class="mut">La partie a été réinitialisée.</p><button class="btn blk" data-a="leave">Rejoindre à nouveau</button>`);
+ const v=vr(),tot=sum(v.map(r=>score(t,r))),pos=v.length?place(v[v.length-1]).find(x=>x.id===me)?.pos:null;
+ const bar=`<div class="tbar"><div class="tm"><small>Ton équipe</small><b>${esc(t.name)}</b></div><div class="tsc"><b>${tot}</b><small>pts</small></div>${pos?`<div class="tpos">#${pos}</div>`:''}</div>`;
+ const rk=rankInner(),RKB=rk?FR(rk):'';
  const r=g.r,st=g.rd?.[r],I=r>=0?ri(r):{};
  const RG=(r>=0&&st==='open'&&I.sx)?guessBox(t,'R'+r,'Thème de la manche',BR):'';
- const W=m=>GB+BRAND(true)+T+m+FR(head+RG+RKB);
+ const W=m=>GB+bar+BRAND(true)+T+m+(RG?FR(RG):'')+RKB;
  if(r<0)return W(GC('Patience, la manche va commencer',"Garde l'oreille tendue"));
  if(st==='closed')return W(GC('On calcule les scores','Les points arrivent, ne bouge pas'));
- if(st==='validated')return W(GC('Scores validés','La manche suivante va commencer bientôt')+reveal(t,r));
+ if(st==='validated')return W(GC('Scores validés','La manche suivante arrive bientôt')+reveal(t,r));
  const ids=th(r).map((_,i)=>`${r}_${i}`),started=ids.some(k=>g.th?.[k]);
  if(!started)return W(GC('La manche va commencer',"Garde l'oreille tendue"));
  const opn=ids.some(k=>g.th?.[k]==='open'&&!t.done?.[k]),wd=ids.some(k=>g.th?.[k]==='open'&&t.done?.[k]);
- const msg=opn?'':GC(wd?'Thème validé':'Le prochain thème va commencer',wd?'On attend le prochain thème':"Garde l'oreille tendue");
- let h=head+`<div class="rb"><div class="rb-n">${RN[r]}</div><div class="rb-s">${I.sx?'Thème mystère':esc(I.n||'')}</div></div>`+RG;
- if(!opn)h+=`<p class="mut" style="margin:0 0 12px">Tu peux modifier tes réponses et placer ton x2 jusqu'à la fin de la manche.</p>`;
+ const msg=opn?'':GC(wd?'Thème validé':'Le prochain thème arrive',wd?'On attend le prochain thème':"Garde l'oreille tendue");
+ let h=`<div class="rb"><span class="rb-k">${r<3?r+1:'F'}</span><div><div class="rb-n">${RN[r]}</div><div class="rb-s">${I.sx?'Thème mystère : à toi de deviner':esc(I.n||'')}</div></div></div>`;
+ if(RG)h+=RG;
+ if(!opn)h+=`<p class="hint">Tu peux modifier tes réponses et placer ton x2 jusqu'à la fin de la manche.</p>`;
  th(r).forEach((x,i)=>{
   const key=`${r}_${i}`,s=g.th?.[key],done=t.done?.[key],play=s==='open'&&!done,xi=t.x2?.[r];
   const shown=s?(exp[key]??play):false,pop=play&&!popped.has(sid+key);if(pop)popped.add(sid+key);
-  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème secret':esc(tn(x,i))}<small>${x.sx?'Devine-le : +'+BT+' pts':'Thème '+(i+1)}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
+  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''} ${x.sx?'sx':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème secret':esc(tn(x,i))}<small>${x.sx?'Devine-le : +'+BT+' pts':'Thème '+(i+1)}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
   if(shown){
    h+=`<div class="db">`+(x.sx?guessBox(t,key,'Nom du thème',BT):'');
    for(let j=0;j<6;j++){const kk=`a|${key}|${j}`;h+=`<div class="qi"><i>${j+1}</i><input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="Artiste - Titre" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}"></div>`}
-   h+=play?`<button class="btn blk" data-a="done" data-t="${i}">Valider ce thème</button>`:`<p class="mut" style="margin:4px 0 0">Enregistré automatiquement.</p>`;
+   h+=play?`<button class="btn blk y" data-a="done" data-t="${i}">Valider ce thème</button>`:`<p class="mut" style="margin:4px 0 0">Enregistré automatiquement.</p>`;
    h+=`</div>`;
   }
   h+=`</div>`;
  });
- return BRAND(false)+Ts+msg+FR(h+RKB);
+ return GD+bar+BRAND(false)+Ts+msg+h+RKB;
 }
 
 /* ============ ADMIN ============ */
