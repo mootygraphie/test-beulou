@@ -2,6 +2,7 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0a0f3a">
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -302,6 +303,12 @@ select.in{appearance:none}
 .adm .c.a-inst{display:flex;align-items:center;gap:12px;border-color:rgba(255,230,0,.45);background:linear-gradient(120deg,rgba(255,10,140,.16),var(--n2) 60%)}
 .a-inst img{width:48px;height:48px;border-radius:12px;flex:none}.a-inst .f{flex:1;min-width:0}.a-inst b{display:block;font:800 15px Poppins}.a-inst small{display:block;font:500 12px/1.4 Poppins;color:var(--mut)}
 .a-inst .shr{display:inline-grid;place-items:center;vertical-align:-3px;color:var(--c)}
+/* volet ou pop-in ouvert : la page derrière ne défile plus */
+html:has(.g-ov,.ov),body:has(.g-ov,.ov){overflow:hidden;overscroll-behavior:none}
+.g-ov,.ov{overscroll-behavior:contain;touch-action:none}.g-sh,.md{touch-action:pan-y;overscroll-behavior:contain}
+/* bouton en cours de suppression */
+.a-ico.busy{opacity:.6;cursor:wait;animation:bz 1s linear infinite}.a-ico.busy svg{opacity:.35}
+@keyframes bz{50%{box-shadow:0 0 0 4px rgba(255,92,122,.35)}}
 /* pop-in QR code */
 .md.qrm{max-width:400px;padding:0 0 18px;overflow:hidden;text-align:center;border:2px solid var(--c);background:radial-gradient(ellipse at 50% 20%,#141b5c,#060a2a 80%);box-shadow:0 0 0 3px var(--p),0 0 60px rgba(0,232,255,.3);animation:eqin .4s cubic-bezier(.2,1.5,.4,1)}
 .qrm-l{margin:18px 0 4px}.qrm-l img{height:96px;max-width:80%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
@@ -1043,7 +1050,8 @@ function flush(key){
 }
 /* suppression complète d'une session : équipes, images, puis la session */
 async function delSession(id){const ref=fs.collection('bt_sessions').doc(id);
- for(const c of['teams','imgs']){const q=await ref.collection(c).get(),bt=fs.batch();q.docs.forEach(d=>bt.delete(d.ref));if(q.docs.length)await bt.commit()}
+ // équipes et images d'abord ; si un dossier est inaccessible (règles Firebase), on continue quand même
+ for(const c of['teams','imgs']){try{const q=await ref.collection(c).get(),bt=fs.batch();q.docs.forEach(d=>bt.delete(d.ref));if(q.docs.length)await bt.commit()}catch(e){console.warn('suppression '+c+' :',e.code||e)}}
  await ref.delete()}
 async function delTeams(){const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().doc(x.id)));await bt.commit();mk={};gk={}}
 async function resetRound(r){
@@ -1171,11 +1179,11 @@ document.addEventListener('click',async e=>{
  if(a==='resetround'&&confirm('Réinitialiser '+RNf(r)+' ? Réponses, x2 et points de cette manche seront effacés.'))resetRound(r);
  if(a==='clrteams'&&confirm('Effacer toutes les équipes et leurs réponses ?'))delTeams();
  if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},cs:{},pl:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
- if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){const id=sid;view='list';bind(null);await delSession(id);render()}
+ if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){const id=sid;view='list';bind(null);try{await delSession(id)}catch(e){alert('Suppression impossible : '+(e.message||e))}render()}
  if(a==='sren'){renS=b.dataset.id;const S=sessions.find(x=>x.id===renS);draft['sr|'+renS]=S?.name||'';render();setTimeout(()=>{const el=document.querySelector(`[data-k="sr|${renS}"]`);if(el){el.focus();el.select()}},30)}
  if(a==='srx'){renS=null;render()}
  if(a==='srok'){const id=b.dataset.id,n=(draft['sr|'+id]||'').trim();if(!n)return;await fs.collection('bt_sessions').doc(id).update({name:n});delete draft['sr|'+id];renS=null;render()}
- if(a==='sdel'){const S=sessions.find(x=>x.id===b.dataset.id);if(S&&confirm(`Supprimer définitivement la session « ${S.name||'Sans nom'} » ?\n\nLes équipes, leurs réponses, les points et les images seront effacés. Cette action est irréversible.`)){b.disabled=true;b.textContent='Suppression…';await delSession(S.id)}}
+ if(a==='sdel'){const S=sessions.find(x=>x.id===b.dataset.id);if(S&&confirm(`Supprimer définitivement la session « ${S.name||'Sans nom'} » ?\n\nLes équipes, leurs réponses, les points et les images seront effacés. Cette action est irréversible.`)){b.disabled=true;b.classList.add('busy');b.setAttribute('aria-busy','true');try{await delSession(S.id)}catch(e){b.disabled=false;b.classList.remove('busy');alert('Suppression impossible : '+(e.message||e))}}}
 });
 })();
 </script></body></html>

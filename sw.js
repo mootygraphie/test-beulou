@@ -1,8 +1,8 @@
 /* Beulou Test : service worker de la webapp admin.
    Réseau d'abord (toujours la dernière version), copie locale en secours hors connexion.
    Firebase, Deezer et les autres sites ne passent pas par ici. */
-const CACHE = 'beulou-v1';
-const BASE = ['./', './index.html', './logo.png', './icon-192.png', './icon-512.png', './manifest.webmanifest'];
+const CACHE = 'beulou-v2';
+const BASE = ['./', './index.html', './logo.png', './icon-192.png', './icon-512.png', './favicon.png', './manifest.webmanifest'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(BASE)).then(() => self.skipWaiting()));
 });
