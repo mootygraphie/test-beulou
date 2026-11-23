@@ -279,6 +279,15 @@ select.in{appearance:none}
 .a-imc{display:flex;gap:12px;align-items:center;width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,.25);margin:4px 0 0}.a-imc-p{width:64px;height:64px;flex:none}.a-imc .f{flex:1;min-width:0}.a-imc b{display:block;font:800 15px Poppins}.a-imc small{display:block;font:500 12px Poppins;color:var(--mut)}
 .a-imb{display:flex;gap:8px;width:100%;flex-wrap:wrap;margin:8px 0 0}.a-imb .btn{margin:0;flex:1;min-height:48px}.a-imb .btn.sm{flex:none;min-width:52px}.a-imb .btn:disabled{opacity:.35}
 .a-qi{flex:none;padding:0;border:0;background:none;cursor:zoom-in}.ab.dis{display:grid;place-items:center;opacity:.35;cursor:default}
+/* poignées de déplacement */
+.a-grip{display:grid;place-items:center;width:22px;height:38px;flex:none;border-radius:7px;color:rgba(255,255,255,.45);cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.a-grip:hover{color:#fff;background:rgba(255,255,255,.08)}.a-tb .a-grip{color:rgba(255,255,255,.8)}
+.a-theme.col>.a-grip{margin-left:6px}
+.drg{position:relative;z-index:30;opacity:.95;box-shadow:0 14px 34px rgba(0,0,0,.55)!important;background:var(--n3)!important;border-radius:14px;transition:none!important}
+.dto{box-shadow:0 -4px 0 var(--y)!important}.dtoe{box-shadow:0 4px 0 var(--y)!important}
+body.dragging,body.dragging *{-webkit-user-select:none;user-select:none;cursor:grabbing!important}
+.a-tb .rm{display:grid;place-items:center}
+.a-lk{display:flex;align-items:center;gap:8px;margin:0;padding:10px 18px 0;font:600 12px Poppins;color:var(--mut)}
 /* préparer : thèmes repliables, déplacements, import d'images */
 .a-theme.col{display:flex;align-items:center;gap:4px;padding:0 8px 0 0;margin:0 0 10px;scroll-margin-top:150px}
 .a-theme.cfg{scroll-margin-top:150px}
@@ -321,7 +330,7 @@ select.in{appearance:none}
 .a-sa{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.a-sa .btn{margin:0}
 .a-ren .a-sa{border-top:0;padding-top:0}.a-ren .in{margin:0}
 /* ajout / suppression de questions et de manches */
-.a-qrow{grid-template-columns:34px 1fr auto!important}.a-qx{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,122,156,.5);background:transparent;color:#ff7a9c;font:700 14px Poppins;cursor:pointer}
+.a-qrow{grid-template-columns:22px 34px 1fr auto!important}.a-qx{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,122,156,.5);background:transparent;color:#ff7a9c;font:700 14px Poppins;cursor:pointer}
 .a-iq .a-qx{flex:none}.a-addq{margin:4px 0 0!important;width:100%;border-style:dashed!important}
 .a-addrd{display:flex;width:100%;margin:0 0 22px!important;min-height:54px;border:2px dashed rgba(0,232,255,.5)!important;color:var(--c)!important;font-weight:800!important}.a-addrd:disabled{opacity:.4}
 .a-lockn{margin:-14px 0 22px;text-align:center}
@@ -441,7 +450,7 @@ const th=r=>(g.rounds?.[r]||[]).map(x=>{const q=(x.q||[]).map(y=>Object.assign({
  return{n:x.n||'',ty:img?'img':'mus',im,qm:qcm?'qcm':'cl',nc:x.nc==2?2:4,ea:!img&&!qcm&&!!x.ea,et:!img&&!qcm&&!!x.et,eb:!img&&!qcm&&!!x.eb,bl:x.bl||'',sx:!!x.sx,q:q.slice(0,QMAX),pts:qcm?1:img?(im==='pr'?1:2):x.ea&&x.et?1:2}});
 const hh=s=>{let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))%1000003;return h};
 const qord=(key,j,n)=>[...Array(n).keys()].sort((a,b)=>hh(key+'|'+j+'|'+a)-hh(key+'|'+j+'|'+b));
-const qpend={};let rvw=null,renS=null,cfgNR=3,prepR=0,openTh=null;
+const qpend={};let rvw=null,renS=null,cfgNR=3,prepR=0,openTh=null,drg=null;
 /* manches : g.nr manches classiques puis la finale (index g.nr) */
 const FI=()=>g?.nr??3,RIDX=()=>[...Array(FI()+1).keys()],RNf=r=>r===FI()?'Finale':'Manche '+(r+1);
 const started=()=>Object.keys(g?.rd||{}).length>0;
@@ -490,6 +499,24 @@ async function upImg(r,i,j,f){const q=cfg[r][i].q[j],id='i'+Date.now().toString(
  q.im=id;IMG[id]=null;IMGP[id]=1;render();
  try{const d=await shrink(f);IMG[id]=d;await sdoc().collection('imgs').doc(id).set({d});if(old)sdoc().collection('imgs').doc(old).delete().catch(()=>{});return true}
  catch(e){q.im=old;alert("Impossible d'envoyer l'image « "+(f.name||'')+" » : "+(e.message||e));return false}}
+if(ADMIN){
+ document.addEventListener('pointerdown',e=>{const gp=e.target.closest&&e.target.closest('[data-grip]');if(!gp||e.button>0)return;
+  const p=gp.dataset.grip.split('|'),row=gp.closest('[data-row]'),pre=p[0]==='q'?`q|${p[1]}|${p[2]}|`:`t|${p[1]}|`,len=row.dataset.row.split('|').length;
+  const rows=[...document.querySelectorAll('[data-row]')].filter(x=>x.dataset.row.startsWith(pre)&&x.dataset.row.split('|').length===len);
+  e.preventDefault();try{gp.setPointerCapture(e.pointerId)}catch(x){}
+  drg={kind:p[0],r:+p[1],i:+p[2],from:rows.indexOf(row),to:rows.indexOf(row),rows,row,y0:e.clientY,sy:window.scrollY};row.classList.add('drg');document.body.classList.add('dragging')});
+ document.addEventListener('pointermove',e=>{if(!drg)return;e.preventDefault();
+  if(e.clientY<90)window.scrollBy(0,-14);else if(e.clientY>innerHeight-130)window.scrollBy(0,14);
+  drg.row.style.transform=`translateY(${e.clientY-drg.y0+window.scrollY-drg.sy}px)`;
+  const O=drg.rows.filter(x=>x!==drg.row);let to=0;O.forEach(x=>{const b=x.getBoundingClientRect();if(e.clientY>b.top+b.height/2)to++});drg.to=to;
+  O.forEach(x=>x.classList.remove('dto','dtoe'));if(O[to])O[to].classList.add('dto');else if(O.length)O[O.length-1].classList.add('dtoe')},{passive:false});
+ const end=e=>{if(!drg)return;const d=drg;drg=null;document.body.classList.remove('dragging');d.row.style.transform='';d.rows.forEach(x=>x.classList.remove('drg','dto','dtoe'));
+  if(e.type==='pointerup'&&d.to!==d.from&&!g.rd?.[d.r]){
+   if(d.kind==='q'){const q=cfg[d.r][d.i].q;q.splice(d.to,0,q.splice(d.from,1)[0])}
+   else{const T=cfg[d.r];T.splice(d.to,0,T.splice(d.from,1)[0]);
+    if(openTh&&openTh.startsWith(d.r+'_')){const o=+openTh.split('_')[1];let n=o;if(o===d.from)n=d.to;else if(d.from<o&&d.to>=o)n=o-1;else if(d.from>o&&d.to<=o)n=o+1;openTh=d.r+'_'+n}}}
+  render()};
+ document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end)}
 const saveCfgNow=()=>sdoc().update({rounds:cfg,rinfo:cfgI,nr:cfgNR});
 /* import groupé : remplit les cases vides dans l'ordre, puis ajoute des questions si besoin */
 async function bulkImg(r,i,files,from){const T=cfg[r][i],F=[...files].filter(f=>/^image\//.test(f.type)||/\.(heic|heif)$/i.test(f.name||''));let n=0;
@@ -515,6 +542,7 @@ if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{s
 else bind(Q.get('s'));
 
 function render(){
+ if(drg)return; // pas de rendu pendant un glisser-déplacer
  if(ADMIN&&!sready)return;
  const a=document.activeElement,k=a&&a.dataset&&a.dataset.k,p=a&&a.selectionStart;
  let h;
@@ -696,12 +724,12 @@ function prep(){
   const I=cfgI[r]||{},T=cfg[r]||[];
   h+=`<section class="a-rd"><header class="a-rdh"><div class="a-num">${r<cfgNR?r+1:'F'}</div><div class="f"><div class="a-k">${n} · ${T.length} thème${T.length>1?'s':''}</div><input class="in" data-k="rn|${r}" placeholder="Nom de la manche (optionnel)" value="${esc(I.n||'')}"></div>
    <button class="btn sm ${I.sx?'y':'gh'}" data-a="rsx" data-r="${r}" style="margin:0">${I.sx?'🔒 Nom secret · +'+BR+' pts':'Nom visible'}</button>${r<cfgNR&&cfgNR>1&&!lock?`<button class="btn sm dg" data-a="rmrd" data-r="${r}" style="margin:0">Supprimer la manche</button>`:''}</header>
-   ${I.sx&&!I.n?`<p class="a-warn" style="padding:10px 18px 0;margin:0">Renseigne le nom de la manche à deviner.</p>`:''}<div class="a-rdb">`;
+   ${I.sx&&!I.n?`<p class="a-warn" style="padding:10px 18px 0;margin:0">Renseigne le nom de la manche à deviner.</p>`:''}${g.rd?.[r]?'<p class="a-lk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 11h12v9H6zM9 11V8a3 3 0 0 1 6 0v3"/></svg>Manche déjà lancée : l\'ordre des thèmes et des questions est verrouillé.</p>':''}<div class="a-rdb">`;
   T.forEach((x,i)=>{const both=x.ea&&x.et;if(openTh!==r+'_'+i){h+=thCol(x,r,i,T.length);return}
-   h+=`<section class="a-theme cfg" id="th-${r}_${i}"><header class="a-tb ${x.sx?'sx':''}"><span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span>${thMv(r,i,T.length,'a-hmv')}<button class="a-hmv" data-a="thx" data-r="${r}" data-t="${i}" aria-label="Replier le thème" aria-expanded="true">${CHEV(1)}</button><button class="rm" title="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">✕</button></header>
+   h+=`<section class="a-theme cfg" id="th-${r}_${i}" data-row="t|${r}|${i}"><header class="a-tb ${x.sx?'sx':''}">${TG(r,i,T.length)}<span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span><button class="a-hmv" data-a="thx" data-r="${r}" data-t="${i}" aria-label="Replier le thème" aria-expanded="true">${CHEV(1)}</button><button class="rm" title="Supprimer ce thème" aria-label="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">${TRASH}</button></header>
    ${genreBtn(x,r,i)}<div class="a-qs">${x.ty==='img'?imgRows(x,r,i):x.qm==='qcm'?qcmRows(x,r,i):''}`;
    if(x.ty!=='img'&&x.qm!=='qcm')for(let j=0;j<(x.q||[]).length;j++){const q=x.q[j]||{a:'',t:''};
-    h+=`<div class="a-qrow"><span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x)}</div>`}
+    h+=`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x)}</div>`}
    h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const[d,tt]=thProg(x),last=i===T.length-1&&r===cfgNR;return`<button class="btn a-next ${d===tt?'y':''}" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer ✓':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button>`})()}</div></section>`});
   h+=`<button class="btn sm gh" data-a="addth" data-r="${r}" style="margin:0">+ Ajouter un thème</button></div></section>`;
  });
@@ -774,25 +802,30 @@ function imgCtl(x,key){const N=x.q.length,c=Math.max(0,Math.min(N-1,g.cs?.[key]?
  return`<div class="a-imc"><div class="a-imc-p">${pic(q.im,'sm')}</div><div class="f"><b>Image ${c+1} / ${N}</b><small>Réponse : ${esc(q.r||'(non renseignée)')}</small>${x.im==='pr'?`<small>Dévoilée : ${[25,50,75,100][l]} % · vaut ${[3,2,1,0][l]} pt${l<2?'s':''}</small>`:''}</div></div>
  <div class="a-imb">${x.im==='pr'?`<button class="btn" data-a="pmore" data-key="${key}" ${l>=3?'disabled':''}>Révéler plus</button>`:''}<button class="btn sm gh" data-a="cmove" data-key="${key}" data-d="-1" ${c?'':'disabled'} aria-label="Image précédente">◀</button><button class="btn y" data-a="cmove" data-key="${key}" data-d="1" ${c<N-1?'':'disabled'}>Image suivante ▶</button></div>`}
 /* bouton « supprimer cette question » (au moins une question par thème) */
-const QX=(r,i,j,x)=>{const n=(x.q||[]).length,mv=!g.rd?.[r]&&n>1;return`<span class="a-qa">${mv?`<button class="a-mv" data-a="mvq" data-r="${r}" data-t="${i}" data-j="${j}" data-d="-1" ${j?'':'disabled'} aria-label="Monter la question ${j+1}">▲</button><button class="a-mv" data-a="mvq" data-r="${r}" data-t="${i}" data-j="${j}" data-d="1" ${j<n-1?'':'disabled'} aria-label="Descendre la question ${j+1}">▼</button>`:''}${n>1?`<button class="a-qx" data-a="rmq" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Supprimer la question ${j+1}">✕</button>`:''}</span>`};
+const QX=(r,i,j,x)=>{const n=(x.q||[]).length;return`<span class="a-qa">${n>1?`<button class="a-qx" data-a="rmq" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Supprimer la question ${j+1}">✕</button>`:''}</span>`};
 /* une question est-elle remplie ? (pour l'avancement des thèmes repliés) */
 function qDone(x,q){const C=q.c||[],nc=x.nc==2?2:4,qcm=x.qm==='qcm'&&!(x.ty==='img'&&x.im==='pr');
  if(qcm&&![...Array(nc).keys()].every(c=>(C[c]||'').trim()))return false;
  if(x.ty==='img')return!!q.im&&(qcm||!!(q.r||'').trim());if(qcm)return true;
  return(!x.ea||!!(q.a||'').trim())&&(!x.et||!!(q.t||'').trim())&&(!x.eb||!!(q.b||'').trim())}
 const thProg=x=>{const n=(x.q||[]).length;return[(x.q||[]).filter(q=>qDone(x,q)).length,n]};
+const GRIP='<svg width="12" height="18" viewBox="0 0 12 18" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.6"/><circle cx="9" cy="3" r="1.6"/><circle cx="3" cy="9" r="1.6"/><circle cx="9" cy="9" r="1.6"/><circle cx="3" cy="15" r="1.6"/><circle cx="9" cy="15" r="1.6"/></svg>';
+const TRASH='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+/* poignées de déplacement (souris et doigt) ; masquées une fois la manche lancée */
+const QG=(r,i,j)=>!g.rd?.[r]?`<span class="a-grip" data-grip="q|${r}|${i}|${j}" role="button" aria-label="Glisser pour déplacer la question ${j+1}">${GRIP}</span>`:'<span></span>';
+const TG=(r,i,n)=>!g.rd?.[r]&&n>1?`<span class="a-grip" data-grip="t|${r}|${i}" role="button" aria-label="Glisser pour déplacer le thème ${i+1}">${GRIP}</span>`:'';
 const CHEV=d=>`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d?'M6 15l6-6 6 6':'M6 9l6 6 6-6'}"/></svg>`;
 const thMv=(r,i,n,cls)=>!g.rd?.[r]&&n>1?`<button class="${cls}" data-a="mvth" data-r="${r}" data-t="${i}" data-d="-1" ${i?'':'disabled'} aria-label="Monter le thème ${i+1}">▲</button><button class="${cls}" data-a="mvth" data-r="${r}" data-t="${i}" data-d="1" ${i<n-1?'':'disabled'} aria-label="Descendre le thème ${i+1}">▼</button>`:'';
 /* thème replié : une ligne avec son avancement */
 function thCol(x,r,i,n){const[d,t]=thProg(x),ok=t&&d===t;
- return`<section class="a-theme cfg col" id="th-${r}_${i}"><button class="a-thc" data-a="thx" data-r="${r}" data-t="${i}" aria-expanded="false"><span class="k">${i+1}</span><span class="f"><b>${esc(x.n)||'Thème '+(i+1)}</b><small>${GEN[genOf(x)].t} · ${d}/${t} rempli${d>1?'es':'e'}</small><span class="pgb"><i style="width:${t?d/t*100:0}%"></i></span></span>${ok?'<span class="okb">✓</span>':''}${CHEV(0)}</button>${thMv(r,i,n,'a-mv')}</section>`}
+ return`<section class="a-theme cfg col" id="th-${r}_${i}" data-row="t|${r}|${i}">${TG(r,i,n)}<button class="a-thc" data-a="thx" data-r="${r}" data-t="${i}" aria-expanded="false"><span class="k">${i+1}</span><span class="f"><b>${esc(x.n)||'Thème '+(i+1)}</b><small>${GEN[genOf(x)].t} · ${d}/${t} rempli${d>1?'es':'e'}</small><span class="pgb"><i style="width:${t?d/t*100:0}%"></i></span></span>${ok?'<span class="okb">✓</span>':''}${CHEV(0)}</button></section>`}
 /* préparer un thème images : mode + photos avec leur réponse */
 function imgRows(x,r,i){const m=['cl','ca','pr'].includes(x.im)?x.im:'cl';
- return`<button class="a-bulk" data-a="bulk" data-r="${r}" data-t="${i}" data-drop="${r}|${i}|*"><b>Importer plusieurs photos</b><small>elles remplissent les cases vides dans l'ordre · sur ordinateur, glisse-les ici</small></button>${(x.q||[]).map((q,j)=>`<div class="a-iq"><button class="a-ip ${q.im?'':'add'}" data-a="pick" data-r="${r}" data-t="${i}" data-j="${j}" data-drop="${r}|${i}|${j}" aria-label="${q.im?'Changer':'Ajouter'} la photo ${j+1}">${q.im?`${pic(q.im,'sm')}<span>Changer</span>`:`+ Photo<br>${j+1}`}</button>${x.qm==='qcm'&&m!=='pr'?`<div class="f a-qcm ${x.nc==2?'two':''}">${[...Array(x.nc==2?2:4).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<label class="f"><span>Réponse ${j+1}</span><input class="in" data-k="q|${r}|${i}|${j}|r" placeholder="Ex : Jean-Paul Belmondo" value="${esc(q.r||'')}"></label>`}${QX(r,i,j,x)}</div>`).join('')}
+ return`<button class="a-bulk" data-a="bulk" data-r="${r}" data-t="${i}" data-drop="${r}|${i}|*"><b>Importer plusieurs photos</b><small>elles remplissent les cases vides dans l'ordre · sur ordinateur, glisse-les ici</small></button>${(x.q||[]).map((q,j)=>`<div class="a-iq" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<button class="a-ip ${q.im?'':'add'}" data-a="pick" data-r="${r}" data-t="${i}" data-j="${j}" data-drop="${r}|${i}|${j}" aria-label="${q.im?'Changer':'Ajouter'} la photo ${j+1}">${q.im?`${pic(q.im,'sm')}<span>Changer</span>`:`+ Photo<br>${j+1}`}</button>${x.qm==='qcm'&&m!=='pr'?`<div class="f a-qcm ${x.nc==2?'two':''}">${[...Array(x.nc==2?2:4).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<label class="f"><span>Réponse ${j+1}</span><input class="in" data-k="q|${r}|${i}|${j}|r" placeholder="Ex : Jean-Paul Belmondo" value="${esc(q.r||'')}"></label>`}${QX(r,i,j,x)}</div>`).join('')}
  <p class="mut" style="margin:6px 0 0;font-size:12px">Les photos sont réduites automatiquement et enregistrées tout de suite.</p>`}
 /* lignes d'un QCM : bonne réponse + 1 ou 3 mauvaises */
 function qcmRows(x,r,i){const n=x.nc==2?2:4;
- return`${(x.q||[]).map((q,j)=>`<div class="a-qrow"><span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x)}</div>`).join('')}`}
+ return`${(x.q||[]).map((q,j)=>`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x)}</div>`).join('')}`}
 /* genres de thème : un bouton avec flèche ouvre un volet (genre, puis options) */
 const GEN=[
  {t:'Blind test',d:'Artiste et titre à écrire',c:'p',p:'M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'},
