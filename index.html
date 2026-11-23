@@ -2,6 +2,11 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0a0f3a">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Beulou Test">
 <title>Beulou Test</title>
 <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -293,6 +298,10 @@ select.in{appearance:none}
 .dzsk{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:none;color:#fff;font:800 14px Poppins;cursor:pointer}.dzsk:disabled{opacity:.3;cursor:default}
 .dzs{font:500 11px Poppins;color:var(--mut);text-align:center}
 @media (prefers-reduced-motion:reduce){.dzeq i{animation:none;height:10px}}
+/* installer la webapp (admin) */
+.adm .c.a-inst{display:flex;align-items:center;gap:12px;border-color:rgba(255,230,0,.45);background:linear-gradient(120deg,rgba(255,10,140,.16),var(--n2) 60%)}
+.a-inst img{width:48px;height:48px;border-radius:12px;flex:none}.a-inst .f{flex:1;min-width:0}.a-inst b{display:block;font:800 15px Poppins}.a-inst small{display:block;font:500 12px/1.4 Poppins;color:var(--mut)}
+.a-inst .shr{display:inline-grid;place-items:center;vertical-align:-3px;color:var(--c)}
 /* pop-in QR code */
 .md.qrm{max-width:400px;padding:0 0 18px;overflow:hidden;text-align:center;border:2px solid var(--c);background:radial-gradient(ellipse at 50% 20%,#141b5c,#060a2a 80%);box-shadow:0 0 0 3px var(--p),0 0 60px rgba(0,232,255,.3);animation:eqin .4s cubic-bezier(.2,1.5,.4,1)}
 .qrm-l{margin:18px 0 4px}.qrm-l img{height:96px;max-width:80%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
@@ -473,6 +482,12 @@ const SALT="beulou-test-v1:",HASH="1d265c88f523d9e63f2a2df03ccf8b9a90a470c920d86
 const BT=30,BR=60,QMAX=20,BO=20,MB=40; // QMAX questions max par thème ; BO : réponses bonus ; MB : marques bonus
 const ADMIN=location.hash==='#admin';
 if(ADMIN)document.body.classList.add('adm');
+/* webapp : proposée uniquement côté admin (manifeste et service worker chargés seulement ici) */
+let BIP=null;const STANDALONE=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+if(ADMIN){const lm=document.createElement('link');lm.rel='manifest';lm.href='manifest.webmanifest';document.head.appendChild(lm);
+ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+ addEventListener('beforeinstallprompt',e=>{e.preventDefault();BIP=e;window.__rr&&window.__rr()});
+ addEventListener('appinstalled',()=>{BIP=null;window.__inst=1;window.__rr&&window.__rr()})}
 const app=document.getElementById('app');
 const BRAND=big=>`<div class="brand ${big?'big':''}"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<h1 class=ttl>BEULOU TEST</h1>'"></div>`;
 function askPin(){try{if(localStorage.getItem('bt_admin')===HASH)return Promise.resolve(true)}catch(x){}
@@ -603,6 +618,7 @@ function bind(id){
  unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{},rinfo:{}},x.data()):null;gl=true;init();render()},ERR);
  unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()},ERR);
 }
+window.__rr=()=>render();
 if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,...d.data()}));sready=true;render()},ERR);
 else bind(Q.get('s'));
 
@@ -749,6 +765,8 @@ const stat=s=>{const rd=s.rd||{};if(s.over||rd[s.nr??3]==='validated')return['Te
  return filled(s.rounds)?['Prête','ok']:['Brouillon','']};
 function alist(){
  let h=BRAND(true)+`<h1 class="a-h1">Sessions</h1><p class="a-sub">Crée, prépare et pilote tes soirées blind test.</p>`;
+ if(!STANDALONE&&!window.__inst){const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  h+=`<div class="c a-inst"><img src="icon-192.png" alt=""><div class="f"><b>Installer l'appli Beulou Test</b><small>${BIP?'Elle s\'ouvre en plein écran, directement sur l\'admin.':ios?'Dans Safari : touche <span class="shr" aria-label="Partager"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v7h14v-7"/></svg></span> Partager, puis « Sur l\'écran d\'accueil ».':'Dans le menu du navigateur : « Installer l\'application » ou « Ajouter à l\'écran d\'accueil ».'}</small></div>${BIP?'<button class="btn y" data-a="install" style="margin:0">Installer</button>':''}</div>`}
  h+=`<p class="a-sub" style="margin:-14px 0 22px"><button class="btn gh sm" data-a="logout" style="margin:0">Se déconnecter</button></p>`;
  h+=`<div class="c"><h2>Nouvelle session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="nn" placeholder="Ex : Soirée équipe Marketing" value="${esc(draft.nn||'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="nt" placeholder="Ex : Beulou Test #4" value="${esc(draft.nt||'')}"></div></div><div style="margin-top:14px"><button class="btn" data-a="newsess">Créer la session</button></div></div>`;
  if(!sessions.length)h+=`<div class="c mut">Aucune session pour le moment.</div>`;
@@ -1080,6 +1098,7 @@ document.addEventListener('click',async e=>{
   draft.nn=draft.nt='';view='sess';tab='prep';bind(ref.id);render()}
  if(a==='opens'){view='sess';tab='prep';draft={};bind(b.dataset.id);render()}
  if(a==='back'){view='list';bind(null);render()}
+ if(a==='install'&&BIP){BIP.prompt();const c=await BIP.userChoice.catch(()=>({}));if(c.outcome==='accepted')window.__inst=1;BIP=null;render()}
  if(a==='qr'){qrModal()}
  if(a==='copy'){try{await navigator.clipboard.writeText(location.origin+location.pathname+'?s='+sid);b.textContent='Copié'}catch(x){b.textContent='Copie impossible'}}
  if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim()});draft.sn=draft.stt=undefined;b.textContent='Enregistré'}
