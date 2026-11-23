@@ -146,16 +146,12 @@ select.in{appearance:none}
 .rvc header div{flex:1;min-width:0}.rvc header b{display:block;font:900 15px var(--fb);text-transform:uppercase}.rvc header small{font:600 12px var(--fb);color:var(--c)}.rvc header em{font:900 18px var(--fb);font-style:normal;color:var(--y)}
 .rvq{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06)}.rvq:last-child{border-bottom:0}
 .rvn{width:24px;height:24px;flex:none;border-radius:50%;background:rgba(255,255,255,.12);font:800 12px/24px var(--fb);text-align:center}.rvi{flex:none;padding:0;border:0;background:none;cursor:zoom-in}
-.rvq{align-items:flex-start!important}.rvq .f{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-.rv-g,.rv-m{border-radius:10px;padding:6px 10px}.rv-g small,.rv-m small{display:block;font:800 10px var(--fb);letter-spacing:.12em;text-transform:uppercase;margin:0 0 2px}
-.rv-g{background:rgba(61,255,165,.1);border-left:3px solid var(--g)}.rv-g small{color:var(--g)}.rv-g b{display:block;font:800 15px/1.3 var(--fb);color:#fff}
-.rv-g .rvb2{display:block;font:600 12px var(--fb);color:rgba(255,255,255,.75);margin-top:2px}
-.rv-m{background:rgba(255,255,255,.05);border-left:3px solid rgba(255,255,255,.3)}.rv-m small{color:var(--mut)}.rv-m span{display:block;font:600 14px/1.3 var(--fb);color:#fff}
-.rv-m .rvb2{display:block;font:500 12px var(--fb);color:rgba(255,255,255,.75)}
-.rv-m.ok{background:rgba(61,255,165,.08);border-left-color:var(--g)}.rv-m.ok small{color:var(--g)}
-.rv-m.mid{background:rgba(255,230,0,.08);border-left-color:var(--y)}.rv-m.mid small{color:var(--y)}
-.rv-m.ko{background:rgba(255,122,156,.1);border-left-color:#ff7a9c}.rv-m.ko small{color:#ff7a9c}
-.rv-m.nr span{font-style:italic;color:var(--mut)}.rvq .rvm{padding-top:4px}.rvn{margin-top:4px}
+.rvq{align-items:flex-start!important}.rvq .f{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.rv-g{font:600 15px/1.3 var(--fb);color:#fff}.rv-g .rvb2{display:block;font:500 12px var(--fb);color:var(--mut);margin-top:1px}
+.rv-m{display:flex;gap:6px;align-items:baseline;font:500 13px/1.35 var(--fb);color:var(--mut)}.rv-m i{font-style:normal;flex:none;opacity:.7}
+.rv-m span{min-width:0}.rv-m .rvb2{color:inherit;opacity:.8}
+.rv-m.ok{color:var(--g)}.rv-m.mid{color:var(--y)}.rv-m.ko{color:#ff8fa8}.rv-m.nr span{font-style:italic}
+.rvq .rvm{padding-top:2px}.rvn{margin-top:2px}
 @media(max-width:420px){.rvq{flex-wrap:wrap}.rvq .rvm{width:100%;justify-content:flex-end;padding-top:0}}
 .rvm{display:flex;align-items:center;gap:4px;flex:none}.rvm small{font:600 10px var(--fb);color:var(--mut)}.rvm i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:900 12px var(--fb)}.rvm i.ok{background:var(--g);color:#04210f}.rvm i.ko{background:rgba(255,122,156,.2);color:#ff7a9c}
 .rvm em{min-width:30px;text-align:right;font:900 14px var(--fb);font-style:normal;color:var(--y)}
@@ -613,8 +609,8 @@ function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v
    else if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];exp=esc(q.c?.[0]||'');mine=Q.length?esc(q.c?.[Q[Q.length-1]]||''):'';marks=ok(m[j*2]);pt=m[j*2]||0}
    else{exp=esc([x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - '))+(x.eb&&q.b?` <span class="rvb2">${esc(bLab(x))} : ${esc(q.b)}</span>`:'');mine=esc(A[j]||'')+(x.eb&&A[BO+j]?` <span class="rvb2">${esc(A[BO+j])}</span>`:'');
     marks=(x.ea?`<small>Artiste</small>${ok(m[j*2])}`:'')+(x.et?`<small>Titre</small>${ok(m[j*2+1])}`:'')+(x.eb?`<small>Bonus</small>${ok(m[MB+j])}`:'');pt=((m[j*2]||0)+(m[j*2+1]||0))*x.pts+(x.eb?(m[MB+j]||0):0)}
-   h+=`<div class="rvq">${x.ty==='img'?`<button class="rvi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:`<span class="rvn">${j+1}</span>`}<div class="f"><div class="rv-g"><small>Bonne réponse</small><b>${exp||'—'}</b></div>${spect?'':(()=>{const mx=x.qm==='qcm'?1:x.ty==='img'?(x.im==='pr'?1:x.pts):((x.ea?1:0)+(x.et?1:0))*x.pts+(x.eb?1:0),cl=!mine?'nr':pt>=mx||(x.ty==='img'&&x.im==='pr'&&pt>0)?'ok':pt>0?'mid':'ko';
-    return`<div class="rv-m ${cl}"><small>Ta réponse</small><span>${mine||'Pas de réponse'}</span></div>`})()}</div><div class="rvm">${spect?'':marks}<em>${spect?'':'+'+pt*(x2?2:1)}</em></div></div>`});
+   h+=`<div class="rvq">${x.ty==='img'?`<button class="rvi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:`<span class="rvn">${j+1}</span>`}<div class="f"><div class="rv-g">${exp||'—'}</div>${spect?'':(()=>{const mx=x.qm==='qcm'?1:x.ty==='img'?(x.im==='pr'?1:x.pts):((x.ea?1:0)+(x.et?1:0))*x.pts+(x.eb?1:0),cl=!mine?'nr':pt>=mx||(x.ty==='img'&&x.im==='pr'&&pt>0)?'ok':pt>0?'mid':'ko';
+    return`<div class="rv-m ${cl}"><i aria-hidden="true">↳</i><span>${mine||'Pas de réponse'}</span></div>`})()}</div><div class="rvm">${spect?'':marks}<em>${spect?'':'+'+pt*(x2?2:1)}</em></div></div>`});
   h+=`</section>`});
  return h+`<button class="btn blk" data-a="rvwx" style="margin-top:6px">Retour</button>`}
 /* QCM : un seul choix (1 pt si c'est le bon), modifiable tant que le thème est ouvert ; résultat révélé à la validation de la manche */
