@@ -311,6 +311,16 @@ html:has(.g-ov,.ov),body:has(.g-ov,.ov){overflow:hidden;overscroll-behavior:none
 /* bouton en cours de suppression */
 .a-ico.busy{opacity:.6;cursor:wait;animation:bz 1s linear infinite}.a-ico.busy svg{opacity:.35}
 @keyframes bz{50%{box-shadow:0 0 0 4px rgba(255,92,122,.35)}}
+/* son sur les téléphones */
+.btn.snd{display:flex!important;gap:10px;background:var(--c)!important;color:var(--n)!important;box-shadow:0 5px 0 #0090a0!important;margin:12px 0 0!important}
+.snd-ok{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 14px;padding:12px;border-radius:14px;background:rgba(61,255,165,.12);border:1.5px solid var(--g);color:var(--g);font:800 15px var(--fb)}
+.btn.blk:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.sndc{display:flex!important;align-items:center;gap:4px;color:var(--g)!important;letter-spacing:.04em!important}
+.a-tgl{display:flex;align-items:flex-start;gap:14px;width:100%;margin:16px 0 0;padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.2);color:#fff;text-align:left;cursor:pointer}
+.a-tgl .kn{position:relative;flex:none;width:46px;height:26px;margin-top:2px;border-radius:999px;background:rgba(255,255,255,.2);transition:background .2s}
+.a-tgl .kn:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.a-tgl.on{border-color:var(--g)}.a-tgl.on .kn{background:var(--g)}.a-tgl.on .kn:after{transform:translateX(20px)}
+.a-tgl .f{flex:1;min-width:0}.a-tgl b{display:block;font:800 14px Poppins}.a-tgl small{display:block;margin-top:2px;font:500 12px/1.45 Poppins;color:var(--mut)}
 /* pop-in QR code */
 .md.qrm{max-width:400px;padding:0 0 18px;overflow:hidden;text-align:center;border:2px solid var(--c);background:radial-gradient(ellipse at 50% 20%,#141b5c,#060a2a 80%);box-shadow:0 0 0 3px var(--p),0 0 60px rgba(0,232,255,.3);animation:eqin .4s cubic-bezier(.2,1.5,.4,1)}
 .qrm-l{margin:18px 0 4px}.qrm-l img{height:96px;max-width:80%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
@@ -624,7 +634,7 @@ function bind(id){
  unG&&unG();unT&&unT();sid=id||null;g=null;gl=false;teams=[];tready=false;cfg=null;cfgI=null;mk={};gk={};me=null;
  if(!sid)return;try{me=localStorage.getItem('bt_me_'+sid)}catch(x){}
  const init=()=>{if(g&&!cfg){cfg=clone(g.rounds);cfgI=clone(g.rinfo);cfgNR=g.nr??3}};
- unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{},rinfo:{}},x.data()):null;gl=true;init();render()},ERR);
+ unG=sdoc().onSnapshot(x=>{g=x.exists?Object.assign({r:-1,th:{},rd:{},rounds:{},rinfo:{}},x.data()):null;gl=true;init();render();sndSync()},ERR);
  unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()},ERR);
 }
 window.__rr=()=>render();
@@ -645,6 +655,16 @@ function render(){
 }
 
 /* ============ ÉQUIPES ============ */
+/* son sur les téléphones (option de session) : déverrouillage par un toucher, puis lecture pilotée par l'admin */
+let SOK=false,lastNp=null,WL=null;
+const sndBox=()=>SOK?`<div class="snd-ok"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>Son activé</div>`:`<button class="btn blk snd" data-a="sndon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>Activer le son</button><p class="hint" style="margin:8px 0 12px">Les extraits de la partie seront joués sur ce téléphone. Garde l'écran allumé et la page ouverte.</p>`;
+async function wake(){try{if(navigator.wakeLock&&document.visibilityState==='visible')WL=await navigator.wakeLock.request('screen')}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(!ADMIN&&SOK&&g?.snd&&document.visibilityState==='visible')wake()});
+function sndSync(){if(ADMIN||!g?.snd||!SOK)return;const n=g.np;if(!n||n.at===lastNp)return;lastNp=n.at;
+ if(n.st==='play'&&n.id){const off=Math.max(0,Math.min(29,(n.pos||0)+Math.min(30,Math.max(0,(Date.now()-n.at)/1000))));
+  dzGet(n.id).then(u=>{if(g.np?.at!==n.at)return;const go=()=>{try{if(off>.5)AU.currentTime=off}catch(e){}};
+   if(AU.src!==u){AU.src=u;AU.addEventListener('loadedmetadata',go,{once:true})}else go();AU.play().catch(()=>{SOK=false;render()})}).catch(()=>{})}
+ else AU.pause()}
 const guessBox=(t,key,label,pts)=>{const k='g|'+key;return`<div class="gs"><div class="gs-l"><span><i>?</i>${label}</span><b>+${pts} pts</b></div><input class="in" data-k="${k}" autocomplete="off" placeholder="Ta proposition..." value="${esc(draft[k]??t.guess?.[key]??'')}"></div>`};
 /* tie break en direct, vu par toutes les équipes */
 const tbSeen={};
@@ -721,12 +741,13 @@ function team(){
  if(!gl||!tready)return GB+BRAND(true)+GC('Chargement','Une seconde');
  if(!g)return GD+BRAND(true)+FR(`<h3>Session introuvable</h3><p class="mut">Vérifie ton lien.</p>`);
  const T=g.title?`<h1 class="st">${esc(g.title)}</h1>`:'',Ts=g.title?`<h1 class="st sm">${esc(g.title)}</h1>`:'';
- if(!me)return GB+BRAND(true)+T+FR(`<h3>Ton équipe</h3><label>Nom d'équipe</label><input class="in" data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}"><button class="btn blk y" data-a="join">C'est parti</button>`);
+ if(!me)return GB+BRAND(true)+T+FR(`<h3>Ton équipe</h3><label>Nom d'équipe</label><input class="in" data-k="nm" maxlength="28" placeholder="Les Chanteurs du Dimanche" value="${esc(draft.nm||'')}">${g.snd?sndBox():''}<button class="btn blk y" data-a="join" ${g.snd&&!SOK?'disabled':''}>C'est parti</button>${g.snd&&!SOK?'<p class="hint" style="margin:10px 0 0">Active le son pour rejoindre la partie.</p>':''}`);
  const t=teams.find(x=>x.id===me);
+ if(g.snd&&!SOK&&t)return GB+BRAND(true)+T+FR(`<h3>Active le son</h3><p class="mut" style="margin:0 0 14px">Cette partie se joue avec le son sur les téléphones : les extraits seront joués ici.</p>${sndBox()}`);
  if(!t)return GD+BRAND(true)+T+FR(`<h3>Équipe introuvable</h3><p class="mut">La partie a été réinitialisée.</p><button class="btn blk" data-a="leave">Rejoindre à nouveau</button>`);
  const v=vr(),tot=sum(v.map(r=>score(t,r)))+tbp(t),pos=v.length?place(v[v.length-1]).find(x=>x.id===me)?.pos:null;
  const pend=g.rd?.[FI()]==='validated'&&!fin(),showPos=pos&&(g.r<0||g.rd?.[g.r]==='validated')&&!pend;
- const bar=`<div class="tbar"><div class="tm"><small>Ton équipe</small><b>${esc(t.name)}</b></div><div class="tsc"><b>${tot}</b><small>pts</small></div>${showPos?`<div class="tpos">#${pos}</div>`:''}</div>`;
+ const bar=`<div class="tbar"><div class="tm"><small>Ton équipe</small><b>${esc(t.name)}</b>${g.snd&&SOK?`<small class="sndc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>Son activé</small>`:''}</div><div class="tsc"><b>${tot}</b><small>pts</small></div>${showPos?`<div class="tpos">#${pos}</div>`:''}</div>`;
  const r=g.r,st=g.rd?.[r],I=r>=0?ri(r):{};
  const showRk=v.length&&(r<0||st==='validated')&&!pend,rk=showRk?rankInner():'',RKB=rk?FR(rk):'';
  const spect=r===FI()&&!inFinal(me),FN=finalists().map(id=>teams.find(x=>x.id===id)?.name).filter(Boolean);
@@ -812,7 +833,8 @@ function teamsTab(){
 function prep(){
  const url=location.origin+location.pathname+'?s='+sid;
  let h=`<div class="c"><h2>Lien des équipes</h2><div class="lk">${esc(url)}</div><button class="btn sm" data-a="copy">Copier le lien</button><button class="btn sm y" data-a="qr">QR code</button><a class="btn sm gh" href="${esc(url)}" target="_blank" style="text-decoration:none">Tester</a><p class="mut" style="margin:10px 0 0">Lien propre à cette session : les équipes ne voient que celle-ci.</p></div>`;
- h+=`<div class="c"><h2>Session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div></div><div style="margin-top:14px"><button class="btn sm" data-a="saveinfo">Enregistrer</button></div></div>`;
+ h+=`<div class="c"><h2>Session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div></div><div style="margin-top:14px"><button class="btn sm" data-a="saveinfo">Enregistrer</button></div>
+ <button class="a-tgl ${g.snd?'on':''}" data-a="sndopt" role="switch" aria-checked="${!!g.snd}"><span class="kn" aria-hidden="true"></span><span class="f"><b>Son aussi sur les téléphones des équipes</b><small>Pour jouer à distance : quand tu lances un extrait Deezer, il est joué aussi chez chaque équipe. Elles devront activer le son pour rejoindre la partie.</small></span></button></div>`;
  const lock=started();prepR=Math.min(prepR,cfgNR);
  if(openTh===null){openTh='';for(let r=0;r<=cfgNR&&!openTh;r++)(cfg[r]||[]).forEach((x,i)=>{if(!openTh){const[d,t]=thProg(x);if(d<t){openTh=r+'_'+i;prepR=r}}});if(!openTh)openTh=prepR+'_0'}
  [prepR].forEach(r=>{const n=r===cfgNR?'Finale':'Manche '+(r+1);
@@ -914,7 +936,8 @@ const dzFresh=id=>{const c=DZC[id];return c&&c.exp-Date.now()/1000>90?c.u:null};
 const dzKeep=(id,u)=>{const m=/exp=(\d+)/.exec(u||'');DZC[id]={u,exp:m?+m[1]:Date.now()/1000+600}};
 const dzGet=id=>dzFresh(id)?Promise.resolve(dzFresh(id)):jsonp('https://api.deezer.com/track/'+id).then(d=>{if(!d.preview)throw new Error('pas d\'extrait pour ce morceau');dzKeep(id,d.preview);return d.preview});
 AU.ontimeupdate=()=>{const pc=Math.min(100,AU.currentTime/(AU.duration||30)*100);document.querySelectorAll('.dzbar i').forEach(e=>e.style.width=pc+'%');document.querySelectorAll('.dzcur').forEach(e=>e.textContent=mmss(AU.currentTime))};
-AU.onplay=AU.onpause=AU.onended=()=>render();
+const npSend=st=>{if(ADMIN&&g&&g.snd&&dzp.from==='pilot'&&dzp.id)gset({np:{id:dzp.id,st,pos:AU.currentTime||0,at:Date.now()}})};
+AU.onplay=()=>{npSend('play');render()};AU.onpause=()=>{npSend('pause');render()};AU.onended=()=>{npSend('stop');render()};
 function dzPlay(id,u){if(dzp.id===id&&!AU.paused){AU.pause();return}if(AU.src!==u)AU.src=u;dzp.id=id;AU.play().catch(()=>{dzp.err='Touche encore ▶ pour lancer la lecture';render()})}
 const DZI='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
  PLAYI='<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>',
@@ -1094,7 +1117,8 @@ document.addEventListener('click',async e=>{
  if(a==='rvw'){rvw=b.dataset.v===''?vr().at(-1):+b.dataset.v;render();window.scrollTo(0,0)}
  if(a==='rvwx'){rvw=null;render();window.scrollTo(0,0)}
  if(a==='tab'){tab=b.dataset.v;render();window.scrollTo(0,0)}
- if(a==='join'){const n=(draft.nm||'').trim();if(!n)return;me='t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);localStorage.setItem('bt_me_'+sid,me);await tcol().doc(me).set({name:n,answers:{},done:{},x2:{},guess:{}})}
+ if(a==='sndon'){AU.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';const p=AU.play();SOK=true;lastNp=null;wake();render();if(p&&p.then)p.then(()=>{AU.pause();sndSync()}).catch(()=>{sndSync()})}
+ if(a==='join'){const n=(draft.nm||'').trim();if(!n)return;if(g.snd&&!SOK)return;me='t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);localStorage.setItem('bt_me_'+sid,me);await tcol().doc(me).set({name:n,answers:{},done:{},x2:{},guess:{}})}
  if(a==='leave'){localStorage.removeItem('bt_me_'+sid);me=null;render()}
  if(a==='x2')tcol().doc(me).set({x2:{[g.r]:b.dataset.v?null:t}},{merge:true});
  if(a==='rename'){const id=b.dataset.id,k='tn|'+id,tm0=teams.find(x=>x.id===id),n=(draft[k]??tm0?.name??'').trim();if(!n)return;await tcol().doc(id).update({name:n});delete draft[k];b.textContent='Renommée'}
@@ -1108,6 +1132,7 @@ document.addEventListener('click',async e=>{
  if(a==='opens'){view='sess';tab='prep';draft={};bind(b.dataset.id);render()}
  if(a==='back'){view='list';bind(null);render()}
  if(a==='install'&&BIP){BIP.prompt();const c=await BIP.userChoice.catch(()=>({}));if(c.outcome==='accepted')window.__inst=1;BIP=null;render()}
+ if(a==='sndopt'){await gset({snd:!g.snd});if(!g.snd)gset({np:FV.delete()})}
  if(a==='qr'){qrModal()}
  if(a==='copy'){try{await navigator.clipboard.writeText(location.origin+location.pathname+'?s='+sid);b.textContent='Copié'}catch(x){b.textContent='Copie impossible'}}
  if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim()});draft.sn=draft.stt=undefined;b.textContent='Enregistré'}
