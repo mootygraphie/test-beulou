@@ -279,6 +279,8 @@ select.in{appearance:none}
 .qrm-c svg{display:block;width:100%;height:auto}
 .qrm-h{margin:16px 18px 14px;font:600 14px Poppins;color:var(--mut)}
 .md.qrm .btn{margin:0 18px!important;width:calc(100% - 36px)!important}
+/* pré-correction : réponse probable à vérifier */
+.ab.pb{box-shadow:0 0 0 3px #ff9f1a}.pbt{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:#ff9f1a;color:#2a1600;font:800 9px Poppins;letter-spacing:.06em;text-transform:uppercase;vertical-align:1px}
 /* QCM admin */
 .a-qcm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.a-qcm.two{grid-template-columns:1fr 1fr}.adm .in.good{border-color:var(--g);box-shadow:inset 3px 0 0 var(--g)}
 @media(max-width:560px){.a-qcm{grid-template-columns:1fr}}
@@ -809,13 +811,14 @@ function rscreen(r){
   x.q.forEach((q,j)=>{
    const ca=x.qm==='qcm'?(q.c?.[0]||''):x.ty==='img'?(q.r||''):[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - ')+(x.eb&&q.b?` · ${bLab(x)} : ${q.b}`:'');
    h+=`<div class="a-q"><div class="a-qh">${x.ty==='img'?`<button class="a-qi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:''}<em>${x.ty==='img'?'Image':'Question'} ${j+1}</em><b>${esc(ca)||'(non renseigné)'}</b></div>`;
-   TM.forEach(t=>{const m=getMk(t,key,x),v=t.answers?.[key]?.[j]||'',vb=t.answers?.[key]?.[BO+j]||'';
-    h+=`<div class="a-ln"><div class="t"><small>${esc(t.name)}${t.x2?.[r]==i?' <span class="x">x2</span>':''}</small>${x.qm==='qcm'?`<span>${(A=>A.length?esc(q.c?.[A[A.length-1]]||'—'):'<i>(pas répondu)</i>')(t.qa?.[key]?.[j]||[])}</span>`:`<span>${v?esc(v):'<i>(vide)</i>'}</span>`}${x.ty==='img'&&x.im==='pr'?`<span class="bv">${t.lk?.[key]?.[j]?'Verrouillée à '+t.lk[key][j]+' pt'+(t.lk[key][j]>1?'s':''):'Pas verrouillée : 0 pt'}</span>`:''}${x.eb?`<span class="bv">${esc(bLab(x))} : ${vb?esc(vb):'<i>(vide)</i>'}</span>`:''}</div>`+
+   TM.forEach(t=>{const m=getMk(t,key,x),v=t.answers?.[key]?.[j]||'',vb=t.answers?.[key]?.[BO+j]||'',sav=!!t.marks?.[key],
+    fa=x.ea&&q.a?fz(q.a,v):0,ft=x.et&&q.t?fz(q.t,v):0,fb=x.eb&&q.b?fz(q.b,vb+' '+v):0,fi=x.ty==='img'&&x.qm!=='qcm'&&q.r?fz(q.r,v):0,PB=f=>f===1?' pb':'',chk=!sav&&[fa,ft,fb,fi].includes(1);
+    h+=`<div class="a-ln"><div class="t"><small>${esc(t.name)}${t.x2?.[r]==i?' <span class="x">x2</span>':''}${chk?' <span class="pbt">à vérifier</span>':''}</small>${x.qm==='qcm'?`<span>${(A=>A.length?esc(q.c?.[A[A.length-1]]||'—'):'<i>(pas répondu)</i>')(t.qa?.[key]?.[j]||[])}</span>`:`<span>${v?esc(v):'<i>(vide)</i>'}</span>`}${x.ty==='img'&&x.im==='pr'?`<span class="bv">${t.lk?.[key]?.[j]?'Verrouillée à '+t.lk[key][j]+' pt'+(t.lk[key][j]>1?'s':''):'Pas verrouillée : 0 pt'}</span>`:''}${x.eb?`<span class="bv">${esc(bLab(x))} : ${vb?esc(vb):'<i>(vide)</i>'}</span>`:''}</div>`+
     (x.qm==='qcm'?`<button class="ab sc ${m[j*2]?'on':''}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}" data-v="1">✓</button>`:'')+
-    (x.ty==='img'&&x.qm!=='qcm'?(x.im==='pr'&&!t.lk?.[key]?.[j]?`<span class="ab sc dis">0</span>`:`<button class="ab sc ${m[j*2]?'on':''}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}" data-v="${x.im==='pr'?t.lk[key][j]:1}">${x.im==='pr'?'+'+t.lk[key][j]:'✓'}</button>`):'')+
-    (x.ea?`<button class="ab ${m[j*2]?'on':''}" title="Artiste" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}">👨‍🎤</button>`:'')+
-    (x.et?`<button class="ab ${m[j*2+1]?'on':''}" title="Titre" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2+1}">🎶</button>`:'')+
-    (x.eb?`<button class="ab sc bnb ${m[MB+j]?'on':''}" title="Bonus" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${MB+j}">+1</button>`:'')+`</div>`});
+    (x.ty==='img'&&x.qm!=='qcm'?(x.im==='pr'&&!t.lk?.[key]?.[j]?`<span class="ab sc dis">0</span>`:`<button class="ab sc ${m[j*2]?'on':''}${PB(fi)}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}" data-v="${x.im==='pr'?t.lk[key][j]:1}">${x.im==='pr'?'+'+t.lk[key][j]:'✓'}</button>`):'')+
+    (x.ea?`<button class="ab ${m[j*2]?'on':''}${PB(fa)}" title="Artiste" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}">👨‍🎤</button>`:'')+
+    (x.et?`<button class="ab ${m[j*2+1]?'on':''}${PB(ft)}" title="Titre" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2+1}">🎶</button>`:'')+
+    (x.eb?`<button class="ab sc bnb ${m[MB+j]?'on':''}${PB(fb)}" title="Bonus" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${MB+j}">+1</button>`:'')+`</div>`});
    h+=`</div>`;
   });
   h+=`<footer class="a-sum">${TM.map(t=>`<span>${esc(t.name)} <b>${ms(getMk(t,key,x),x)*(t.x2?.[r]==i?2:1)+(x.sx&&getGk(t,key,x.n)?BT:0)}</b></span>`).join('')}</footer></section>`;
@@ -921,18 +924,33 @@ function endBlock(TM){
   ${tied?`<p class="a-warn" style="margin:10px 0 12px">Égalité parfaite entre ${P.filter(x=>x.sc===P[0].sc).map(x=>esc(x.name)).join(' et ')}.</p><button class="btn blk" data-a="tiebreak">Aller au tie break</button>`:'<div style="height:12px"></div>'}
   <button class="btn blk ${tied?'gh':'y'}" data-a="closenight" style="margin-top:8px">Clôturer la soirée</button></div>`;
 }
+/* ===== pré-correction tolérante =====
+   fz(attendu, réponse) : 2 = sûr (trouvé tel quel), 1 = probable (faute, mot manquant…), 0 = non reconnu */
+const STOPW=new Set(['the','le','la','les','l','a','an','de','des','du','d','of','and','et','un','une']);
+const nz=(s,exp)=>{let v=(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/&/g,' and ').replace(/\([^)]*\)|\[[^\]]*\]/g,' ');
+ if(exp)v=v.replace(/\b(feat|ft|featuring)\b.*$/,' ');return v.replace(/[^a-z0-9]+/g,' ').trim()};
+const toks=(s,exp)=>{const w=nz(s,exp).split(' ').filter(Boolean),k=w.filter(x=>!STOPW.has(x));return k.length?k:w};
+function lev(a,b){if(a===b)return 0;let p=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){const c=[i];for(let j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[b.length]}
+function lsub(pat,txt){let p=new Array(txt.length+1).fill(0);for(let i=1;i<=pat.length;i++){const c=[i];for(let j=1;j<=txt.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(pat[i-1]===txt[j-1]?0:1));p=c}return Math.min(...p)}
+function fz(exp,ans){const E=toks(exp,1),A=toks(ans);if(!E.length||!A.length)return 0;const e=E.join(''),a=A.join('');
+ if(a.includes(e))return 2;
+ const m=e.length,tol=m<=3?0:m<=6?1:m<=10?2:Math.floor(m/5);if(tol&&lsub(e,a)<=tol)return 1;
+ const near=(w,v)=>w===v||(w.length>3&&lev(w,v)<=(w.length>7?2:1));
+ if(E.length>1&&E.every(w=>A.some(v=>near(w,v))))return 1;           // tous les mots, dans le désordre ou avec des fautes
+ if(E.length>1&&A.join('').length>=4&&A.every(v=>E.some(w=>near(w,v))))return 1; // une partie seulement (ex. le nom de famille)
+ return 0}
 function getMk(t,key,x){const k=sid+'|'+t.id+'|'+key;
  if(!mk[k]){const A=t.answers?.[key]||[];
   if(t.marks?.[key])mk[k]=[...t.marks[key]].map(v=>v||0);
-  else{const m=[];x.q.forEach((q,j)=>{const an=norm(A[j]);let a=0,b=0;
+  else{const m=[];x.q.forEach((q,j)=>{let a=0,b=0;
    if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];a=Q.length&&Q[Q.length-1]===0?1:0}
-   else if(x.ty==='img'){const ex=norm(q.r);a=ex&&an&&(an.includes(ex)||(an.length>3&&ex.includes(an)))?(x.im==='pr'?(t.lk?.[key]?.[j]||0):1):0}
-   else{a=x.ea&&q.a&&an.includes(norm(q.a))?1:0;b=x.et&&q.t&&an.includes(norm(q.t))?1:0;const ab=norm((A[BO+j]||'')+' '+(A[j]||''));m[MB+j]=x.eb&&q.b&&ab.includes(norm(q.b))?1:0}
+   else if(x.ty==='img'){a=q.r&&fz(q.r,A[j])?(x.im==='pr'?(t.lk?.[key]?.[j]||0):1):0}
+   else{a=x.ea&&q.a&&fz(q.a,A[j])?1:0;b=x.et&&q.t&&fz(q.t,A[j])?1:0;m[MB+j]=x.eb&&q.b&&fz(q.b,(A[BO+j]||'')+' '+(A[j]||''))?1:0}
    m[2*j]=a;m[2*j+1]=b});mk[k]=m}
   for(let i=0;i<MB+QMAX;i++)mk[k][i]=mk[k][i]||0}
  return mk[k]}
 function getGk(t,key,name){const k=sid+'|'+t.id+'|'+key;
- if(gk[k]==null)gk[k]=t.gok?.[key]!=null?(t.gok[key]?1:0):(name&&norm(t.guess?.[key])===norm(name)?1:0);
+ if(gk[k]==null)gk[k]=t.gok?.[key]!=null?(t.gok[key]?1:0):(name&&t.guess?.[key]&&fz(name,t.guess[key])?1:0);
  return gk[k]}
 
 /* ============ ACTIONS ============ */
