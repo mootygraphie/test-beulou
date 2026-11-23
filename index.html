@@ -675,6 +675,7 @@ function team(){
   return GB+bar+BRAND(true)+T+`<h1 class="st sm fun">Classement final</h1>`+FR(podium())+
    `<p class="fres">${mp?.pos===1?'<b>Vous remportez la soirée !</b>':`Vous finissez <b>${mp?.pos}e</b> avec <b>${mp?.sc} pts</b>`}</p>`+RVB()+RKB+reveal(t,3)}
  const RG=(r>=0&&st==='open'&&I.sx&&!spect)?guessBox(t,'R'+r,'Thème de la manche',BR):'';
+ if(rvw!=null&&(st==='open'||(g.tb&&!fin())))rvw=null; // la partie reprend : retour forcé au jeu
  if(rvw!=null&&vr().length)return GD+bar+review(t);
  const W=m=>GB+bar+BRAND(true)+T+m+(RG?FR(RG):'')+RKB+(showRk?RVB():'');
  if(r<0)return W(GC('Patience, la manche va commencer',"Garde l'oreille tendue"));
