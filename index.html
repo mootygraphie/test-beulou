@@ -151,8 +151,8 @@ select.in{appearance:none}
 .rv-m{display:flex;gap:6px;align-items:baseline;font:500 13px/1.35 var(--fb);color:var(--mut)}.rv-m i{font-style:normal;flex:none;opacity:.7}
 .rv-m span{min-width:0}.rv-m .rvb2{color:inherit;opacity:.8}
 .rv-m.ok{color:var(--g)}.rv-m.mid{color:var(--y)}.rv-m.ko{color:#ff8fa8}.rv-m.nr span{font-style:italic}
-.rvq .rvm{padding-top:2px}.rvn{margin-top:2px}
-@media(max-width:420px){.rvq{flex-wrap:wrap}.rvq .rvm{width:100%;justify-content:flex-end;padding-top:0}}
+.rvq .rvm{justify-content:flex-end;flex-wrap:wrap;gap:6px;margin-top:4px;padding:0}.rvq .rvm em{min-width:44px;font:900 20px var(--fb);color:var(--y);text-shadow:2px 2px 0 rgba(255,10,140,.5)}.rvm small{margin-left:4px}.rvn{margin-top:2px}
+
 .rvm{display:flex;align-items:center;gap:4px;flex:none}.rvm small{font:600 10px var(--fb);color:var(--mut)}.rvm i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:900 12px var(--fb)}.rvm i.ok{background:var(--g);color:#04210f}.rvm i.ko{background:rgba(255,122,156,.2);color:#ff7a9c}
 .rvm em{min-width:30px;text-align:right;font:900 14px var(--fb);font-style:normal;color:var(--y)}
 /* manche images : joueurs */
@@ -610,7 +610,7 @@ function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v
    else{exp=esc([x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - '))+(x.eb&&q.b?` <span class="rvb2">${esc(bLab(x))} : ${esc(q.b)}</span>`:'');mine=esc(A[j]||'')+(x.eb&&A[BO+j]?` <span class="rvb2">${esc(A[BO+j])}</span>`:'');
     marks=(x.ea?`<small>Artiste</small>${ok(m[j*2])}`:'')+(x.et?`<small>Titre</small>${ok(m[j*2+1])}`:'')+(x.eb?`<small>Bonus</small>${ok(m[MB+j])}`:'');pt=((m[j*2]||0)+(m[j*2+1]||0))*x.pts+(x.eb?(m[MB+j]||0):0)}
    h+=`<div class="rvq">${x.ty==='img'?`<button class="rvi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:`<span class="rvn">${j+1}</span>`}<div class="f"><div class="rv-g">${exp||'—'}</div>${spect?'':(()=>{const mx=x.qm==='qcm'?1:x.ty==='img'?(x.im==='pr'?1:x.pts):((x.ea?1:0)+(x.et?1:0))*x.pts+(x.eb?1:0),cl=!mine?'nr':pt>=mx||(x.ty==='img'&&x.im==='pr'&&pt>0)?'ok':pt>0?'mid':'ko';
-    return`<div class="rv-m ${cl}"><i aria-hidden="true">↳</i><span>${mine||'Pas de réponse'}</span></div>`})()}</div><div class="rvm">${spect?'':marks}<em>${spect?'':'+'+pt*(x2?2:1)}</em></div></div>`});
+    return`<div class="rv-m ${cl}"><i aria-hidden="true">↳</i><span>${mine||'Pas de réponse'}</span></div>`})()}${spect?'':`<div class="rvm">${marks}<em>+${pt*(x2?2:1)}</em></div>`}</div></div>`});
   h+=`</section>`});
  return h+`<button class="btn blk" data-a="rvwx" style="margin-top:6px">Retour</button>`}
 /* QCM : un seul choix (1 pt si c'est le bon), modifiable tant que le thème est ouvert ; résultat révélé à la validation de la manche */
