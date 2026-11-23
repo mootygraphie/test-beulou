@@ -270,6 +270,29 @@ select.in{appearance:none}
 .eqm-s{font:600 16px/1.45 Poppins;color:#fff;margin:0 18px 20px}.eqm-s b{color:var(--y);font-size:20px}
 @keyframes eqin{from{transform:scale(.7);opacity:0}}
 .tbs-x{align-self:center;margin-top:18px;background:none;border:0;color:var(--mut);font:600 13px Poppins;text-decoration:underline;cursor:pointer;padding:10px}
+/* Deezer : recherche et lecteur */
+.a-dzb{width:34px;height:34px;flex:none;border-radius:9px;border:1px solid rgba(0,232,255,.5);background:rgba(0,232,255,.08);color:var(--c);display:grid;place-items:center;padding:0;overflow:hidden;cursor:pointer}
+.a-dzb img{width:100%;height:100%;object-fit:cover}.a-dzb.on{border-color:var(--g);box-shadow:0 0 0 2px rgba(61,255,165,.35)}
+.dz-in{position:relative;display:block}.dz-in svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--c)}.dz-in .in{padding-left:40px!important;height:48px;border-color:var(--c)!important}
+.dz-res{display:flex;flex-direction:column;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid var(--line);overflow:hidden;min-height:60px}
+.dz-it{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.07)}.dz-it:last-child{border-bottom:0}
+.dz-pk{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;color:#fff;text-align:left;cursor:pointer;padding:0}
+.dz-pk img{width:44px;height:44px;flex:none;border-radius:8px;background:#141b5c}.dz-pk span{min-width:0}.dz-pk b{display:block;font:700 14px Poppins;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dz-pk small{display:block;font:500 12px Poppins;color:var(--mut)}
+.dz-ls{width:40px;height:40px;flex:none;border-radius:50%;border:1px solid rgba(61,255,165,.6);background:none;color:var(--g);display:grid;place-items:center;cursor:pointer}.dz-ls svg{width:16px;height:16px}
+.dz-msg{margin:0;padding:14px;font:500 13px Poppins;color:var(--mut);text-align:center}.dz-msg.ko{color:#ff8fa8}
+.dz-note{margin:0;font:500 11px Poppins;color:var(--mut)}
+.dzeq{display:flex;align-items:center;gap:2px;height:16px}.dzeq i{width:3px;background:var(--g);animation:dzeq .8s ease-in-out infinite}.dzeq i:nth-child(2){animation-delay:-.3s}.dzeq i:nth-child(3){animation-delay:-.6s}
+@keyframes dzeq{0%,100%{height:4px}50%{height:14px}}
+.dzc{width:100%;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:14px;background:rgba(0,0,0,.28);border:1px solid rgba(0,232,255,.35);margin:4px 0 0}
+.dzq{display:flex;gap:6px;flex-wrap:wrap}.dzq button{width:38px;height:34px;border-radius:9px;border:1px solid var(--line);background:transparent;color:#fff;font:800 13px Poppins;cursor:pointer}.dzq button.on{background:var(--p);border-color:var(--p)}.dzq button:disabled{opacity:.25;cursor:default}
+.dzn{display:flex;align-items:center;gap:10px}.dzn img{width:52px;height:52px;border-radius:10px;flex:none}.dzn .f{min-width:0}.dzn b{display:block;font:800 15px Poppins}.dzn small{display:block;font:500 12px Poppins;color:var(--y)}
+.dzbar{height:8px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden}.dzbar i{display:block;height:100%;background:linear-gradient(90deg,var(--c),var(--p))}
+.dzt{display:flex;justify-content:space-between;font:600 12px Poppins;color:var(--mut);font-variant-numeric:tabular-nums}
+.dzb{display:flex;align-items:center;justify-content:center;gap:16px}
+.dzplay{width:68px;height:68px;border-radius:50%;border:0;background:var(--y);color:var(--n);display:grid;place-items:center;cursor:pointer;box-shadow:0 0 22px rgba(255,230,0,.35)}
+.dzsk{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:none;color:#fff;font:800 14px Poppins;cursor:pointer}.dzsk:disabled{opacity:.3;cursor:default}
+.dzs{font:500 11px Poppins;color:var(--mut);text-align:center}
+@media (prefers-reduced-motion:reduce){.dzeq i{animation:none;height:10px}}
 /* pop-in QR code */
 .md.qrm{max-width:400px;padding:0 0 18px;overflow:hidden;text-align:center;border:2px solid var(--c);background:radial-gradient(ellipse at 50% 20%,#141b5c,#060a2a 80%);box-shadow:0 0 0 3px var(--p),0 0 60px rgba(0,232,255,.3);animation:eqin .4s cubic-bezier(.2,1.5,.4,1)}
 .qrm-l{margin:18px 0 4px}.qrm-l img{height:96px;max-width:80%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
@@ -752,7 +775,7 @@ function asess(){
  const N=`<nav class="a-nav" aria-label="Menu admin"><div>${nav.map(([k,n])=>{const on=k==='game'?inG:tab===k;
   return`<button class="a-nb ${on?'on':''}" data-a="tab" data-v="${k==='game'?liveR():k}"><span class="p">${IC[k]}</span>${n}${k==='game'&&live?'<span class="lv"></span>':''}${k==='teams'&&teams.length?`<span class="bd">${teams.length}</span>`:''}</button>`}).join('')}</div></nav>`;
  const body=tab==='tb'?(g.tb?tbBlock():rscreen(3)):tab==='prep'?prep():tab==='teams'?teamsTab():tab==='rank'?((fin()&&teams.length?`<div class="c"><h2>Podium final</h2>${podium()}</div>`:'')+(rankHtml()||'<div class="c mut">Aucune manche validée pour le moment.</div>')):rscreen(+tab);
- return h+body+N+gSheet();
+ return h+body+N+gSheet()+dzSheet();
 }
 function teamsTab(){
  if(!teams.length)return `<div class="c mut">Aucune équipe pour le moment. Elles apparaissent ici dès qu'elles rejoignent la session avec le lien.</div>`;
@@ -775,7 +798,7 @@ function prep(){
    h+=`<section class="a-theme cfg" id="th-${r}_${i}" data-row="t|${r}|${i}"><header class="a-tb ${x.sx?'sx':''}">${TG(r,i,T.length)}<span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span><button class="a-hmv" data-a="thx" data-r="${r}" data-t="${i}" aria-label="Replier le thème" aria-expanded="true">${CHEV(1)}</button><button class="rm" title="Supprimer ce thème" aria-label="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">${TRASH}</button></header>
    ${genreBtn(x,r,i)}<div class="a-qs">${x.ty==='img'?imgRows(x,r,i):x.qm==='qcm'?qcmRows(x,r,i):''}`;
    if(x.ty!=='img'&&x.qm!=='qcm')for(let j=0;j<(x.q||[]).length;j++){const q=x.q[j]||{a:'',t:''};
-    h+=`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x)}</div>`}
+    h+=`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x,dzBtn(r,i,j,q))}</div>`}
    h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const[d,tt]=thProg(x),last=i===T.length-1&&r===cfgNR;return`<button class="btn a-next ${d===tt?'y':''}" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer ✓':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button>`})()}</div></section>`});
   h+=`<button class="btn sm gh" data-a="addth" data-r="${r}" style="margin:0">+ Ajouter un thème</button></div></section>`;
  });
@@ -795,7 +818,7 @@ function rscreen(r){
    h+=`<p class="a-p">Les équipes sont sur l'écran d'attente. Ouvre la manche pour lancer le jeu.</p><button class="btn blk" data-a="launch" data-r="${r}">Ouvrir la manche</button>`}}
  if(on){
   T.forEach((x,i)=>{const o=g.th?.[`${r}_${i}`];
-   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom secret · ':''}${x.ty==='img'?'Images · '+IML[x.im]+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM · '+x.nc+' choix':x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`+(o==='open'&&x.ty==='img'&&x.im!=='cl'?imgCtl(x,`${r}_${i}`):'')});
+   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom secret · ':''}${x.ty==='img'?'Images · '+IML[x.im]+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM · '+x.nc+' choix':x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`+(o==='open'&&x.ty==='img'&&x.im!=='cl'?imgCtl(x,`${r}_${i}`):'')+(o==='open'&&x.ty!=='img'&&x.q.some(q=>q.dz)?dzCtl(x,`${r}_${i}`):'')});
   h+=`<button class="btn blk y" data-a="closeround" data-r="${r}" style="margin-top:12px">Clôturer la manche</button>`;
  }
  if(over)h+=`<p class="a-p" style="margin:0">Manche ${st==='closed'?'clôturée : passe aux corrections ci-dessous.':'validée.'}</p>`;
@@ -854,12 +877,53 @@ async function qrModal(){const url=location.origin+location.pathname+'?s='+sid;
 function eqModal(names,sc){const o=document.createElement('div');o.className='ov';
  o.innerHTML=`<div class="md eqm"><div class="a-strip"></div><h2 class="eqm-h">Égalité !</h2><p class="eqm-s">${names.map(esc).join(' et ')}<br><b>${sc} pts</b> chacun</p><button class="btn blk y" data-a="gotb">Aller au tie break</button><button class="tbs-x" data-a="closeov">Plus tard</button></div>`;
  document.body.appendChild(o)}
+/* ===== Deezer (gratuit, sans compte) : recherche + extraits de 30 s =====
+   L'API publique ne renvoie pas d'en-tête CORS : on l'appelle en JSONP. Les liens d'extraits expirent : on les redemande au besoin. */
+let jsn=0,dzs=null,dzp={};const DZC={},DZW={},AU=new Audio();AU.preload='auto';
+function jsonp(u){return new Promise((ok,ko)=>{const cb='__dz'+(++jsn),sc=document.createElement('script'),clean=()=>{clearTimeout(tm);delete window[cb];sc.remove()},tm=setTimeout(()=>{clean();ko(new Error('Deezer ne répond pas'))},9000);
+ window[cb]=d=>{clean();d&&d.error?ko(new Error(d.error.message||'erreur Deezer')):ok(d)};sc.onerror=()=>{clean();ko(new Error('connexion impossible'))};
+ sc.src=u+(u.includes('?')?'&':'?')+'output=jsonp&callback='+cb;document.head.appendChild(sc)})}
+const mmss=t=>Math.floor((t||0)/60)+':'+String(Math.floor((t||0)%60)).padStart(2,'0');
+const dzFresh=id=>{const c=DZC[id];return c&&c.exp-Date.now()/1000>90?c.u:null};
+const dzKeep=(id,u)=>{const m=/exp=(\d+)/.exec(u||'');DZC[id]={u,exp:m?+m[1]:Date.now()/1000+600}};
+const dzGet=id=>dzFresh(id)?Promise.resolve(dzFresh(id)):jsonp('https://api.deezer.com/track/'+id).then(d=>{if(!d.preview)throw new Error('pas d\'extrait pour ce morceau');dzKeep(id,d.preview);return d.preview});
+AU.ontimeupdate=()=>{const pc=Math.min(100,AU.currentTime/(AU.duration||30)*100);document.querySelectorAll('.dzbar i').forEach(e=>e.style.width=pc+'%');document.querySelectorAll('.dzcur').forEach(e=>e.textContent=mmss(AU.currentTime))};
+AU.onplay=AU.onpause=AU.onended=()=>render();
+function dzPlay(id,u){if(dzp.id===id&&!AU.paused){AU.pause();return}if(AU.src!==u)AU.src=u;dzp.id=id;AU.play().catch(()=>{dzp.err='Touche encore ▶ pour lancer la lecture';render()})}
+const DZI='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+ PLAYI='<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>',
+ PAUSEI='<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
+ EQI='<span class="dzeq" aria-hidden="true"><i></i><i></i><i></i></span>';
+/* bouton « chercher sur Deezer » d'une question (pochette quand un morceau est lié) */
+const dzBtn=(r,i,j,q)=>`<button class="a-dzb ${q.dz?'on':''}" data-a="dzopen" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="${q.dz?'Morceau lié : changer':'Chercher la question '+(j+1)+' sur Deezer'}">${q.dz&&q.cv?`<img src="${esc(q.cv)}" alt="">`:DZI}</button>`;
+function dzSearch(){if(!dzs)return;const q=(dzs.q||'').trim();if(q.length<2){dzs.res=[];dzs.err='';render();return}
+ dzs.loading=true;dzs.err='';render();
+ jsonp('https://api.deezer.com/search?limit=8&q='+encodeURIComponent(q)).then(d=>{if(!dzs||(dzs.q||'').trim()!==q)return;dzs.res=(d.data||[]).filter(t=>t.preview);(dzs.res).forEach(t=>dzKeep(t.id,t.preview));dzs.loading=false;render()})
+  .catch(e=>{if(!dzs)return;dzs.loading=false;dzs.err=e.message;render()})}
+function dzSheet(){if(!dzs)return'';const x=cfg[dzs.r]?.[dzs.i],q=x?.q?.[dzs.j];if(!q)return'';
+ const R=dzs.res||[];
+ return`<div class="g-ov"><button class="g-bg" data-a="dzx" aria-label="Fermer"></button><div class="g-sh" role="dialog" aria-label="Chercher sur Deezer"><span class="g-hd"></span>
+ <div class="g-top"><div class="f"><small>Thème ${dzs.i+1} · question ${dzs.j+1}</small><b>Chercher sur Deezer</b></div><button class="g-ib" data-a="dzx" aria-label="Fermer">✕</button></div>
+ <label class="dz-in">${DZI}<input class="in" data-k="dzq" value="${esc(dzs.q||'')}" placeholder="Titre ou artiste" autocomplete="off" enterkeyhint="search" aria-label="Titre ou artiste"></label>
+ <div class="dz-res">${dzs.loading?'<p class="dz-msg">Recherche…</p>':dzs.err?`<p class="dz-msg ko">${esc(dzs.err)}</p>`:R.length?R.map((t,n)=>`<div class="dz-it"><button class="dz-pk" data-a="dzpick" data-n="${n}"><img src="${esc(t.album?.cover_small||'')}" alt=""><span><b>${esc(t.title)}</b><small>${esc(t.artist?.name||'')} · ${mmss(t.duration)}${t.explicit_lyrics?' · explicite':''}</small></span></button><button class="dz-ls" data-a="dzlisten" data-n="${n}" aria-label="Écouter l'extrait de ${esc(t.title)}">${dzp.id===t.id&&!AU.paused?EQI:PLAYI}</button></div>`).join(''):(dzs.q||'').trim().length>1?'<p class="dz-msg">Aucun morceau trouvé.</p>':'<p class="dz-msg">Tape un titre ou un artiste.</p>'}</div>
+ <p class="dz-note">Extraits de 30 s fournis par Deezer, sans compte ni pub. Choisir un morceau remplit ${x.qm==='qcm'?'la bonne réponse':'l\'artiste et le titre'}.</p>
+ ${q.dz?'<button class="btn sm dg" data-a="dzunlink" style="margin:0">Retirer le morceau lié</button>':''}</div></div>`}
+/* lecteur d'extraits sous le thème ouvert (pilotage) */
+function dzCtl(x,key){const L=x.q.map((q,j)=>q.dz?j:-1).filter(j=>j>=0);let j=dzp.key===key&&x.q[dzp.j]?.dz?dzp.j:L[0];const q=x.q[j],on=dzp.id===q.dz&&!AU.paused;
+ L.forEach(k=>{const id=x.q[k].dz;if(!dzFresh(id)&&!DZW[id]){DZW[id]=1;dzGet(id).catch(()=>{}).then(()=>{delete DZW[id]})}}); // on prépare les extraits pour une lecture immédiate
+ return`<div class="dzc"><div class="dzq" role="group" aria-label="Question à jouer">${x.q.map((qq,k)=>`<button class="${k===j?'on':''}" data-a="dzsel" data-key="${key}" data-j="${k}" ${qq.dz?'':'disabled'} aria-label="Question ${k+1}">${k+1}</button>`).join('')}</div>
+ <div class="dzn">${q.cv?`<img src="${esc(q.cv)}" alt="">`:''}<span class="f"><b>${esc(x.qm==='qcm'?(q.c?.[0]||''):[q.a,q.t].filter(Boolean).join(' - '))}</b><small>Question ${j+1} · visible par toi seulement</small></span></div>
+ <div class="dzbar"><i style="width:${dzp.id===q.dz&&AU.duration?AU.currentTime/AU.duration*100:0}%"></i></div><div class="dzt"><span class="dzcur">${dzp.id===q.dz?mmss(AU.currentTime):'0:00'}</span><span>0:30</span></div>
+ <div class="dzb"><button class="dzsk" data-a="dzmv" data-key="${key}" data-j="${j}" data-d="-1" ${L.indexOf(j)>0?'':'disabled'} aria-label="Question précédente">◀</button>
+ <button class="dzplay" data-a="dzplay" data-key="${key}" data-j="${j}" aria-label="${on?'Pause':'Lecture'}">${on?PAUSEI:PLAYI}</button>
+ <button class="dzsk" data-a="dzmv" data-key="${key}" data-j="${j}" data-d="1" ${L.indexOf(j)<L.length-1?'':'disabled'} aria-label="Question suivante">▶</button></div>
+ ${dzp.err?`<p class="dz-msg ko">${esc(dzp.err)}</p>`:''}<small class="dzs">Extrait Deezer · 30 s · ${L.length} morceau${L.length>1?'x':''} lié${L.length>1?'s':''} sur ${x.q.length}</small></div>`}
 /* pilotage d'un thème images en carrousel ou progressif */
 function imgCtl(x,key){const N=x.q.length,c=Math.max(0,Math.min(N-1,g.cs?.[key]??0)),l=Math.min(3,g.pl?.[key]??0),q=x.q[c];
  return`<div class="a-imc"><div class="a-imc-p">${pic(q.im,'sm')}</div><div class="f"><b>Image ${c+1} / ${N}</b><small>Réponse : ${esc(q.r||'(non renseignée)')}</small>${x.im==='pr'?`<small>Dévoilée : ${[25,50,75,100][l]} % · vaut ${[3,2,1,0][l]} pt${l<2?'s':''}</small>`:''}</div></div>
  <div class="a-imb">${x.im==='pr'?`<button class="btn" data-a="pmore" data-key="${key}" ${l>=3?'disabled':''}>Révéler plus</button>`:''}<button class="btn sm gh" data-a="cmove" data-key="${key}" data-d="-1" ${c?'':'disabled'} aria-label="Image précédente">◀</button><button class="btn y" data-a="cmove" data-key="${key}" data-d="1" ${c<N-1?'':'disabled'}>Image suivante ▶</button></div>`}
 /* bouton « supprimer cette question » (au moins une question par thème) */
-const QX=(r,i,j,x)=>{const n=(x.q||[]).length;return`<span class="a-qa">${n>1?`<button class="a-qx" data-a="rmq" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Supprimer la question ${j+1}">✕</button>`:''}</span>`};
+const QX=(r,i,j,x,pre='')=>{const n=(x.q||[]).length;return`<span class="a-qa">${pre}${n>1?`<button class="a-qx" data-a="rmq" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Supprimer la question ${j+1}">✕</button>`:''}</span>`};
 /* une question est-elle remplie ? (pour l'avancement des thèmes repliés) */
 function qDone(x,q){const C=q.c||[],nc=x.nc==2?2:4,qcm=x.qm==='qcm'&&!(x.ty==='img'&&x.im==='pr');
  if(qcm&&![...Array(nc).keys()].every(c=>(C[c]||'').trim()))return false;
@@ -882,7 +946,7 @@ function imgRows(x,r,i){const m=['cl','ca','pr'].includes(x.im)?x.im:'cl';
  <p class="mut" style="margin:6px 0 0;font-size:12px">Les photos sont réduites automatiquement et enregistrées tout de suite.</p>`}
 /* lignes d'un QCM : bonne réponse + 1 ou 3 mauvaises */
 function qcmRows(x,r,i){const n=x.nc==2?2:4;
- return`${(x.q||[]).map((q,j)=>`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x)}</div>`).join('')}`}
+ return`${(x.q||[]).map((q,j)=>`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x,x.ty!=='img'?dzBtn(r,i,j,q):'')}</div>`).join('')}`}
 /* genres de thème : un bouton avec flèche ouvre un volet (genre, puis options) */
 const GEN=[
  {t:'Blind test',d:'Artiste et titre à écrire',c:'p',p:'M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'},
@@ -981,6 +1045,7 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
  else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v}
  else if(k.startsWith('qc|')){const[,r,i,j,n]=k.split('|'),q=cfg[r][i].q[j];q.c=q.c||[];q.c[+n]=v}
  else if(k==='gbl'&&gsh)gsh.d.bl=v;
+ else if(k==='dzq'&&dzs){dzs.q=v;clearTimeout(dzs.tm);dzs.tm=setTimeout(dzSearch,350)}
  else if(k.startsWith('bl|')){const[,r,i]=k.split('|');cfg[r][i].bl=v}});
 document.addEventListener('click',async e=>{
  if(window.__noClick){window.__noClick=0;return} // fin d'un glisser d'onglet : pas de clic
@@ -1032,6 +1097,17 @@ document.addEventListener('click',async e=>{
   if(!x.q||!x.q.length)x.q=[0,1,2,3,4,5].map(()=>({a:'',t:'',b:'',r:'',im:''}));gsh=null;render()}
  if(a==='mvrd'&&!started()){const k=r+(+b.dataset.d);if(k<0||k>=cfgNR||r>=cfgNR)return;[cfg[r],cfg[k]]=[cfg[k],cfg[r]];[cfgI[r],cfgI[k]]=[cfgI[k]||{},cfgI[r]||{}];
   if(openTh&&openTh.startsWith(r+'_'))openTh=k+openTh.slice(String(r).length);else if(openTh&&openTh.startsWith(k+'_'))openTh=r+openTh.slice(String(k).length);prepR=k;render()}
+ if(a==='dzopen'){const q=cfg[r][t].q[+b.dataset.j],x=cfg[r][t];dzs={r,i:t,j:+b.dataset.j,q:x.qm==='qcm'?(q.c?.[0]||''):[q.a,q.t].filter(Boolean).join(' '),res:[]};render();dzSearch();setTimeout(()=>{const el=document.querySelector('[data-k="dzq"]');if(el){el.focus();el.select()}},40)}
+ if(a==='dzx'){if(dzp.from==='sheet')AU.pause();dzs=null;render()}
+ if(a==='dzlisten'&&dzs){const tr=dzs.res[+b.dataset.n];if(tr){dzp.from='sheet';dzPlay(tr.id,tr.preview);render()}}
+ if(a==='dzpick'&&dzs){const tr=dzs.res[+b.dataset.n],x=cfg[dzs.r][dzs.i],q=x.q[dzs.j];if(tr){const ar=tr.artist?.name||'';
+   if(x.qm==='qcm'){q.c=q.c||[];q.c[0]=ar+' - '+tr.title}else{q.a=ar;q.t=tr.title}q.dz=tr.id;q.cv=tr.album?.cover_medium||tr.album?.cover_small||'';
+   if(dzp.from==='sheet')AU.pause();dzs=null;render()}}
+ if(a==='dzunlink'&&dzs){const q=cfg[dzs.r][dzs.i].q[dzs.j];delete q.dz;delete q.cv;dzs=null;render()}
+ if(a==='dzsel'){AU.pause();dzp={key:b.dataset.key,j:+b.dataset.j};render()}
+ if(a==='dzmv'){const k=b.dataset.key,[rr,ii]=k.split('_'),x=th(+rr)[+ii],L=x.q.map((q,j)=>q.dz?j:-1).filter(j=>j>=0),p=L.indexOf(+b.dataset.j)+(+b.dataset.d);if(p<0||p>=L.length)return;AU.pause();dzp={key:k,j:L[p]};render()}
+ if(a==='dzplay'){const k=b.dataset.key,j=+b.dataset.j,[rr,ii]=k.split('_'),q=th(+rr)[+ii].q[j];if(!q?.dz)return;dzp.key=k;dzp.j=j;dzp.from='pilot';dzp.err='';
+   const u=dzFresh(q.dz);if(u)dzPlay(q.dz,u);else{dzp.err='Chargement de l\'extrait…';render();dzGet(q.dz).then(v=>{dzp.err='';dzPlay(q.dz,v);render()}).catch(e=>{dzp.err=e.message;render()})}render()}
  if(a==='mvq'){const q=cfg[r][t].q,j=+b.dataset.j,k=j+(+b.dataset.d);if(k<0||k>=q.length||g.rd?.[r])return;[q[j],q[k]]=[q[k],q[j]];render()}
  if(a==='mvth'){const T=cfg[r],k=t+(+b.dataset.d);if(k<0||k>=T.length||g.rd?.[r])return;[T[t],T[k]]=[T[k],T[t]];if(openTh===r+'_'+t)openTh=r+'_'+k;else if(openTh===r+'_'+k)openTh=r+'_'+t;render()}
  if(a==='thx'){const k=r+'_'+t;openTh=openTh===k?'':k;render();if(openTh)setTimeout(()=>document.getElementById('th-'+k)?.scrollIntoView({behavior:'smooth',block:'start'}),60)}
