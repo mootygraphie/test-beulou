@@ -133,6 +133,7 @@ select.in{appearance:none}
 .qq-c{display:grid;grid-template-columns:1fr 1fr;gap:8px}.qq-c.two{grid-template-columns:1fr}
 .qc{min-height:58px;padding:10px 12px;border-radius:14px;border:1.5px solid rgba(255,255,255,.22);background:rgba(0,0,0,.35);color:#fff;font:700 14px/1.25 var(--fb);text-align:center;cursor:pointer;touch-action:manipulation}
 .qc:not(:disabled):active{transform:scale(.97)}.qc:disabled{cursor:default}
+.qc.sel{background:var(--p);border-color:var(--p);color:#fff;box-shadow:0 0 0 3px rgba(255,10,140,.3)}.qq-h b.dn{background:rgba(0,232,255,.14);color:var(--c)}
 .qc.ok{background:var(--g);border-color:var(--g);color:#04210f}.qc.ko{background:rgba(255,122,156,.15);border-color:#ff7a9c;color:#ff9db5;text-decoration:line-through}.qc.rv{border-color:var(--g);color:var(--g)}
 /* bonnes réponses */
 .rvb{margin:-4px 0 18px!important;background:var(--c)!important;color:var(--n)!important;box-shadow:0 5px 0 #0090a0!important}
@@ -432,7 +433,7 @@ const IMD={cl:'Toutes les images d\'un coup, chaque équipe avance à son rythme
 const ORD=[5,10,6,9,1,14,3,12,0,7,15,8,2,13,4,11];
 /* marques : [artiste,titre]×6 puis 6 cases bonus (1 pt chacune) */
 const ms=(m,x)=>sum((m||[]).slice(0,2*QMAX).map(v=>v||0))*(x?x.pts:1)+(x&&x.eb?sum((m||[]).slice(MB,MB+QMAX).map(v=>v||0)):0);
-const ptsMax=x=>{const n=(x.q||[]).length,img=x.ty==='img';return(img&&x.im==='pr')||x.qm==='qcm'?3*n:2*n+(!img&&x.eb?n:0)};
+const ptsMax=x=>{const n=(x.q||[]).length,img=x.ty==='img';return img&&x.im==='pr'?3*n:x.qm==='qcm'?n:2*n+(!img&&x.eb?n:0)};
 const bLab=x=>x.bl||'Bonus';
 const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
@@ -516,19 +517,19 @@ function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v
   h+=`<section class="rvc"><header><span>${i+1}</span><div><b>${esc(tn(x,i))}</b><small>${x.sx?(t.gok?.[key]?'Thème secret trouvé · +'+BT:'Thème secret raté'):x.ty==='img'?'Images'+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM':'Thème '+(i+1)}${x2?' · x2':''}</small></div><em>+${spect?0:tot}</em></header>`;
   x.q.forEach((q,j)=>{let exp,mine,marks,pt;
    if(x.ty==='img'&&x.qm!=='qcm'){exp=esc(q.r||'');mine=esc(A[j]||'');marks=ok(m[j*2]);pt=(m[j*2]||0)*x.pts}
-   else if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];exp=esc(q.c?.[0]||'');mine=Q.map(c=>esc(q.c?.[c]||'')).join(' → ');marks=ok(m[j*2]);pt=m[j*2]||0}
+   else if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];exp=esc(q.c?.[0]||'');mine=Q.length?esc(q.c?.[Q[Q.length-1]]||''):'';marks=ok(m[j*2]);pt=m[j*2]||0}
    else{exp=esc([x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - '))+(x.eb&&q.b?` <span class="rvb2">${esc(bLab(x))} : ${esc(q.b)}</span>`:'');mine=esc(A[j]||'')+(x.eb&&A[BO+j]?` <span class="rvb2">${esc(A[BO+j])}</span>`:'');
     marks=(x.ea?`<small>Artiste</small>${ok(m[j*2])}`:'')+(x.et?`<small>Titre</small>${ok(m[j*2+1])}`:'')+(x.eb?`<small>Bonus</small>${ok(m[MB+j])}`:'');pt=((m[j*2]||0)+(m[j*2+1]||0))*x.pts+(x.eb?(m[MB+j]||0):0)}
    h+=`<div class="rvq">${x.ty==='img'?`<button class="rvi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:`<span class="rvn">${j+1}</span>`}<div class="f"><b>${exp||'—'}</b><span>${spect?'':mine?'Ta réponse : '+mine:'<i>Pas de réponse</i>'}</span></div><div class="rvm">${spect?'':marks}<em>${spect?'':'+'+pt*(x2?2:1)}</em></div></div>`});
   h+=`</section>`});
  return h+`<button class="btn blk" data-a="rvwx" style="margin-top:6px">Retour</button>`}
-/* QCM : 3 pts au 1er essai, 1 pt au 2e, 0 sinon ; ordre des choix mélangé mais identique pour tous */
-const QH=`<p class="bnh">Touche la bonne réponse : <b>3 pts</b> du premier coup, <b>1 pt</b> au 2e essai.</p>`;
+/* QCM : un seul choix (1 pt si c'est le bon), modifiable tant que le thème est ouvert ; résultat révélé à la validation de la manche */
+const QH=`<p class="bnh">Touche ta réponse : <b>1 pt</b> si c'est la bonne. Tu peux changer d'avis tant que le thème est ouvert. Résultat à la fin de la manche.</p>`;
 function qcmPlay(t,x,key,s){return QH+x.q.map((q,j)=>qchoice(t,x,key,j,s,true)).join('')}
-function qchoice(t,x,key,j,s,num){const q=x.q[j],A=t.qa?.[key]?.[j]||[],w=A.indexOf(0),done=w>=0||A.length>=2,pt=w===0?3:w===1?1:0,live=s==='open'&&!done&&!qpend[key+'|'+j],C=q.c||[];
- return`<div class="qq"><div class="qq-h">${num?`<span>${j+1}</span>`:''}${done?`<b class="${pt?'ok':'ko'}">${pt?'+'+pt+' pts':'0 pt'}</b>`:A.length?'<b class="tr">2e essai : 1 pt</b>':'<b class="tr">1er essai : 3 pts</b>'}</div>
- <div class="qq-c ${x.nc===2?'two':''}">${qord(key,j,x.nc).map(c=>{const pk=A.includes(c),ok=c===0,cl=pk?(ok?'ok':'ko'):((done||s!=='open')&&ok?'rv':'');
-  return`<button class="qc ${cl}" ${live&&!pk?`data-a="qcm" data-key="${key}" data-j="${j}" data-c="${c}"`:'disabled'}>${pk?(ok?'✓ ':'✕ '):''}${esc(C[c]||'—')}</button>`}).join('')}</div></div>`}
+function qchoice(t,x,key,j,s,num){const q=x.q[j],A=t.qa?.[key]?.[j]||[],v=A.length?A[A.length-1]:null,live=s==='open'&&!qpend[key+'|'+j],C=q.c||[];
+ return`<div class="qq"><div class="qq-h">${num?`<span>${j+1}</span>`:''}${v!=null?'<b class="dn">Réponse enregistrée</b>':s==='open'?'<b class="tr">1 pt</b>':'<b class="ko">Pas de réponse</b>'}</div>
+ <div class="qq-c ${x.nc===2?'two':''}">${qord(key,j,x.nc).map(c=>{const pk=c===v;
+  return`<button class="qc ${pk?'sel':''}" aria-pressed="${pk}" ${live&&!pk?`data-a="qcm" data-key="${key}" data-j="${j}" data-c="${c}"`:'disabled'}>${pk?'● ':''}${esc(C[c]||'—')}</button>`}).join('')}</div></div>`}
 /* manche images côté joueur : classique, carrousel ou progressif */
 function imgPlay(t,x,key,s){
  const Q=x.qm==='qcm',A=j=>esc(draft[`a|${key}|${j}`]??t.answers?.[key]?.[j]??''),inp=(j,ph)=>Q?qchoice(t,x,key,j,s,false):`<input class="in" data-k="a|${key}|${j}" autocomplete="off" enterkeyhint="done" placeholder="${ph}" value="${A(j)}">`;
@@ -706,8 +707,8 @@ function rscreen(r){
    const ca=x.qm==='qcm'?(q.c?.[0]||''):x.ty==='img'?(q.r||''):[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - ')+(x.eb&&q.b?` · ${bLab(x)} : ${q.b}`:'');
    h+=`<div class="a-q"><div class="a-qh">${x.ty==='img'?`<button class="a-qi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:''}<em>${x.ty==='img'?'Image':'Question'} ${j+1}</em><b>${esc(ca)||'(non renseigné)'}</b></div>`;
    TM.forEach(t=>{const m=getMk(t,key,x),v=t.answers?.[key]?.[j]||'',vb=t.answers?.[key]?.[BO+j]||'';
-    h+=`<div class="a-ln"><div class="t"><small>${esc(t.name)}${t.x2?.[r]==i?' <span class="x">x2</span>':''}</small>${x.qm==='qcm'?`<span>${(t.qa?.[key]?.[j]||[]).map((c,n)=>`${n?'2e':'1er'} essai : ${esc(q.c?.[c]||'—')} ${c===0?'✓':'✕'}`).join(' · ')||'<i>(pas répondu)</i>'}</span>`:`<span>${v?esc(v):'<i>(vide)</i>'}</span>`}${x.ty==='img'&&x.im==='pr'?`<span class="bv">${t.lk?.[key]?.[j]?'Verrouillée à '+t.lk[key][j]+' pt'+(t.lk[key][j]>1?'s':''):'Pas verrouillée : 0 pt'}</span>`:''}${x.eb?`<span class="bv">${esc(bLab(x))} : ${vb?esc(vb):'<i>(vide)</i>'}</span>`:''}</div>`+
-    (x.qm==='qcm'?`<span class="ab sc dis ${m[j*2]?'on':''}">+${m[j*2]||0}</span>`:'')+
+    h+=`<div class="a-ln"><div class="t"><small>${esc(t.name)}${t.x2?.[r]==i?' <span class="x">x2</span>':''}</small>${x.qm==='qcm'?`<span>${(A=>A.length?esc(q.c?.[A[A.length-1]]||'—'):'<i>(pas répondu)</i>')(t.qa?.[key]?.[j]||[])}</span>`:`<span>${v?esc(v):'<i>(vide)</i>'}</span>`}${x.ty==='img'&&x.im==='pr'?`<span class="bv">${t.lk?.[key]?.[j]?'Verrouillée à '+t.lk[key][j]+' pt'+(t.lk[key][j]>1?'s':''):'Pas verrouillée : 0 pt'}</span>`:''}${x.eb?`<span class="bv">${esc(bLab(x))} : ${vb?esc(vb):'<i>(vide)</i>'}</span>`:''}</div>`+
+    (x.qm==='qcm'?`<button class="ab sc ${m[j*2]?'on':''}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}" data-v="1">✓</button>`:'')+
     (x.ty==='img'&&x.qm!=='qcm'?(x.im==='pr'&&!t.lk?.[key]?.[j]?`<span class="ab sc dis">0</span>`:`<button class="ab sc ${m[j*2]?'on':''}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}" data-v="${x.im==='pr'?t.lk[key][j]:1}">${x.im==='pr'?'+'+t.lk[key][j]:'✓'}</button>`):'')+
     (x.ea?`<button class="ab ${m[j*2]?'on':''}" title="Artiste" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}">👨‍🎤</button>`:'')+
     (x.et?`<button class="ab ${m[j*2+1]?'on':''}" title="Titre" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2+1}">🎶</button>`:'')+
@@ -795,7 +796,7 @@ function getMk(t,key,x){const k=sid+'|'+t.id+'|'+key;
  if(!mk[k]){const A=t.answers?.[key]||[];
   if(t.marks?.[key])mk[k]=[...t.marks[key]].map(v=>v||0);
   else{const m=[];x.q.forEach((q,j)=>{const an=norm(A[j]);let a=0,b=0;
-   if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[],w=Q.indexOf(0);a=w===0?3:w===1?1:0}
+   if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];a=Q.length&&Q[Q.length-1]===0?1:0}
    else if(x.ty==='img'){const ex=norm(q.r);a=ex&&an&&(an.includes(ex)||(an.length>3&&ex.includes(an)))?(x.im==='pr'?(t.lk?.[key]?.[j]||0):1):0}
    else{a=x.ea&&q.a&&an.includes(norm(q.a))?1:0;b=x.et&&q.t&&an.includes(norm(q.t))?1:0;const ab=norm((A[BO+j]||'')+' '+(A[j]||''));m[MB+j]=x.eb&&q.b&&ab.includes(norm(q.b))?1:0}
    m[2*j]=a;m[2*j+1]=b});mk[k]=m}
@@ -845,8 +846,8 @@ document.addEventListener('click',async e=>{
  if(a==='ty'){cfg[r][t].ty=b.dataset.v;const q=cfg[r][t].q;if(!q.length)q.push({a:'',t:'',b:'',r:'',im:''});render()}
  if(a==='imo'){cfg[r][t].im=b.dataset.v;render()}
  if(a==='qcm'){const k=b.dataset.key,j=+b.dataset.j,c=+b.dataset.c,cur=teams.find(x=>x.id===me),A=[...(cur?.qa?.[k]?.[j]||[])];
-  if(g.th?.[k]!=='open'||A.includes(0)||A.length>=2||A.includes(c)||qpend[k+'|'+j])return;qpend[k+'|'+j]=1;A.push(c);render();
-  try{await tcol().doc(me).set({qa:{[k]:{[j]:A}}},{merge:true})}finally{delete qpend[k+'|'+j];render()}}
+  if(g.th?.[k]!=='open'||A[A.length-1]===c||qpend[k+'|'+j])return;qpend[k+'|'+j]=1;render();
+  try{await tcol().doc(me).set({qa:{[k]:{[j]:[c]}}},{merge:true})}finally{delete qpend[k+'|'+j];render()}}
  if(a==='qm'){cfg[r][t].qm=b.dataset.v;cfg[r][t].nc=cfg[r][t].nc||4;render()}
  if(a==='nc'){cfg[r][t].nc=+b.dataset.v;render()}
  if(a==='rvw'){rvw=b.dataset.v===''?vr().at(-1):+b.dataset.v;render();window.scrollTo(0,0)}
