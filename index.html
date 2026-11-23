@@ -270,6 +270,15 @@ select.in{appearance:none}
 .eqm-s{font:600 16px/1.45 Poppins;color:#fff;margin:0 18px 20px}.eqm-s b{color:var(--y);font-size:20px}
 @keyframes eqin{from{transform:scale(.7);opacity:0}}
 .tbs-x{align-self:center;margin-top:18px;background:none;border:0;color:var(--mut);font:600 13px Poppins;text-decoration:underline;cursor:pointer;padding:10px}
+/* pop-in QR code */
+.md.qrm{max-width:400px;padding:0 0 18px;overflow:hidden;text-align:center;border:2px solid var(--c);background:radial-gradient(ellipse at 50% 20%,#141b5c,#060a2a 80%);box-shadow:0 0 0 3px var(--p),0 0 60px rgba(0,232,255,.3);animation:eqin .4s cubic-bezier(.2,1.5,.4,1)}
+.qrm-l{margin:18px 0 4px}.qrm-l img{height:96px;max-width:80%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
+.qrm-t{font:900 30px Poppins;color:var(--y);text-shadow:3px 3px 0 var(--p)}
+.qrm-s{margin:0 18px 12px;font:800 16px Poppins;color:#fff}
+.qrm-c{width:min(280px,72vw);margin:0 auto;padding:12px;border-radius:18px;background:#fff;box-shadow:0 0 0 4px var(--y),6px 6px 0 4px var(--p)}
+.qrm-c svg{display:block;width:100%;height:auto}
+.qrm-h{margin:16px 18px 14px;font:600 14px Poppins;color:var(--mut)}
+.md.qrm .btn{margin:0 18px!important;width:calc(100% - 36px)!important}
 /* QCM admin */
 .a-qcm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.a-qcm.two{grid-template-columns:1fr 1fr}.adm .in.good{border-color:var(--g);box-shadow:inset 3px 0 0 var(--g)}
 @media(max-width:560px){.a-qcm{grid-template-columns:1fr}}
@@ -751,7 +760,7 @@ function teamsTab(){
 }
 function prep(){
  const url=location.origin+location.pathname+'?s='+sid;
- let h=`<div class="c"><h2>Lien des équipes</h2><div class="lk">${esc(url)}</div><button class="btn sm" data-a="copy">Copier le lien</button><a class="btn sm gh" href="${esc(url)}" target="_blank" style="text-decoration:none">Tester</a><p class="mut" style="margin:10px 0 0">Lien propre à cette session : les équipes ne voient que celle-ci.</p></div>`;
+ let h=`<div class="c"><h2>Lien des équipes</h2><div class="lk">${esc(url)}</div><button class="btn sm" data-a="copy">Copier le lien</button><button class="btn sm y" data-a="qr">QR code</button><a class="btn sm gh" href="${esc(url)}" target="_blank" style="text-decoration:none">Tester</a><p class="mut" style="margin:10px 0 0">Lien propre à cette session : les équipes ne voient que celle-ci.</p></div>`;
  h+=`<div class="c"><h2>Session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div></div><div style="margin-top:14px"><button class="btn sm" data-a="saveinfo">Enregistrer</button></div></div>`;
  const lock=started();prepR=Math.min(prepR,cfgNR);
  if(openTh===null){openTh='';for(let r=0;r<=cfgNR&&!openTh;r++)(cfg[r]||[]).forEach((x,i)=>{if(!openTh){const[d,t]=thProg(x);if(d<t){openTh=r+'_'+i;prepR=r}}});if(!openTh)openTh=prepR+'_0'}
@@ -829,6 +838,16 @@ function tbBlock(){
 }
 /* score de la finale à partir des corrections qu'on vient de valider (sans attendre Firebase) */
 function fScore(t){const F=FI(),I=ri(F);return th(F).reduce((s,x,i)=>{const key=`${F}_${i}`;return s+ms(getMk(t,key,x),x)*(t.x2?.[F]==i?2:1)+(x.sx&&getGk(t,key,x.n)?BT:0)},0)+(I.sx&&getGk(t,'R'+F,I.n)?BR:0)}
+/* QR code du lien des équipes (bibliothèque chargée seulement au premier clic) */
+const loadQR=()=>window.qrcode?Promise.resolve():new Promise((ok,ko)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';sc.onload=ok;sc.onerror=()=>ko(new Error('connexion impossible'));document.head.appendChild(sc)});
+async function qrModal(){const url=location.origin+location.pathname+'?s='+sid;
+ try{await loadQR()}catch(e){alert('QR code indisponible : '+e.message);return}
+ const q=qrcode(0,'M');q.addData(url);q.make();
+ const o=document.createElement('div');o.className='ov';
+ o.innerHTML=`<div class="md qrm"><div class="a-strip"></div><div class="qrm-l"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<span class=qrm-t>BEULOU TEST</span>'"></div>
+ <p class="qrm-s">${esc(g.title||g.name||'')}</p><div class="qrm-c">${q.createSvgTag({cellSize:8,margin:2,scalable:true,alt:'QR code pour rejoindre la session'})}</div>
+ <p class="qrm-h">Scanne pour rejoindre la partie</p><button class="btn blk" data-a="closeov">Fermer</button></div>`;
+ document.body.appendChild(o)}
 function eqModal(names,sc){const o=document.createElement('div');o.className='ov';
  o.innerHTML=`<div class="md eqm"><div class="a-strip"></div><h2 class="eqm-h">Égalité !</h2><p class="eqm-s">${names.map(esc).join(' et ')}<br><b>${sc} pts</b> chacun</p><button class="btn blk y" data-a="gotb">Aller au tie break</button><button class="tbs-x" data-a="closeov">Plus tard</button></div>`;
  document.body.appendChild(o)}
@@ -978,6 +997,7 @@ document.addEventListener('click',async e=>{
   draft.nn=draft.nt='';view='sess';tab='prep';bind(ref.id);render()}
  if(a==='opens'){view='sess';tab='prep';draft={};bind(b.dataset.id);render()}
  if(a==='back'){view='list';bind(null);render()}
+ if(a==='qr'){qrModal()}
  if(a==='copy'){try{await navigator.clipboard.writeText(location.origin+location.pathname+'?s='+sid);b.textContent='Copié'}catch(x){b.textContent='Copie impossible'}}
  if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim()});draft.sn=draft.stt=undefined;b.textContent='Enregistré'}
  if(a==='rsx'){cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].sx=!cfgI[r].sx;render()}
