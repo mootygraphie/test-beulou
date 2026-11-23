@@ -126,6 +126,60 @@ select.in{appearance:none}
 .tbl-vs{font:400 26px var(--ff);color:var(--p);text-shadow:2px 2px 0 var(--n)}
 .tbl-st{font:800 16px var(--fb);color:var(--g);margin:16px 0 0}.tbl-st.eq{color:var(--y)}
 @media (prefers-reduced-motion:reduce){.tbl-h,.tbl-n.bump{animation:none}}
+/* QCM joueurs */
+.qq{margin:0 0 16px}.qq-h{display:flex;align-items:center;gap:10px;margin:0 0 8px}
+.qq-h span{width:30px;height:30px;border-radius:50%;background:var(--p);font:900 14px/30px var(--fb);text-align:center}
+.qq-h b{font:800 12px var(--fb);padding:4px 10px;border-radius:999px}.qq-h b.tr{background:rgba(255,230,0,.12);color:var(--y)}.qq-h b.ok{background:var(--g);color:#04210f}.qq-h b.ko{background:rgba(255,122,156,.18);color:#ff7a9c}
+.qq-c{display:grid;grid-template-columns:1fr 1fr;gap:8px}.qq-c.two{grid-template-columns:1fr}
+.qc{min-height:58px;padding:10px 12px;border-radius:14px;border:1.5px solid rgba(255,255,255,.22);background:rgba(0,0,0,.35);color:#fff;font:700 14px/1.25 var(--fb);text-align:center;cursor:pointer;touch-action:manipulation}
+.qc:not(:disabled):active{transform:scale(.97)}.qc:disabled{cursor:default}
+.qc.ok{background:var(--g);border-color:var(--g);color:#04210f}.qc.ko{background:rgba(255,122,156,.15);border-color:#ff7a9c;color:#ff9db5;text-decoration:line-through}.qc.rv{border-color:var(--g);color:var(--g)}
+/* bonnes réponses */
+.rvb{margin:-4px 0 18px!important;background:var(--c)!important;color:var(--n)!important;box-shadow:0 5px 0 #0090a0!important}
+.rvh{display:flex;align-items:center;gap:12px;margin:4px 0 12px}.rvh .btn{margin:0}.rvh b{font:900 20px var(--fb);text-transform:uppercase}
+.rvtabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;scrollbar-width:none}.rvtabs button{flex:none;height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font:700 13px var(--fb);cursor:pointer}.rvtabs button.on{background:var(--p);border-color:var(--p)}
+.rvs{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin:0 0 12px;border-radius:16px;background:linear-gradient(120deg,var(--p),#8a0b6b 55%,var(--n3));font:800 15px var(--fb)}.rvs b{font:900 20px var(--fb);color:var(--y)}
+.rvsec{padding:10px 14px;margin:0 0 12px;border-radius:14px;border:1.5px dashed #ff7a9c;font:600 14px var(--fb)}.rvsec.ok{border-color:var(--g)}
+.rvc{border-radius:18px;background:rgba(7,11,48,.92);border:1.5px solid rgba(255,255,255,.14);margin:0 0 12px;overflow:hidden}
+.rvc header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.1)}.rvc header>span{width:32px;height:32px;flex:none;border-radius:10px;background:var(--y);color:var(--n);font:900 15px/32px var(--fb);text-align:center}
+.rvc header div{flex:1;min-width:0}.rvc header b{display:block;font:900 15px var(--fb);text-transform:uppercase}.rvc header small{font:600 12px var(--fb);color:var(--c)}.rvc header em{font:900 18px var(--fb);font-style:normal;color:var(--y)}
+.rvq{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06)}.rvq:last-child{border-bottom:0}
+.rvn{width:24px;height:24px;flex:none;border-radius:50%;background:rgba(255,255,255,.12);font:800 12px/24px var(--fb);text-align:center}.rvi{flex:none;padding:0;border:0;background:none;cursor:zoom-in}
+.rvq .f{flex:1;min-width:0}.rvq .f b{display:block;font:700 14px/1.3 var(--fb)}.rvq .f span{display:block;font:500 12px/1.35 var(--fb);color:var(--mut)}.rvb2{color:var(--y)}
+.rvm{display:flex;align-items:center;gap:4px;flex:none}.rvm small{font:600 10px var(--fb);color:var(--mut)}.rvm i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:900 12px var(--fb)}.rvm i.ok{background:var(--g);color:#04210f}.rvm i.ko{background:rgba(255,122,156,.2);color:#ff7a9c}
+.rvm em{min-width:30px;text-align:right;font:900 14px var(--fb);font-style:normal;color:var(--y)}
+/* manche images : joueurs */
+.pic{display:block;width:100%;height:190px;object-fit:cover;border-radius:16px;background:#141b5c}
+.pic.ld{display:grid;place-items:center;font:600 13px var(--fb);color:var(--mut);background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 10px,transparent 10px 20px),#141b5c}
+.pic.big{height:auto;max-height:52vh;aspect-ratio:4/5;object-fit:cover}.pic.ld.big{height:340px}
+.pic.sm{height:100%;border-radius:10px}.pic.xs{width:44px;height:44px;border-radius:8px}.pic.full{height:auto;max-height:78vh;object-fit:contain;background:none}
+.iq{display:flex;flex-direction:column;gap:8px;margin:0 0 18px}.iq .in{margin:0}
+.izm{position:relative;display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;border-radius:16px;box-shadow:0 0 0 2px rgba(0,232,255,.5)}
+.izm.big{box-shadow:0 0 0 3px var(--c),6px 6px 0 3px var(--p);margin:0 0 12px}
+.ibn{position:absolute;top:10px;left:10px;z-index:1;width:32px;height:32px;border-radius:50%;background:var(--p);font:900 15px/32px var(--fb);text-align:center;color:#fff}
+.ich{display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px}.ich b{font:900 22px var(--fb)}.ich small{font-size:14px;color:var(--mut)}
+.ilive,.ipast{padding:5px 12px;border-radius:999px;font:800 11px var(--fb);letter-spacing:.1em;text-transform:uppercase}.ilive{background:var(--p);animation:pu 1.4s infinite}.ipast{border:1px solid rgba(255,255,255,.3)}
+.ith{font:700 11px var(--fb);letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin:14px 0 8px}
+.itb{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.itm{position:relative;height:56px;padding:0;border-radius:12px;border:0;overflow:hidden;cursor:pointer;background:#141b5c}.itm.on{box-shadow:0 0 0 3px var(--y)}
+.itm i{position:absolute;top:3px;left:5px;font:900 11px var(--fb);font-style:normal;color:#fff;text-shadow:0 1px 3px #000}
+.itm em{position:absolute;bottom:3px;right:4px;width:18px;height:18px;border-radius:50%;background:var(--g);color:#04210f;font:900 11px/18px var(--fb);font-style:normal;text-align:center}
+.itm.lk{display:grid;place-items:center;font:800 12px var(--fb);color:var(--mut);background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.25)}
+.ipot{display:flex;align-items:center;gap:10px;padding:12px 14px;margin:0 0 12px;border-radius:16px;background:rgba(255,230,0,.08);border:1.5px dashed var(--y)}
+.ipot div{flex:1}.ipot small{display:block;font:700 11px var(--fb);letter-spacing:.1em;text-transform:uppercase;color:var(--y)}.ipot b{font:900 22px var(--fb)}
+.ipot span{display:flex;gap:5px}.ipot i{width:16px;height:16px;border-radius:5px;background:rgba(255,255,255,.15)}.ipot i.on{background:var(--y);box-shadow:0 0 8px rgba(255,230,0,.6)}
+.iprg{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 0 0 3px var(--c);margin:0 0 10px}.iprg .pic{border-radius:0}
+.itl{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr)}
+.itl span{display:grid;place-items:center;font:900 18px var(--fb);color:rgba(255,255,255,.35);background:#1a2270;border:1px solid rgba(0,0,0,.25);transition:opacity .45s,transform .45s}
+.itl span:nth-child(3n){background:#ff0a8c}.itl span:nth-child(4n+1){background:#2a1f7a}.itl span:nth-child(5n+2){background:#8a0b6b}
+.itl span.off{opacity:0;transform:scale(.6)}
+.ibar{height:8px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden;margin:0 0 12px}.ibar i{display:block;height:100%;background:linear-gradient(90deg,var(--c),var(--p))}
+.ilkd{padding:14px;border-radius:16px;background:rgba(61,255,165,.1);border:1.5px solid var(--g);text-align:center;margin:0 0 6px}.ilkd b{display:block;font:800 16px var(--fb);color:var(--g)}.ilkd span{font:500 13px var(--fb)}
+.ipl{display:flex;flex-direction:column;gap:6px}.ipl div{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05)}
+.ipl b{width:24px;height:24px;flex:none;border-radius:50%;background:var(--p);font:900 12px/24px var(--fb);text-align:center}.ipl span{flex:1;font:600 14px var(--fb);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ipl em{font:700 12px var(--fb);font-style:normal;color:var(--y)}
+.izo{position:fixed;inset:0;z-index:70;background:rgba(2,3,16,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px}
+.izo-i{width:100%;max-width:520px}.izo .btn{max-width:320px}
+@media (prefers-reduced-motion:reduce){.ilive{animation:none}.itl span{transition:none}}
 /* podium final */
 .pod{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:8px;margin:6px 0 2px}
 .pd{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
@@ -209,6 +263,21 @@ select.in{appearance:none}
 .eqm-s{font:600 16px/1.45 Poppins;color:#fff;margin:0 18px 20px}.eqm-s b{color:var(--y);font-size:20px}
 @keyframes eqin{from{transform:scale(.7);opacity:0}}
 .tbs-x{align-self:center;margin-top:18px;background:none;border:0;color:var(--mut);font:600 13px Poppins;text-decoration:underline;cursor:pointer;padding:10px}
+/* QCM admin */
+.a-qcm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.a-qcm.two{grid-template-columns:1fr 1fr}.adm .in.good{border-color:var(--g);box-shadow:inset 3px 0 0 var(--g)}
+@media(max-width:560px){.a-qcm{grid-template-columns:1fr}}
+/* manche images : admin */
+.a-ty{gap:10px}.a-ty .lb{font:700 10px Poppins;letter-spacing:.16em;text-transform:uppercase;color:var(--c);min-width:42px}
+.a-sw{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:rgba(0,0,0,.3)}.a-sw.three{grid-template-columns:repeat(3,1fr)}
+.a-sw button{height:38px;border:0;border-radius:9px;background:transparent;color:rgba(255,255,255,.75);font:800 13px Poppins;cursor:pointer}.a-sw button.on{background:var(--p);color:#fff}
+.a-imd{flex-basis:100%;margin:2px 0 4px;font:500 12px/1.45 Poppins;color:var(--mut)}
+.a-iq{display:flex;gap:10px;align-items:center;margin:0 0 10px}.a-iq .f{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}.a-iq .f span{font:700 10px Poppins;letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
+.a-ip{position:relative;width:76px;height:76px;flex:none;padding:0;border-radius:12px;overflow:hidden;border:0;background:#141b5c;cursor:pointer}
+.a-ip span{position:absolute;bottom:0;left:0;right:0;padding:2px 0;background:rgba(0,0,0,.6);font:700 10px Poppins;color:#fff}
+.a-ip.add{border:2px dashed rgba(0,232,255,.6);background:rgba(0,232,255,.06);color:var(--c);font:800 11px/1.3 Poppins}
+.a-imc{display:flex;gap:12px;align-items:center;width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,.25);margin:4px 0 0}.a-imc-p{width:64px;height:64px;flex:none}.a-imc .f{flex:1;min-width:0}.a-imc b{display:block;font:800 15px Poppins}.a-imc small{display:block;font:500 12px Poppins;color:var(--mut)}
+.a-imb{display:flex;gap:8px;width:100%;flex-wrap:wrap;margin:8px 0 0}.a-imb .btn{margin:0;flex:1;min-height:48px}.a-imb .btn.sm{flex:none;min-width:52px}.a-imb .btn:disabled{opacity:.35}
+.a-qi{flex:none;padding:0;border:0;background:none;cursor:zoom-in}.ab.dis{display:grid;place-items:center;opacity:.35;cursor:default}
 /* équipes */
 .a-team{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:16px;margin:0 0 10px;background:rgba(0,0,0,.18);flex-wrap:wrap}
 .a-team .av{flex:none;width:40px;height:40px;border-radius:12px;background:var(--c);color:var(--n);font:800 15px/40px Poppins;text-align:center}
@@ -319,11 +388,19 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
 const sum=a=>a.reduce((x,y)=>x+y,0);
 const ERR=e=>{app.innerHTML='<div class="c"><h2>Erreur Firebase</h2><p>'+esc((e.code||'')+' '+(e.message||e))+'</p></div>'};
-const blank=()=>({n:'',ea:true,et:true,eb:false,bl:'',sx:false,q:[0,1,2,3,4,5].map(()=>({a:'',t:'',b:''}))});
-const th=r=>(g.rounds?.[r]||[]).map(x=>{const q=[...(x.q||[])];while(q.length<6)q.push({a:'',t:'',b:''});return{n:x.n||'',ea:!!x.ea,et:!!x.et,eb:!!x.eb,bl:x.bl||'',sx:!!x.sx,q:q.slice(0,6),pts:x.ea&&x.et?1:2}});
+const blank=()=>({n:'',ty:'mus',im:'cl',qm:'cl',nc:4,ea:true,et:true,eb:false,bl:'',sx:false,q:[0,1,2,3,4,5].map(()=>({a:'',t:'',b:'',r:'',im:''}))});
+const th=r=>(g.rounds?.[r]||[]).map(x=>{const q=[...(x.q||[])];while(q.length<6)q.push({a:'',t:'',b:'',r:'',im:''});const img=x.ty==='img',im=['cl','ca','pr'].includes(x.im)?x.im:'cl';
+ const qcm=x.qm==='qcm'&&(!img||im!=='pr'); // QCM : questions, ou images en classique / carrousel
+ return{n:x.n||'',ty:img?'img':'mus',im,qm:qcm?'qcm':'cl',nc:x.nc==2?2:4,ea:!img&&!qcm&&!!x.ea,et:!img&&!qcm&&!!x.et,eb:!img&&!qcm&&!!x.eb,bl:x.bl||'',sx:!!x.sx,q:q.slice(0,6),pts:qcm?1:img?(im==='pr'?1:2):x.ea&&x.et?1:2}});
+const hh=s=>{let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))%1000003;return h};
+const qord=(key,j,n)=>[...Array(n).keys()].sort((a,b)=>hh(key+'|'+j+'|'+a)-hh(key+'|'+j+'|'+b));
+const qpend={};let rvw=null;
+const IML={cl:'Classique',ca:'Carrousel',pr:'Progressif'};
+const IMD={cl:'Les 6 images d\'un coup, chaque équipe avance à son rythme · 2 pts par bonne réponse',ca:'Tu fais défiler les images une par une · 2 pts par bonne réponse',pr:'L\'image se dévoile par étapes : 3, 2 puis 1 pt selon le moment où l\'équipe verrouille'};
+const ORD=[5,10,6,9,1,14,3,12,0,7,15,8,2,13,4,11];
 /* marques : [artiste,titre]×6 puis 6 cases bonus (1 pt chacune) */
 const ms=(m,x)=>sum((m||[]).slice(0,12).map(v=>v||0))*(x?x.pts:1)+(x&&x.eb?sum((m||[]).slice(12,18).map(v=>v||0)):0);
-const ptsMax=x=>12+(x.eb?6:0);
+const ptsMax=x=>x.qm==='qcm'?18:x.ty==='img'?(x.im==='pr'?18:12):12+(x.eb?6:0);
 const bLab=x=>x.bl||'Bonus';
 const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
@@ -351,6 +428,18 @@ const rankHtml=()=>{const i=rankInner();return i?`<div class="c">${i}</div>`:''}
 const GB='<div class="gbg"><b></b><b></b><b></b><b></b><b></b><b></b><div class="nz"></div></div>';
 const GC=(t,sub)=>`<div class="gm"><h2>${t}</h2>${sub?`<p>${sub}</p>`:''}</div>`;
 const gset=o=>sdoc().set(o,{merge:true});
+/* images : une par document (bt_sessions/{sid}/imgs/{id}), chargées à la demande et gardées en mémoire */
+const IMG={},IMGP={},isel={};let zoomId=null,pickT=null;
+function isrc(id){if(!id)return'';if(IMG[id]!=null)return IMG[id];if(!IMGP[id]&&sid){IMGP[id]=1;sdoc().collection('imgs').doc(id).get().then(d=>{IMG[id]=d.data()?.d||'';render()}).catch(()=>{IMG[id]=''})}return null}
+const pic=(id,cls='')=>{const s=isrc(id);return s?`<img class="pic ${cls}" src="${s}" alt="">`:`<span class="pic ${cls} ld">${id&&s===null?'Chargement…':'Pas d\'image'}</span>`};
+async function shrink(file){const u=URL.createObjectURL(file),im=new Image();await new Promise((ok,ko)=>{im.onload=ok;im.onerror=()=>ko(new Error('format non reconnu'));im.src=u});
+ const k=Math.min(1,900/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*k);c.height=Math.round(im.naturalHeight*k);
+ c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);let q=.82,d=c.toDataURL('image/jpeg',q);while(d.length>650000&&q>.35){q-=.1;d=c.toDataURL('image/jpeg',q)}return d}
+const fpick=document.createElement('input');fpick.type='file';fpick.accept='image/*';fpick.style.display='none';document.body.appendChild(fpick);
+fpick.onchange=async()=>{const f=fpick.files[0];fpick.value='';if(!f||!pickT)return;const{r,i,j}=pickT,q=cfg[r][i].q[j],id='i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),old=q.im;
+ q.im=id;IMG[id]=null;IMGP[id]=1;render();
+ try{const d=await shrink(f);IMG[id]=d;await sdoc().collection('imgs').doc(id).set({d});await gset({rounds:cfg,rinfo:cfgI});if(old)sdoc().collection('imgs').doc(old).delete().catch(()=>{})}
+ catch(e){q.im=old;alert("Impossible d'envoyer cette image : "+(e.message||e))}render()};
 
 function bind(id){
  unG&&unG();unT&&unT();sid=id||null;g=null;gl=false;teams=[];tready=false;cfg=null;cfgI=null;mk={};gk={};me=null;
@@ -368,7 +457,7 @@ function render(){
  let h;
  if(ADMIN){if(view==='sess'&&gl&&!g){view='list';bind(null)}
   h=view==='list'?alist():(gl&&tready&&(!g||cfg)?asess():'<div class="c">Chargement...</div>')}
- else h=team();
+ else h=team()+(zoomId!=null?`<div class="izo"><div class="izo-i">${pic(zoomId,'full')}</div><button class="btn blk" data-a="zoomx">Fermer</button></div>`:'');
  app.innerHTML=h;
  if(!ADMIN)cheer();
  if(k){const e=document.querySelector(`[data-k="${k}"]`);if(e){e.focus();try{e.setSelectionRange(p,p)}catch(x){}}}
@@ -383,6 +472,50 @@ function tbLive(){
  return`<div class="tbl"><h1 class="tbl-h">Tie break</h1><p class="tbl-s">Égalité parfaite : le premier qui trouve marque !</p><div class="tbl-d">${P.map((x,i)=>{const t=teams.find(z=>z.id===x.id),n=tbp(t),up=tbSeen[x.id]!=null&&n>tbSeen[x.id];tbSeen[x.id]=n;
   return`${i?'<span class="tbl-vs">VS</span>':''}<div class="tbl-t ${!tied&&x.sc===top?'lead':''} ${x.id===me?'me':''}"><b>${esc(x.name)}</b><span class="tbl-n ${up?'bump':''}">${n}</span><small>${x.sc} pts au total</small></div>`}).join('')}</div>
  <p class="tbl-st ${tied?'eq':''}">${tied?'Toujours à égalité':esc(P.find(x=>x.sc===top)?.name||'')+' passe devant !'}</p></div>`}
+/* « Voir les bonnes réponses » : manches validées, juste / faux et points par question */
+const RVB=()=>vr().length?`<button class="btn blk rvb" data-a="rvw" data-v="">Voir les bonnes réponses</button>`:'';
+function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v=>`<i class="${v?'ok':'ko'}">${v?'✓':'✕'}</i>`;
+ const spect=r===3&&!inFinal(me);
+ let h=`<div class="rvh"><button class="btn sm gh" data-a="rvwx">‹ Retour</button><b>Bonnes réponses</b></div><div class="rvtabs">${V.map(k=>`<button class="${k===r?'on':''}" data-a="rvw" data-v="${k}">${k<3?'Manche '+(k+1):'Finale'}</button>`).join('')}</div>
+ <div class="rvs"><span>${RN[r]}${I.n?' · '+esc(I.n):''}</span><b>${spect?'Pas jouée':'+'+(score(t,r)+(r===3?tbp(t):0))+' pts'}</b></div>`;
+ if(I.sx)h+=`<div class="rvsec ${t.gok?.['R'+r]?'ok':''}">Thème de la manche : <b>${esc(I.n||'')}</b> ${t.gok?.['R'+r]?'· trouvé +'+BR:'· raté'}</div>`;
+ th(r).forEach((x,i)=>{const key=`${r}_${i}`,m=t.marks?.[key]||[],x2=t.x2?.[r]==i,A=t.answers?.[key]||[];
+  const tot=ms(m,x)*(x2?2:1)+(x.sx&&t.gok?.[key]?BT:0);
+  h+=`<section class="rvc"><header><span>${i+1}</span><div><b>${esc(tn(x,i))}</b><small>${x.sx?(t.gok?.[key]?'Thème secret trouvé · +'+BT:'Thème secret raté'):x.ty==='img'?'Images'+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM':'Thème '+(i+1)}${x2?' · x2':''}</small></div><em>+${spect?0:tot}</em></header>`;
+  x.q.forEach((q,j)=>{let exp,mine,marks,pt;
+   if(x.ty==='img'&&x.qm!=='qcm'){exp=esc(q.r||'');mine=esc(A[j]||'');marks=ok(m[j*2]);pt=(m[j*2]||0)*x.pts}
+   else if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];exp=esc(q.c?.[0]||'');mine=Q.map(c=>esc(q.c?.[c]||'')).join(' → ');marks=ok(m[j*2]);pt=m[j*2]||0}
+   else{exp=esc([x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - '))+(x.eb&&q.b?` <span class="rvb2">${esc(bLab(x))} : ${esc(q.b)}</span>`:'');mine=esc(A[j]||'')+(x.eb&&A[6+j]?` <span class="rvb2">${esc(A[6+j])}</span>`:'');
+    marks=(x.ea?`<small>Artiste</small>${ok(m[j*2])}`:'')+(x.et?`<small>Titre</small>${ok(m[j*2+1])}`:'')+(x.eb?`<small>Bonus</small>${ok(m[12+j])}`:'');pt=((m[j*2]||0)+(m[j*2+1]||0))*x.pts+(x.eb?(m[12+j]||0):0)}
+   h+=`<div class="rvq">${x.ty==='img'?`<button class="rvi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:`<span class="rvn">${j+1}</span>`}<div class="f"><b>${exp||'—'}</b><span>${spect?'':mine?'Ta réponse : '+mine:'<i>Pas de réponse</i>'}</span></div><div class="rvm">${spect?'':marks}<em>${spect?'':'+'+pt*(x2?2:1)}</em></div></div>`});
+  h+=`</section>`});
+ return h+`<button class="btn blk" data-a="rvwx" style="margin-top:6px">Retour</button>`}
+/* QCM : 3 pts au 1er essai, 1 pt au 2e, 0 sinon ; ordre des choix mélangé mais identique pour tous */
+const QH=`<p class="bnh">Touche la bonne réponse : <b>3 pts</b> du premier coup, <b>1 pt</b> au 2e essai.</p>`;
+function qcmPlay(t,x,key,s){return QH+x.q.map((q,j)=>qchoice(t,x,key,j,s,true)).join('')}
+function qchoice(t,x,key,j,s,num){const q=x.q[j],A=t.qa?.[key]?.[j]||[],w=A.indexOf(0),done=w>=0||A.length>=2,pt=w===0?3:w===1?1:0,live=s==='open'&&!done&&!qpend[key+'|'+j],C=q.c||[];
+ return`<div class="qq"><div class="qq-h">${num?`<span>${j+1}</span>`:''}${done?`<b class="${pt?'ok':'ko'}">${pt?'+'+pt+' pts':'0 pt'}</b>`:A.length?'<b class="tr">2e essai : 1 pt</b>':'<b class="tr">1er essai : 3 pts</b>'}</div>
+ <div class="qq-c ${x.nc===2?'two':''}">${qord(key,j,x.nc).map(c=>{const pk=A.includes(c),ok=c===0,cl=pk?(ok?'ok':'ko'):((done||s!=='open')&&ok?'rv':'');
+  return`<button class="qc ${cl}" ${live&&!pk?`data-a="qcm" data-key="${key}" data-j="${j}" data-c="${c}"`:'disabled'}>${pk?(ok?'✓ ':'✕ '):''}${esc(C[c]||'—')}</button>`}).join('')}</div></div>`}
+/* manche images côté joueur : classique, carrousel ou progressif */
+function imgPlay(t,x,key,s){
+ const Q=x.qm==='qcm',A=j=>esc(draft[`a|${key}|${j}`]??t.answers?.[key]?.[j]??''),inp=(j,ph)=>Q?qchoice(t,x,key,j,s,false):`<input class="in" data-k="a|${key}|${j}" autocomplete="off" enterkeyhint="done" placeholder="${ph}" value="${A(j)}">`;
+ const LK=t.lk?.[key]||{},cur=Math.min(5,g.cs?.[key]??0);
+ const list=()=>x.q.map((q,j)=>`<div class="iq"><button class="izm" data-a="zoom" data-id="${q.im||''}" aria-label="Agrandir l'image ${j+1}"><span class="ibn">${j+1}</span>${pic(q.im)}</button>${inp(j,'Ta réponse '+(j+1))}</div>`).join('');
+ const recap=n=>`<div class="ipl">${x.q.slice(0,n).map((q,j)=>`<div><b>${j+1}</b><span>${esc(t.answers?.[key]?.[j]||'—')}</span><em>${LK[j]?LK[j]+' pt'+(LK[j]>1?'s':''):'non verrouillée'}</em></div>`).join('')}</div>`;
+ if(x.im==='pr'&&s!=='open')return`<p class="ith">Tes réponses</p>`+recap(6);
+ if(x.im==='cl'||s!=='open')return(Q?QH:'')+list();
+ isrc(x.q[cur+1]?.im); // on précharge l'image suivante
+ if(x.im==='ca'){const sel=Math.min(cur,isel[key]??cur);
+  return(Q?QH:'')+`<div class="ich"><b>Image ${sel+1} <small>/ 6</small></b>${sel===cur?'<span class="ilive">À l\'écran</span>':'<span class="ipast">Image passée</span>'}</div>
+  <button class="izm big" data-a="zoom" data-id="${x.q[sel].im||''}" aria-label="Agrandir">${pic(x.q[sel].im,'big')}</button>${inp(sel,sel===cur?'Ta réponse':'Corrige ta réponse')}
+  <p class="ith">Tes réponses · touche une image passée pour la corriger</p><div class="itb">${x.q.map((q,j)=>j>cur?`<span class="itm lk">${j+1}</span>`:`<button class="itm ${j===sel?'on':''}" data-a="isel" data-key="${key}" data-j="${j}" aria-label="Image ${j+1}">${pic(q.im,'sm')}<i>${j+1}</i>${(Q?(t.qa?.[key]?.[j]||[]).length:(draft[`a|${key}|${j}`]??t.answers?.[key]?.[j]))?'<em>✓</em>':''}</button>`).join('')}</div>`}
+ const lvl=Math.min(3,g.pl?.[key]??0),pts=[3,2,1,0][lvl],lk=LK[cur],nb=[4,8,12,16][lvl],v=lk||pts;
+ return`<div class="ich"><b>Image ${cur+1} <small>/ 6</small></b></div>
+ <div class="ipot"><div><small>${lk?'Ta réponse vaut':lvl<3?'Si tu trouves maintenant':'Image entière'}</small><b>${v?v+' pt'+(v>1?'s':''):'Trop tard : 0 pt'}</b></div><span>${[0,1,2].map(k=>`<i class="${k<v?'on':''}"></i>`).join('')}</span></div>
+ <div class="iprg">${pic(x.q[cur].im,'big')}<div class="itl">${ORD.map(o=>`<span class="${o<nb?'off':''}">?</span>`).join('')}</div></div><div class="ibar"><i style="width:${nb/16*100}%"></i></div>
+ ${lk?`<div class="ilkd"><b>Réponse verrouillée</b><span>« ${A(cur)} » · ${lk} pt${lk>1?'s':''} si c'est juste</span></div>`:pts?`${inp(cur,'Ta réponse')}<button class="btn blk y" data-a="lock" data-key="${key}" data-j="${cur}" data-p="${pts}">Je verrouille à ${pts} pt${pts>1?'s':''}</button>`:`<p class="hint">Image entière : plus de points possibles sur celle-ci.</p>`}
+ ${cur?`<p class="ith">Images précédentes</p>${recap(cur)}`:''}`}
 /* confettis une seule fois par secret trouvé */
 function cheer(){
  const t=g&&teams.find(x=>x.id===me),r=g?.r;if(!t||g.rd?.[r]!=='validated')return;
@@ -417,9 +550,10 @@ function team(){
  const spect=r===3&&!inFinal(me),FN=finalists().map(id=>teams.find(x=>x.id===id)?.name).filter(Boolean);
  if(fin()){const mp=place(3).find(x=>x.id===me);
   return GB+bar+BRAND(true)+T+`<h1 class="st sm fun">Classement final</h1>`+FR(podium())+
-   `<p class="fres">${mp?.pos===1?'<b>Vous remportez la soirée !</b>':`Vous finissez <b>${mp?.pos}e</b> avec <b>${mp?.sc} pts</b>`}</p>`+RKB+reveal(t,3)}
+   `<p class="fres">${mp?.pos===1?'<b>Vous remportez la soirée !</b>':`Vous finissez <b>${mp?.pos}e</b> avec <b>${mp?.sc} pts</b>`}</p>`+RVB()+RKB+reveal(t,3)}
  const RG=(r>=0&&st==='open'&&I.sx&&!spect)?guessBox(t,'R'+r,'Thème de la manche',BR):'';
- const W=m=>GB+bar+BRAND(true)+T+m+(RG?FR(RG):'')+RKB;
+ if(rvw!=null&&vr().length)return GD+bar+review(t);
+ const W=m=>GB+bar+BRAND(true)+T+m+(RG?FR(RG):'')+RKB+(showRk?RVB():'');
  if(r<0)return W(GC('Patience, la manche va commencer',"Garde l'oreille tendue"));
  if(pend)return g.tb?GB+bar+BRAND(false)+tbLive():W(GC('Verdict imminent','Le classement final arrive'));
  if(spect)return W(GC('Finale en cours',`${FN.map(esc).join(' et ')} s'affrontent pour la victoire`));
@@ -434,13 +568,13 @@ function team(){
  if(!opn)h+=`<p class="hint">Tu peux modifier tes réponses et placer ton x2 jusqu'à la fin de la manche.</p>`;
  th(r).forEach((x,i)=>{
   const key=`${r}_${i}`,s=g.th?.[key],done=t.done?.[key],play=s==='open'&&!done,xi=t.x2?.[r];
-  const known=s==='closed'; // nom du thème caché tant qu'il n'est pas terminé (secrets : jamais ici)
+  const known=s==='open'||s==='closed'; // nom révélé dès l'ouverture du thème (secrets : jamais ici)
   const shown=s?(exp[key]??play):false,pop=play&&!popped.has(sid+key);if(pop)popped.add(sid+key);
-  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''} ${x.sx?'sx':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème secret':known?esc(tn(x,i)):'Thème '+(i+1)}<small>${x.sx?'Devine-le : +'+BT+' pts':known&&x.n?'Thème '+(i+1):s==='open'?'Nom révélé à la fin du thème':'À venir'}${x.eb?' · bonus '+esc(bLab(x)):''}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
+  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''} ${x.sx?'sx':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème secret':known?esc(tn(x,i)):'Thème '+(i+1)}<small>${x.sx?'Devine-le : +'+BT+' pts':(known?'Thème '+(i+1):'À venir')+(x.ty==='img'?' · images':'')+(x.qm==='qcm'?' · QCM':'')}${x.eb?' · bonus '+esc(bLab(x)):''}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
   if(shown){
    h+=`<div class="db">`+(x.sx?guessBox(t,key,'Nom du thème',BT):'');
    if(x.eb)h+=`<p class="bnh">Bonus : <b>${esc(bLab(x))}</b> · +1 pt par bonus trouvé</p>`;
-   for(let j=0;j<6;j++){const kk=`a|${key}|${j}`,kb=`a|${key}|${6+j}`;h+=`<div class="qi"><i>${j+1}</i><div class="qf"><input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">${x.eb?`<input class="in bn" data-k="${kb}" autocomplete="off" enterkeyhint="next" placeholder="+1 ${esc(bLab(x))}" value="${esc(draft[kb]??t.answers?.[key]?.[6+j]??'')}">`:''}</div></div>`}
+   if(x.ty==='img')h+=imgPlay(t,x,key,s);else if(x.qm==='qcm')h+=qcmPlay(t,x,key,s);else for(let j=0;j<6;j++){const kk=`a|${key}|${j}`,kb=`a|${key}|${6+j}`;h+=`<div class="qi"><i>${j+1}</i><div class="qf"><input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">${x.eb?`<input class="in bn" data-k="${kb}" autocomplete="off" enterkeyhint="next" placeholder="+1 ${esc(bLab(x))}" value="${esc(draft[kb]??t.answers?.[key]?.[6+j]??'')}">`:''}</div></div>`}
    h+=play?`<button class="btn blk y" data-a="done" data-t="${i}">Valider ce thème</button>`:`<p class="mut" style="margin:4px 0 0">Enregistré automatiquement.</p>`;
    h+=`</div>`;
   }
@@ -496,9 +630,11 @@ function prep(){
    ${I.sx&&!I.n?`<p class="a-warn" style="padding:10px 18px 0;margin:0">Renseigne le nom de la manche à deviner.</p>`:''}<div class="a-rdb">`;
   T.forEach((x,i)=>{const both=x.ea&&x.et;
    h+=`<section class="a-theme cfg"><header class="a-tb ${x.sx?'sx':''}"><span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span><button class="rm" title="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">✕</button></header>
-   <div class="a-cf"><button class="btn sm ${x.ea?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="ea">Artiste</button><button class="btn sm ${x.et?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="et">Titre</button><button class="btn sm ${x.eb?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="eb">Bonus</button><button class="btn sm ${x.sx?'y':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="sx">${x.sx?'🔒 Secret · +'+BT+' pts':'Nom visible'}</button>
-   <span class="mut">${both?'1 pt par réponse':'2 pts par réponse'}${x.eb?' · bonus +1':''}</span>${x.eb?`<input class="in a-bl" data-k="bl|${r}|${i}" placeholder="Intitulé du bonus (ex : Année, Film)" value="${esc(x.bl||'')}">`:''}${x.sx&&!x.n?'<span class="a-warn" style="flex-basis:100%">Renseigne le nom du thème à deviner.</span>':''}</div><div class="a-qs">`;
-   for(let j=0;j<6;j++){const q=(x.q||[])[j]||{a:'',t:''};
+   <div class="a-cf a-ty"><span class="lb">Type</span><div class="a-sw"><button class="${x.ty!=='img'?'on':''}" data-a="ty" data-r="${r}" data-t="${i}" data-v="mus">Questions</button><button class="${x.ty==='img'?'on':''}" data-a="ty" data-r="${r}" data-t="${i}" data-v="img">Images</button></div></div>
+   ${x.ty!=='img'?`<div class="a-cf a-ty"><span class="lb">Format</span><div class="a-sw"><button class="${x.qm!=='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="cl">Classique</button><button class="${x.qm==='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="qcm">QCM</button></div></div>`:''}
+   ${x.ty==='img'?imgCfg(x,r,i):x.qm==='qcm'?qcmCfg(x,r,i):`<div class="a-cf"><button class="btn sm ${x.ea?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="ea">Artiste</button><button class="btn sm ${x.et?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="et">Titre</button><button class="btn sm ${x.eb?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="eb">Bonus</button><button class="btn sm ${x.sx?'y':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="sx">${x.sx?'🔒 Secret · +'+BT+' pts':'Nom visible'}</button>
+   <span class="mut">${both?'1 pt par réponse':'2 pts par réponse'}${x.eb?' · bonus +1':''}</span>${x.eb?`<input class="in a-bl" data-k="bl|${r}|${i}" placeholder="Intitulé du bonus (ex : Année, Film)" value="${esc(x.bl||'')}">`:''}${x.sx&&!x.n?'<span class="a-warn" style="flex-basis:100%">Renseigne le nom du thème à deviner.</span>':''}</div><div class="a-qs">`}`;
+   if(x.ty!=='img'&&x.qm!=='qcm')for(let j=0;j<6;j++){const q=(x.q||[])[j]||{a:'',t:''};
     h+=`<div class="a-qrow"><span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div></div>`}
    h+=`</div></section>`});
   h+=`<button class="btn sm gh" data-a="addth" data-r="${r}" style="margin:0">+ Ajouter un thème</button></div></section>`;
@@ -519,7 +655,7 @@ function rscreen(r){
    h+=`<p class="a-p">Les équipes sont sur l'écran d'attente. Ouvre la manche pour lancer le jeu.</p><button class="btn blk" data-a="launch" data-r="${r}">Ouvrir la manche</button>`}}
  if(on){
   T.forEach((x,i)=>{const o=g.th?.[`${r}_${i}`];
-   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom secret · ':''}${x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`});
+   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom secret · ':''}${x.ty==='img'?'Images · '+IML[x.im]+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM · '+x.nc+' choix':x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`+(o==='open'&&x.ty==='img'&&x.im!=='cl'?imgCtl(x,`${r}_${i}`):'')});
   h+=`<button class="btn blk y" data-a="closeround" data-r="${r}" style="margin-top:12px">Clôturer la manche</button>`;
  }
  if(over)h+=`<p class="a-p" style="margin:0">Manche ${st==='closed'?'clôturée : passe aux corrections ci-dessous.':'validée.'}</p>`;
@@ -533,10 +669,12 @@ function rscreen(r){
   h+=`<section class="a-theme"><header class="a-tb"><span class="k">Thème ${i+1}</span><h3>${esc(tn(x,i))}</h3>${x.sx?'<span class="chip yl">Secret</span>':''}${x.eb?`<span class="chip">Bonus : ${esc(bLab(x))}</span>`:''}<span class="pts">${ptsMax(x)} pts</span></header>`;
   if(x.sx)h+=`<div class="a-q">${secBlock(key,'Nom du thème',x.n,BT)}</div>`;
   x.q.forEach((q,j)=>{
-   const ca=[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - ')+(x.eb&&q.b?` · ${bLab(x)} : ${q.b}`:'');
-   h+=`<div class="a-q"><div class="a-qh"><em>Question ${j+1}</em><b>${esc(ca)||'(non renseigné)'}</b></div>`;
+   const ca=x.qm==='qcm'?(q.c?.[0]||''):x.ty==='img'?(q.r||''):[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - ')+(x.eb&&q.b?` · ${bLab(x)} : ${q.b}`:'');
+   h+=`<div class="a-q"><div class="a-qh">${x.ty==='img'?`<button class="a-qi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:''}<em>${x.ty==='img'?'Image':'Question'} ${j+1}</em><b>${esc(ca)||'(non renseigné)'}</b></div>`;
    TM.forEach(t=>{const m=getMk(t,key,x),v=t.answers?.[key]?.[j]||'',vb=t.answers?.[key]?.[6+j]||'';
-    h+=`<div class="a-ln"><div class="t"><small>${esc(t.name)}${t.x2?.[r]==i?' <span class="x">x2</span>':''}</small><span>${v?esc(v):'<i>(vide)</i>'}</span>${x.eb?`<span class="bv">${esc(bLab(x))} : ${vb?esc(vb):'<i>(vide)</i>'}</span>`:''}</div>`+
+    h+=`<div class="a-ln"><div class="t"><small>${esc(t.name)}${t.x2?.[r]==i?' <span class="x">x2</span>':''}</small>${x.qm==='qcm'?`<span>${(t.qa?.[key]?.[j]||[]).map((c,n)=>`${n?'2e':'1er'} essai : ${esc(q.c?.[c]||'—')} ${c===0?'✓':'✕'}`).join(' · ')||'<i>(pas répondu)</i>'}</span>`:`<span>${v?esc(v):'<i>(vide)</i>'}</span>`}${x.ty==='img'&&x.im==='pr'?`<span class="bv">${t.lk?.[key]?.[j]?'Verrouillée à '+t.lk[key][j]+' pt'+(t.lk[key][j]>1?'s':''):'Pas verrouillée : 0 pt'}</span>`:''}${x.eb?`<span class="bv">${esc(bLab(x))} : ${vb?esc(vb):'<i>(vide)</i>'}</span>`:''}</div>`+
+    (x.qm==='qcm'?`<span class="ab sc dis ${m[j*2]?'on':''}">+${m[j*2]||0}</span>`:'')+
+    (x.ty==='img'&&x.qm!=='qcm'?(x.im==='pr'&&!t.lk?.[key]?.[j]?`<span class="ab sc dis">0</span>`:`<button class="ab sc ${m[j*2]?'on':''}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}" data-v="${x.im==='pr'?t.lk[key][j]:1}">${x.im==='pr'?'+'+t.lk[key][j]:'✓'}</button>`):'')+
     (x.ea?`<button class="ab ${m[j*2]?'on':''}" title="Artiste" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}">👨‍🎤</button>`:'')+
     (x.et?`<button class="ab ${m[j*2+1]?'on':''}" title="Titre" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2+1}">🎶</button>`:'')+
     (x.eb?`<button class="ab sc bnb ${m[12+j]?'on':''}" title="Bonus" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${12+j}">+1</button>`:'')+`</div>`});
@@ -565,6 +703,21 @@ function fScore(t){const I=ri(3);return th(3).reduce((s,x,i)=>{const key=`3_${i}
 function eqModal(names,sc){const o=document.createElement('div');o.className='ov';
  o.innerHTML=`<div class="md eqm"><div class="a-strip"></div><h2 class="eqm-h">Égalité !</h2><p class="eqm-s">${names.map(esc).join(' et ')}<br><b>${sc} pts</b> chacun</p><button class="btn blk y" data-a="gotb">Aller au tie break</button><button class="tbs-x" data-a="closeov">Plus tard</button></div>`;
  document.body.appendChild(o)}
+/* pilotage d'un thème images en carrousel ou progressif */
+function imgCtl(x,key){const c=Math.min(5,g.cs?.[key]??0),l=Math.min(3,g.pl?.[key]??0),q=x.q[c];
+ return`<div class="a-imc"><div class="a-imc-p">${pic(q.im,'sm')}</div><div class="f"><b>Image ${c+1} / 6</b><small>Réponse : ${esc(q.r||'(non renseignée)')}</small>${x.im==='pr'?`<small>Dévoilée : ${[25,50,75,100][l]} % · vaut ${[3,2,1,0][l]} pt${l<2?'s':''}</small>`:''}</div></div>
+ <div class="a-imb">${x.im==='pr'?`<button class="btn" data-a="pmore" data-key="${key}" ${l>=3?'disabled':''}>Révéler plus</button>`:''}<button class="btn sm gh" data-a="cmove" data-key="${key}" data-d="-1" ${c?'':'disabled'} aria-label="Image précédente">◀</button><button class="btn y" data-a="cmove" data-key="${key}" data-d="1" ${c<5?'':'disabled'}>Image suivante ▶</button></div>`}
+/* préparer un thème images : mode + 6 photos avec leur réponse */
+function imgCfg(x,r,i){const m=['cl','ca','pr'].includes(x.im)?x.im:'cl';
+ return`<div class="a-cf a-ty"><span class="lb">Mode</span><div class="a-sw three">${['cl','ca','pr'].map(k=>`<button class="${m===k?'on':''}" data-a="imo" data-r="${r}" data-t="${i}" data-v="${k}">${IML[k]}</button>`).join('')}</div>
+ <p class="a-imd">${IMD[m]}</p>${m!=='pr'?`<span class="lb">Format</span><div class="a-sw"><button class="${x.qm!=='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="cl">Réponse libre</button><button class="${x.qm==='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="qcm">QCM</button></div>${x.qm==='qcm'?`<div class="a-sw" style="flex-basis:100%"><button class="${x.nc==2?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="2">2 réponses</button><button class="${x.nc!=2?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="4">4 réponses</button></div><p class="a-imd">3 pts du premier coup, 1 pt au 2e essai, 0 sinon.</p>`:''}`:''}<button class="btn sm ${x.sx?'y':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="sx">${x.sx?'🔒 Secret · +'+BT+' pts':'Nom visible'}</button>${x.sx&&!x.n?'<span class="a-warn" style="flex-basis:100%">Renseigne le nom du thème à deviner.</span>':''}</div>
+ <div class="a-qs">${(x.q||[]).slice(0,6).map((q,j)=>`<div class="a-iq"><button class="a-ip ${q.im?'':'add'}" data-a="pick" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="${q.im?'Changer':'Ajouter'} la photo ${j+1}">${q.im?`${pic(q.im,'sm')}<span>Changer</span>`:`+ Photo<br>${j+1}`}</button>${x.qm==='qcm'&&m!=='pr'?`<div class="f a-qcm ${x.nc==2?'two':''}">${[...Array(x.nc==2?2:4).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<label class="f"><span>Réponse ${j+1}</span><input class="in" data-k="q|${r}|${i}|${j}|r" placeholder="Ex : Jean-Paul Belmondo" value="${esc(q.r||'')}"></label>`}</div>`).join('')}
+ <p class="mut" style="margin:6px 0 0;font-size:12px">Les photos sont réduites automatiquement et enregistrées tout de suite.</p>`}
+/* préparer un QCM : bonne réponse + 1 ou 3 mauvaises */
+function qcmCfg(x,r,i){const n=x.nc==2?2:4;
+ return`<div class="a-cf a-ty"><span class="lb">Choix</span><div class="a-sw"><button class="${n===2?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="2">2 réponses</button><button class="${n===4?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="4">4 réponses</button></div>
+ <p class="a-imd">Les équipes touchent une réponse : 3 pts du premier coup, 1 pt au 2e essai, 0 sinon. L'ordre des choix est mélangé automatiquement.</p><button class="btn sm ${x.sx?'y':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="sx">${x.sx?'🔒 Secret · +'+BT+' pts':'Nom visible'}</button>${x.sx&&!x.n?'<span class="a-warn" style="flex-basis:100%">Renseigne le nom du thème à deviner.</span>':''}</div>
+ <div class="a-qs">${(x.q||[]).slice(0,6).map((q,j)=>`<div class="a-qrow"><span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div></div>`).join('')}`}
 /* fin de soirée : clôture directe ou tie break en cas d'égalité parfaite */
 function endBlock(TM){
  const P=place(3).filter(x=>inFinal(x.id)),tied=P.length>1&&P[0].sc===P[1].sc;
@@ -575,6 +728,8 @@ function endBlock(TM){
   <button class="btn blk ${tied?'gh':'y'}" data-a="closenight" style="margin-top:8px">Clôturer la soirée</button></div>`;
 }
 function getMk(t,key,x){const k=sid+'|'+t.id+'|'+key;
+ if(!mk[k]&&x.qm==='qcm'&&!t.marks?.[key])mk[k]=x.q.flatMap((q,j)=>{const A=t.qa?.[key]?.[j]||[],w=A.indexOf(0);return[w===0?3:w===1?1:0,0]});
+ if(!mk[k]&&x.ty==='img'&&!t.marks?.[key])mk[k]=x.q.flatMap((q,j)=>{const an=norm(t.answers?.[key]?.[j]),ex=norm(q.r),ok=ex&&an&&(an.includes(ex)||(an.length>3&&ex.includes(an)));return[ok?(x.im==='pr'?(t.lk?.[key]?.[j]||0):1):0,0]});
  if(!mk[k]){mk[k]=t.marks?.[key]?[...t.marks[key]].map(v=>v||0):x.q.flatMap((q,j)=>{const an=norm(t.answers?.[key]?.[j]);return[x.ea&&q.a&&an.includes(norm(q.a))?1:0,x.et&&q.t&&an.includes(norm(q.t))?1:0]});
   if(!t.marks?.[key])mk[k].push(...x.q.map((q,j)=>{const ab=norm((t.answers?.[key]?.[6+j]||'')+' '+(t.answers?.[key]?.[j]||''));return x.eb&&q.b&&ab.includes(norm(q.b))?1:0}))}
  while(mk[k].length<18)mk[k].push(0);
@@ -592,8 +747,8 @@ function flush(key){
 async function delTeams(){const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().doc(x.id)));await bt.commit();mk={};gk={}}
 async function resetRound(r){
  const D=FV.delete(),keys=th(r).map((_,i)=>`${r}_${i}`),bt=fs.batch();
- teams.forEach(t=>{const o={['x2.'+r]:D,['guess.R'+r]:D,['gok.R'+r]:D};keys.forEach(k=>{o['answers.'+k]=D;o['done.'+k]=D;o['marks.'+k]=D;o['guess.'+k]=D;o['gok.'+k]=D});bt.update(tcol().doc(t.id),o)});
- const so={['rd.'+r]:D};keys.forEach(k=>so['th.'+k]=D);if(r===3)Object.assign(so,{fz:D,tb:D,tbp:D,over:D});if(g.r===r)so.r=-1;bt.update(sdoc(),so);
+ teams.forEach(t=>{const o={['x2.'+r]:D,['guess.R'+r]:D,['gok.R'+r]:D};keys.forEach(k=>{o['qa.'+k]=D;o['lk.'+k]=D;o['answers.'+k]=D;o['done.'+k]=D;o['marks.'+k]=D;o['guess.'+k]=D;o['gok.'+k]=D});bt.update(tcol().doc(t.id),o)});
+ const so={['rd.'+r]:D};keys.forEach(k=>{so['th.'+k]=D;so['cs.'+k]=D;so['pl.'+k]=D});if(r===3)Object.assign(so,{fz:D,tb:D,tbp:D,over:D});if(g.r===r)so.r=-1;bt.update(sdoc(),so);
  await bt.commit();mk={};gk={};
 }
 const later=(key,fn)=>{clearTimeout(timers[key]);timers[key]=setTimeout(fn,500)};
@@ -605,11 +760,25 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
  else if(k.startsWith('rn|')){const r=k.split('|')[1];cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].n=v}
  else if(k.startsWith('n|')){const[,r,i]=k.split('|');cfg[r][i].n=v}
  else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v}
+ else if(k.startsWith('qc|')){const[,r,i,j,n]=k.split('|'),q=cfg[r][i].q[j];q.c=q.c||[];q.c[+n]=v}
  else if(k.startsWith('bl|')){const[,r,i]=k.split('|');cfg[r][i].bl=v}});
 document.addEventListener('click',async e=>{
  const b=e.target.closest('button[data-a]');if(!b)return;
  const a=b.dataset.a,r=+b.dataset.r,t=+b.dataset.t;
  if(a==='logout'&&confirm('Se déconnecter de l\'admin sur cet appareil ?')){try{localStorage.removeItem('bt_admin')}catch(x){}location.reload()}
+ if(a==='zoom'&&b.dataset.id){zoomId=b.dataset.id;render()}
+ if(a==='zoomx'){zoomId=null;render()}
+ if(a==='isel'){isel[b.dataset.key]=+b.dataset.j;render()}
+ if(a==='pick'){pickT={r,i:t,j:+b.dataset.j};fpick.click()}
+ if(a==='ty'){cfg[r][t].ty=b.dataset.v;const q=cfg[r][t].q;while(q.length<6)q.push({a:'',t:'',b:'',r:'',im:''});render()}
+ if(a==='imo'){cfg[r][t].im=b.dataset.v;render()}
+ if(a==='qcm'){const k=b.dataset.key,j=+b.dataset.j,c=+b.dataset.c,cur=teams.find(x=>x.id===me),A=[...(cur?.qa?.[k]?.[j]||[])];
+  if(g.th?.[k]!=='open'||A.includes(0)||A.length>=2||A.includes(c)||qpend[k+'|'+j])return;qpend[k+'|'+j]=1;A.push(c);render();
+  try{await tcol().doc(me).set({qa:{[k]:{[j]:A}}},{merge:true})}finally{delete qpend[k+'|'+j];render()}}
+ if(a==='qm'){cfg[r][t].qm=b.dataset.v;cfg[r][t].nc=cfg[r][t].nc||4;render()}
+ if(a==='nc'){cfg[r][t].nc=+b.dataset.v;render()}
+ if(a==='rvw'){rvw=b.dataset.v===''?vr().at(-1):+b.dataset.v;render();window.scrollTo(0,0)}
+ if(a==='rvwx'){rvw=null;render();window.scrollTo(0,0)}
  if(a==='tab'){tab=b.dataset.v;render();window.scrollTo(0,0)}
  if(a==='join'){const n=(draft.nm||'').trim();if(!n)return;me='t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);localStorage.setItem('bt_me_'+sid,me);await tcol().doc(me).set({name:n,answers:{},done:{},x2:{},guess:{}})}
  if(a==='leave'){localStorage.removeItem('bt_me_'+sid);me=null;render()}
@@ -638,10 +807,14 @@ document.addEventListener('click',async e=>{
  if(a==='tbp'){const id=b.dataset.id,d=+b.dataset.d;if(d<0&&!(g.tbp?.[id]>0))return;gset({tbp:{[id]:FV.increment(d)}})}
  if(a==='tbok'&&confirm(document.querySelector('.tbs-st.eq')?'Les finalistes sont encore à égalité. Valider le tie break quand même ?':'Valider le tie break et afficher le résultat final ?')){await gset({over:true});tab='rank';render();window.scrollTo(0,0)}
  if(a==='closeround'){const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'}})}
- if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});o[`${r}_${t}`]='open';gset({th:o})}
+ if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});const k=`${r}_${t}`;o[k]='open';gset({th:o,cs:{[k]:g.cs?.[k]??0},pl:{[k]:g.pl?.[k]??0}})}
  if(a==='tclose')gset({th:{[`${r}_${t}`]:'closed'}});
  if(a==='idle')gset({r:-1});
- if(a==='mk'){const m=mk[b.dataset.m],i=+b.dataset.i;m[i]=m[i]?0:1;render()}
+ if(a==='mk'){const m=mk[b.dataset.m],i=+b.dataset.i;m[i]=m[i]?0:(+b.dataset.v||1);render()}
+ if(a==='cmove'){const k=b.dataset.key,c=Math.max(0,Math.min(5,(g.cs?.[k]??0)+(+b.dataset.d)));gset({cs:{[k]:c},pl:{[k]:0}})}
+ if(a==='pmore'){const k=b.dataset.key;gset({pl:{[k]:Math.min(3,(g.pl?.[k]??0)+1)}})}
+ if(a==='lock'){const k=b.dataset.key,j=+b.dataset.j,p=+b.dataset.p,v=(draft[`a|${k}|${j}`]??teams.find(x=>x.id===me)?.answers?.[k]?.[j]??'').trim();if(!v){alert('Écris ta réponse avant de verrouiller.');return}
+  if((g.pl?.[k]??0)>=3||(g.cs?.[k]??0)!==j)return;await flush(k);tcol().doc(me).set({lk:{[k]:{[j]:p}}},{merge:true})}
  if(a==='gk'){const k=b.dataset.m;gk[k]=gk[k]?0:1;render()}
  if(a==='validate'){
   const bt=fs.batch(),I=ri(r);
@@ -657,8 +830,8 @@ document.addEventListener('click',async e=>{
  if(a==='closeov')document.querySelector('.ov')?.remove();
  if(a==='resetround'&&confirm('Réinitialiser '+RN[r]+' ? Réponses, x2 et points de cette manche seront effacés.'))resetRound(r);
  if(a==='clrteams'&&confirm('Effacer toutes les équipes et leurs réponses ?'))delTeams();
- if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
- if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){await delTeams();await sdoc().delete();view='list';bind(null);render()}
+ if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},cs:{},pl:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
+ if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){await delTeams();const im=await sdoc().collection('imgs').get(),bi=fs.batch();im.docs.forEach(d=>bi.delete(d.ref));await bi.commit();await sdoc().delete();view='list';bind(null);render()}
 });
 })();
 </script></body></html>
