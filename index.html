@@ -278,6 +278,27 @@ select.in{appearance:none}
 .a-imc{display:flex;gap:12px;align-items:center;width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,.25);margin:4px 0 0}.a-imc-p{width:64px;height:64px;flex:none}.a-imc .f{flex:1;min-width:0}.a-imc b{display:block;font:800 15px Poppins}.a-imc small{display:block;font:500 12px Poppins;color:var(--mut)}
 .a-imb{display:flex;gap:8px;width:100%;flex-wrap:wrap;margin:8px 0 0}.a-imb .btn{margin:0;flex:1;min-height:48px}.a-imb .btn.sm{flex:none;min-width:52px}.a-imb .btn:disabled{opacity:.35}
 .a-qi{flex:none;padding:0;border:0;background:none;cursor:zoom-in}.ab.dis{display:grid;place-items:center;opacity:.35;cursor:default}
+/* genre du thème + volet */
+.g-btn{display:flex;align-items:center;gap:12px;width:calc(100% - 28px);margin:12px 14px 4px;padding:10px 12px;border-radius:14px;border:1px solid rgba(0,232,255,.4);background:rgba(0,232,255,.08);color:#fff;text-align:left;cursor:pointer}
+.g-btn .f{flex:1;min-width:0}.g-btn b{display:block;font:800 15px Poppins}.g-btn small{display:block;font:500 12px Poppins;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.g-chev{flex:none;color:var(--c)}
+.g-ic{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center}.g-p{background:var(--p);color:#fff}.g-c{background:var(--c);color:var(--n)}.g-y{background:var(--y);color:var(--n)}
+.g-ov{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;justify-content:flex-end;background:rgba(2,3,16,.65);animation:gfd .2s}
+.g-bg{flex:1;border:0;background:transparent;cursor:pointer}
+.g-sh{max-height:88vh;overflow-y:auto;width:100%;max-width:620px;margin:0 auto;box-sizing:border-box;background:var(--n2);border-radius:26px 26px 0 0;border-top:2px solid var(--c);box-shadow:0 -20px 50px rgba(0,0,0,.5);padding:10px 16px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;animation:gup .3s cubic-bezier(.2,1,.4,1)}
+@keyframes gup{from{transform:translateY(100%)}}@keyframes gfd{from{opacity:0}}
+.g-hd{align-self:center;width:44px;height:5px;border-radius:5px;background:rgba(255,255,255,.3)}
+.g-top{display:flex;align-items:center;gap:10px}.g-top .f{flex:1}.g-top small{display:block;font:700 10px Poppins;letter-spacing:.16em;text-transform:uppercase;color:var(--c)}.g-top b{font:900 18px Poppins}
+.g-ib{width:40px;height:40px;flex:none;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.05);color:#fff;font:800 17px Poppins;cursor:pointer}
+.g-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.g-tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:12px;min-height:112px;border-radius:16px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:#fff;text-align:left;cursor:pointer}
+.g-tile b{font:800 14px/1.15 Poppins}.g-tile small{font:500 11px/1.3 Poppins;color:var(--mut)}.g-tile.sel{border:2px solid var(--c);background:rgba(0,232,255,.12)}
+.g-tile i{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--c);color:var(--n);font:900 12px/22px Poppins;font-style:normal;text-align:center}
+.g-cur{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(0,232,255,.08);border:1px solid rgba(0,232,255,.35)}.g-cur .f{flex:1}.g-cur b{display:block;font:800 15px Poppins}.g-cur small{font:500 12px Poppins;color:var(--mut)}
+.g-grp{display:flex;flex-direction:column;gap:8px}.g-grp>span{font:700 10px Poppins;letter-spacing:.16em;text-transform:uppercase;color:var(--c)}.g-grp>div{display:grid;gap:8px}.g-grp .in{margin:0;border-color:rgba(255,230,0,.5)}
+.g-opt{min-height:52px;padding:6px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.25);color:rgba(255,255,255,.85);font:800 14px/1.2 Poppins;cursor:pointer}.g-opt small{display:block;font:600 11px Poppins;opacity:.8}
+.g-opt.on{border-color:var(--p);background:var(--p);color:#fff}.g-opt.on.y{border-color:var(--y);background:var(--y);color:var(--n)}
+.g-ok{margin:4px 0 0!important;min-height:56px!important}
+@media (prefers-reduced-motion:reduce){.g-ov,.g-sh{animation:none}}
 /* liste des sessions : renommer / supprimer */
 .a-sa{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.a-sa .btn{margin:0}
 .a-ren .a-sa{border-top:0;padding-top:0}.a-ren .in{margin:0}
@@ -625,7 +646,7 @@ function asess(){
  const N=`<nav class="a-nav" aria-label="Menu admin"><div>${nav.map(([k,n])=>{const on=k==='game'?inG:tab===k;
   return`<button class="a-nb ${on?'on':''}" data-a="tab" data-v="${k==='game'?liveR():k}"><span class="p">${IC[k]}</span>${n}${k==='game'&&live?'<span class="lv"></span>':''}${k==='teams'&&teams.length?`<span class="bd">${teams.length}</span>`:''}</button>`}).join('')}</div></nav>`;
  const body=tab==='tb'?(g.tb?tbBlock():rscreen(3)):tab==='prep'?prep():tab==='teams'?teamsTab():tab==='rank'?((fin()&&teams.length?`<div class="c"><h2>Podium final</h2>${podium()}</div>`:'')+(rankHtml()||'<div class="c mut">Aucune manche validée pour le moment.</div>')):rscreen(+tab);
- return h+body+N;
+ return h+body+N+gSheet();
 }
 function teamsTab(){
  if(!teams.length)return `<div class="c mut">Aucune équipe pour le moment. Elles apparaissent ici dès qu'elles rejoignent la session avec le lien.</div>`;
@@ -646,10 +667,7 @@ function prep(){
    ${I.sx&&!I.n?`<p class="a-warn" style="padding:10px 18px 0;margin:0">Renseigne le nom de la manche à deviner.</p>`:''}<div class="a-rdb">`;
   T.forEach((x,i)=>{const both=x.ea&&x.et;
    h+=`<section class="a-theme cfg"><header class="a-tb ${x.sx?'sx':''}"><span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span><button class="rm" title="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">✕</button></header>
-   <div class="a-cf a-ty"><span class="lb">Type</span><div class="a-sw"><button class="${x.ty!=='img'?'on':''}" data-a="ty" data-r="${r}" data-t="${i}" data-v="mus">Questions</button><button class="${x.ty==='img'?'on':''}" data-a="ty" data-r="${r}" data-t="${i}" data-v="img">Images</button></div></div>
-   ${x.ty!=='img'?`<div class="a-cf a-ty"><span class="lb">Format</span><div class="a-sw"><button class="${x.qm!=='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="cl">Classique</button><button class="${x.qm==='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="qcm">QCM</button></div></div>`:''}
-   ${x.ty==='img'?imgCfg(x,r,i):x.qm==='qcm'?qcmCfg(x,r,i):`<div class="a-cf"><button class="btn sm ${x.ea?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="ea">Artiste</button><button class="btn sm ${x.et?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="et">Titre</button><button class="btn sm ${x.eb?'on':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="eb">Bonus</button><button class="btn sm ${x.sx?'y':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="sx">${x.sx?'🔒 Secret · +'+BT+' pts':'Nom visible'}</button>
-   <span class="mut">${both?'1 pt par réponse':'2 pts par réponse'}${x.eb?' · bonus +1':''}</span>${x.eb?`<input class="in a-bl" data-k="bl|${r}|${i}" placeholder="Intitulé du bonus (ex : Année, Film)" value="${esc(x.bl||'')}">`:''}${x.sx&&!x.n?'<span class="a-warn" style="flex-basis:100%">Renseigne le nom du thème à deviner.</span>':''}</div><div class="a-qs">`}`;
+   ${genreBtn(x,r,i)}<div class="a-qs">${x.ty==='img'?imgRows(x,r,i):x.qm==='qcm'?qcmRows(x,r,i):''}`;
    if(x.ty!=='img'&&x.qm!=='qcm')for(let j=0;j<(x.q||[]).length;j++){const q=x.q[j]||{a:'',t:''};
     h+=`<div class="a-qrow"><span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x)}</div>`}
    h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}</div></section>`});
@@ -726,16 +744,44 @@ function imgCtl(x,key){const N=x.q.length,c=Math.max(0,Math.min(N-1,g.cs?.[key]?
 /* bouton « supprimer cette question » (au moins une question par thème) */
 const QX=(r,i,j,x)=>(x.q||[]).length>1?`<button class="a-qx" data-a="rmq" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Supprimer la question ${j+1}">✕</button>`:'';
 /* préparer un thème images : mode + photos avec leur réponse */
-function imgCfg(x,r,i){const m=['cl','ca','pr'].includes(x.im)?x.im:'cl';
- return`<div class="a-cf a-ty"><span class="lb">Mode</span><div class="a-sw three">${['cl','ca','pr'].map(k=>`<button class="${m===k?'on':''}" data-a="imo" data-r="${r}" data-t="${i}" data-v="${k}">${IML[k]}</button>`).join('')}</div>
- <p class="a-imd">${IMD[m]}</p>${m!=='pr'?`<span class="lb">Format</span><div class="a-sw"><button class="${x.qm!=='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="cl">Réponse libre</button><button class="${x.qm==='qcm'?'on':''}" data-a="qm" data-r="${r}" data-t="${i}" data-v="qcm">QCM</button></div>${x.qm==='qcm'?`<div class="a-sw" style="flex-basis:100%"><button class="${x.nc==2?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="2">2 réponses</button><button class="${x.nc!=2?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="4">4 réponses</button></div><p class="a-imd">3 pts du premier coup, 1 pt au 2e essai, 0 sinon.</p>`:''}`:''}<button class="btn sm ${x.sx?'y':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="sx">${x.sx?'🔒 Secret · +'+BT+' pts':'Nom visible'}</button>${x.sx&&!x.n?'<span class="a-warn" style="flex-basis:100%">Renseigne le nom du thème à deviner.</span>':''}</div>
- <div class="a-qs">${(x.q||[]).map((q,j)=>`<div class="a-iq"><button class="a-ip ${q.im?'':'add'}" data-a="pick" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="${q.im?'Changer':'Ajouter'} la photo ${j+1}">${q.im?`${pic(q.im,'sm')}<span>Changer</span>`:`+ Photo<br>${j+1}`}</button>${x.qm==='qcm'&&m!=='pr'?`<div class="f a-qcm ${x.nc==2?'two':''}">${[...Array(x.nc==2?2:4).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<label class="f"><span>Réponse ${j+1}</span><input class="in" data-k="q|${r}|${i}|${j}|r" placeholder="Ex : Jean-Paul Belmondo" value="${esc(q.r||'')}"></label>`}${QX(r,i,j,x)}</div>`).join('')}
+function imgRows(x,r,i){const m=['cl','ca','pr'].includes(x.im)?x.im:'cl';
+ return`${(x.q||[]).map((q,j)=>`<div class="a-iq"><button class="a-ip ${q.im?'':'add'}" data-a="pick" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="${q.im?'Changer':'Ajouter'} la photo ${j+1}">${q.im?`${pic(q.im,'sm')}<span>Changer</span>`:`+ Photo<br>${j+1}`}</button>${x.qm==='qcm'&&m!=='pr'?`<div class="f a-qcm ${x.nc==2?'two':''}">${[...Array(x.nc==2?2:4).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<label class="f"><span>Réponse ${j+1}</span><input class="in" data-k="q|${r}|${i}|${j}|r" placeholder="Ex : Jean-Paul Belmondo" value="${esc(q.r||'')}"></label>`}${QX(r,i,j,x)}</div>`).join('')}
  <p class="mut" style="margin:6px 0 0;font-size:12px">Les photos sont réduites automatiquement et enregistrées tout de suite.</p>`}
-/* préparer un QCM : bonne réponse + 1 ou 3 mauvaises */
-function qcmCfg(x,r,i){const n=x.nc==2?2:4;
- return`<div class="a-cf a-ty"><span class="lb">Choix</span><div class="a-sw"><button class="${n===2?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="2">2 réponses</button><button class="${n===4?'on':''}" data-a="nc" data-r="${r}" data-t="${i}" data-v="4">4 réponses</button></div>
- <p class="a-imd">Les équipes touchent une réponse : 3 pts du premier coup, 1 pt au 2e essai, 0 sinon. L'ordre des choix est mélangé automatiquement.</p><button class="btn sm ${x.sx?'y':'gh'}" data-a="tg" data-r="${r}" data-t="${i}" data-f="sx">${x.sx?'🔒 Secret · +'+BT+' pts':'Nom visible'}</button>${x.sx&&!x.n?'<span class="a-warn" style="flex-basis:100%">Renseigne le nom du thème à deviner.</span>':''}</div>
- <div class="a-qs">${(x.q||[]).map((q,j)=>`<div class="a-qrow"><span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x)}</div>`).join('')}`}
+/* lignes d'un QCM : bonne réponse + 1 ou 3 mauvaises */
+function qcmRows(x,r,i){const n=x.nc==2?2:4;
+ return`${(x.q||[]).map((q,j)=>`<div class="a-qrow"><span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x)}</div>`).join('')}`}
+/* genres de thème : un bouton avec flèche ouvre un volet (genre, puis options) */
+const GEN=[
+ {t:'Blind test',d:'Artiste et titre à écrire',c:'p',p:'M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'},
+ {t:'Blind test QCM',d:'2 ou 4 réponses au choix',c:'p',p:'M4 6h2M10 6h10M4 12h2M10 12h10M4 18h2M10 18h10'},
+ {t:'Images',d:'Toutes les images d\'un coup',c:'c',p:'M3 4h7v7H3zM14 4h7v7h-7zM3 15h7v5H3zM14 15h7v5h-7z'},
+ {t:'Carrousel',d:'Une image à la fois, tu fais défiler',c:'c',p:'M7 5h10v14H7zM3 8v8M21 8v8'},
+ {t:'Progressif',d:'L\'image se dévoile : 3, 2, 1 pt',c:'y',p:'M4 4h16v16H4zM4 12h16M12 4v16'},
+ {t:'Images QCM',d:'Une image, des réponses au choix',c:'c',p:'M3 5h18v10H3zM6 19h4M14 19h4'}];
+const genOf=x=>x.ty==='img'?(x.qm==='qcm'&&x.im!=='pr'?5:x.im==='ca'?3:x.im==='pr'?4:2):x.qm==='qcm'?1:0;
+const gIco=k=>`<span class="g-ic g-${GEN[k].c}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${GEN[k].p}"/></svg></span>`;
+function gSum(x){const k=genOf(x),sx=x.sx?' · secret':'';
+ if(k===0)return[x.ea&&'Artiste',x.et&&'Titre'].filter(Boolean).join(' + ')+(x.eb?' · bonus '+bLab(x):'')+sx;
+ if(k===1)return(x.nc==2?2:4)+' réponses'+sx;
+ if(k===5)return(x.im==='ca'?'Carrousel':'Classique')+' · '+(x.nc==2?2:4)+' réponses'+sx;
+ return GEN[k].d+sx}
+const genreBtn=(x,r,i)=>{const k=genOf(x);return`<button class="g-btn" data-a="gopen" data-r="${r}" data-t="${i}">${gIco(k)}<span class="f"><b>${GEN[k].t}</b><small>${esc(gSum(x))}</small></span><svg class="g-chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>${x.sx&&!x.n?'<p class="a-warn" style="margin:0 14px 8px">Renseigne le nom du thème à deviner.</p>':''}`};
+let gsh=null; // volet ouvert : {r,i,step,d}
+function gSheet(){if(!gsh)return'';const d=gsh.d,k=d.k,on=(c,v)=>c?'on':'',
+ tile=j=>`<button class="g-tile ${k===j?'sel':''}" data-a="gpick" data-v="${j}">${gIco(j)}<b>${GEN[j].t}</b><small>${GEN[j].d}</small>${k===j?'<i>✓</i>':''}</button>`,
+ grp=(t,cols,items)=>`<div class="g-grp"><span>${t}</span><div style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${items.join('')}</div></div>`,
+ opt=(f,v,lab,sub,cl)=>`<button class="g-opt ${cl||''}" data-a="gset" data-f="${f}" data-v="${v}" aria-pressed="${cl&&cl.includes('on')?'true':'false'}">${lab}${sub?`<small>${sub}</small>`:''}</button>`;
+ let body;
+ if(gsh.step==='genre')body=`<div class="g-grid">${GEN.map((_,j)=>tile(j)).join('')}</div>`;
+ else{const G=[];
+  if(k===0){G.push(grp('À trouver',3,[opt('ea',1,'Artiste','',on(d.ea)),opt('et',1,'Titre','',on(d.et)),opt('eb',1,'Bonus','+1 pt',on(d.eb))]));
+   if(d.eb)G.push(`<label class="g-grp"><span>Intitulé du bonus</span><input class="in" data-k="gbl" placeholder="Ex : Année, Film" value="${esc(d.bl||'')}"></label>`)}
+  if(k===5)G.push(grp('Affichage',2,[opt('im','cl','Classique','toutes d\'un coup',on(d.im!=='ca')),opt('im','ca','Carrousel','une par une',on(d.im==='ca'))]));
+  if(k===1||k===5)G.push(grp('Nombre de choix',2,[opt('nc',2,'2 réponses','',on(d.nc==2)),opt('nc',4,'4 réponses','',on(d.nc!=2))]));
+  G.push(grp('Nom du thème',2,[opt('sx',0,'Visible','affiché aux équipes',on(!d.sx)),opt('sx',1,'Secret','+'+BT+' pts à deviner',d.sx?'on y':'')]));
+  body=`<div class="g-cur">${gIco(k)}<span class="f"><b>${GEN[k].t}</b><small>${GEN[k].d}</small></span></div>${G.join('')}<button class="btn blk y g-ok" data-a="gok">Valider</button>`}
+ return`<div class="g-ov"><button class="g-bg" data-a="gclose" aria-label="Fermer le volet"></button><div class="g-sh" role="dialog" aria-label="Genre du thème"><span class="g-hd"></span>
+ <div class="g-top">${gsh.step==='opts'?'<button class="g-ib" data-a="gback" aria-label="Revenir aux genres">‹</button>':''}<div class="f"><small>Thème ${gsh.i+1}</small><b>${gsh.step==='genre'?'Choisis un genre':'Options'}</b></div><button class="g-ib" data-a="gclose" aria-label="Fermer">✕</button></div>${body}</div></div>`}
 /* fin de soirée : clôture directe ou tie break en cas d'égalité parfaite */
 function endBlock(TM){
  const P=place(FI()).filter(x=>inFinal(x.id)),tied=P.length>1&&P[0].sc===P[1].sc;
@@ -786,6 +832,7 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
  else if(k.startsWith('n|')){const[,r,i]=k.split('|');cfg[r][i].n=v}
  else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v}
  else if(k.startsWith('qc|')){const[,r,i,j,n]=k.split('|'),q=cfg[r][i].q[j];q.c=q.c||[];q.c[+n]=v}
+ else if(k==='gbl'&&gsh)gsh.d.bl=v;
  else if(k.startsWith('bl|')){const[,r,i]=k.split('|');cfg[r][i].bl=v}});
 document.addEventListener('click',async e=>{
  const b=e.target.closest('button[data-a]');if(!b)return;
@@ -822,6 +869,16 @@ document.addEventListener('click',async e=>{
  if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim()});draft.sn=draft.stt=undefined;b.textContent='Enregistré'}
  if(a==='rsx'){cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].sx=!cfgI[r].sx;render()}
  if(a==='tg'){const x=cfg[r][t],f=b.dataset.f;x[f]=!x[f];if(f!=='sx'&&f!=='eb'&&!x.ea&&!x.et)x[f]=true;render()}
+ if(a==='gopen'){const x=cfg[r][t];gsh={r,i:t,step:'genre',d:{k:genOf(x),ea:x.ea!==false,et:x.et!==false,eb:!!x.eb,bl:x.bl||'',nc:x.nc==2?2:4,im:x.im==='ca'?'ca':'cl',sx:!!x.sx}};render()}
+ if(a==='gclose'){gsh=null;render()}
+ if(a==='gback'&&gsh){gsh.step='genre';render()}
+ if(a==='gpick'&&gsh){gsh.d.k=+b.dataset.v;gsh.step='opts';render()}
+ if(a==='gset'&&gsh){const d=gsh.d,f=b.dataset.f,v=b.dataset.v;
+  if(f==='ea'||f==='et'||f==='eb'){d[f]=!d[f];if(!d.ea&&!d.et)d[f]=true}else if(f==='nc')d.nc=+v;else if(f==='sx')d.sx=v==='1';else d[f]=v;render()}
+ if(a==='gok'&&gsh){const x=cfg[gsh.r][gsh.i],d=gsh.d,k=d.k;
+  Object.assign(x,{ty:k>=2?'img':'mus',qm:k===1||k===5?'qcm':'cl',im:k===3?'ca':k===4?'pr':k===5?d.im:'cl',nc:d.nc,sx:d.sx});
+  if(k===0)Object.assign(x,{ea:d.ea,et:d.et,eb:d.eb,bl:d.bl});
+  if(!x.q||!x.q.length)x.q=[0,1,2,3,4,5].map(()=>({a:'',t:'',b:'',r:'',im:''}));gsh=null;render()}
  if(a==='addq'){const q=cfg[r][t].q;if(q.length<QMAX)q.push({a:'',t:'',b:'',r:'',im:''});render()}
  if(a==='rmq'){const q=cfg[r][t].q,j=+b.dataset.j;if(q.length>1&&confirm(`Supprimer la question ${j+1} de ce thème ?`)){q.splice(j,1);render()}}
  if(a==='addrd'&&!started()){const F=cfgNR;cfg[F+1]=cfg[F]||[blank(),blank(),blank()];cfgI[F+1]=cfgI[F]||{};cfg[F]=[blank(),blank(),blank()];cfgI[F]={};cfgNR++;render()}
