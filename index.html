@@ -278,6 +278,9 @@ select.in{appearance:none}
 .a-imc{display:flex;gap:12px;align-items:center;width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,.25);margin:4px 0 0}.a-imc-p{width:64px;height:64px;flex:none}.a-imc .f{flex:1;min-width:0}.a-imc b{display:block;font:800 15px Poppins}.a-imc small{display:block;font:500 12px Poppins;color:var(--mut)}
 .a-imb{display:flex;gap:8px;width:100%;flex-wrap:wrap;margin:8px 0 0}.a-imb .btn{margin:0;flex:1;min-height:48px}.a-imb .btn.sm{flex:none;min-width:52px}.a-imb .btn:disabled{opacity:.35}
 .a-qi{flex:none;padding:0;border:0;background:none;cursor:zoom-in}.ab.dis{display:grid;place-items:center;opacity:.35;cursor:default}
+/* liste des sessions : renommer / supprimer */
+.a-sa{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.a-sa .btn{margin:0}
+.a-ren .a-sa{border-top:0;padding-top:0}.a-ren .in{margin:0}
 /* équipes */
 .a-team{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:16px;margin:0 0 10px;background:rgba(0,0,0,.18);flex-wrap:wrap}
 .a-team .av{flex:none;width:40px;height:40px;border-radius:12px;background:var(--c);color:var(--n);font:800 15px/40px Poppins;text-align:center}
@@ -394,7 +397,7 @@ const th=r=>(g.rounds?.[r]||[]).map(x=>{const q=[...(x.q||[])];while(q.length<6)
  return{n:x.n||'',ty:img?'img':'mus',im,qm:qcm?'qcm':'cl',nc:x.nc==2?2:4,ea:!img&&!qcm&&!!x.ea,et:!img&&!qcm&&!!x.et,eb:!img&&!qcm&&!!x.eb,bl:x.bl||'',sx:!!x.sx,q:q.slice(0,6),pts:qcm?1:img?(im==='pr'?1:2):x.ea&&x.et?1:2}});
 const hh=s=>{let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))%1000003;return h};
 const qord=(key,j,n)=>[...Array(n).keys()].sort((a,b)=>hh(key+'|'+j+'|'+a)-hh(key+'|'+j+'|'+b));
-const qpend={};let rvw=null;
+const qpend={};let rvw=null,renS=null;
 const IML={cl:'Classique',ca:'Carrousel',pr:'Progressif'};
 const IMD={cl:'Les 6 images d\'un coup, chaque équipe avance à son rythme · 2 pts par bonne réponse',ca:'Tu fais défiler les images une par une · 2 pts par bonne réponse',pr:'L\'image se dévoile par étapes : 3, 2 puis 1 pt selon le moment où l\'équipe verrouille'};
 const ORD=[5,10,6,9,1,14,3,12,0,7,15,8,2,13,4,11];
@@ -592,7 +595,10 @@ function alist(){
  h+=`<div class="c"><h2>Nouvelle session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="nn" placeholder="Ex : Soirée équipe Marketing" value="${esc(draft.nn||'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="nt" placeholder="Ex : Beulou Test #4" value="${esc(draft.nt||'')}"></div></div><div style="margin-top:14px"><button class="btn" data-a="newsess">Créer la session</button></div></div>`;
  if(!sessions.length)h+=`<div class="c mut">Aucune session pour le moment.</div>`;
  sessions.forEach(s=>{const[l,c]=stat(s);
-  h+=`<div class="c"><div class="a-sess"><div class="f"><b>${esc(s.name||'Sans nom')}</b><small>${esc(s.title||'')} · ${new Date(s.created||0).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}</small></div><span class="chip ${c}">${l}</span><button class="btn pk" data-a="opens" data-id="${s.id}">Ouvrir</button></div></div>`});
+  const dt=new Date(s.created||0).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}),k='sr|'+s.id;
+  h+=renS===s.id?`<div class="c a-ren"><label>Nom de la session</label><input class="in" data-k="${k}" maxlength="60" value="${esc(draft[k]??s.name??'')}"><div class="a-sa"><button class="btn sm gh" data-a="srx">Annuler</button><button class="btn sm y" data-a="srok" data-id="${s.id}">Enregistrer</button></div></div>`
+  :`<div class="c"><div class="a-sess"><div class="f"><b>${esc(s.name||'Sans nom')}</b><small>${esc(s.title||'')} · ${dt}</small></div><span class="chip ${c}">${l}</span><button class="btn pk" data-a="opens" data-id="${s.id}">Ouvrir</button></div>
+  <div class="a-sa"><button class="btn sm gh" data-a="sren" data-id="${s.id}">Renommer</button><button class="btn sm dg" data-a="sdel" data-id="${s.id}">Supprimer</button></div></div>`});
  return h;
 }
 const IC={
@@ -744,6 +750,10 @@ function flush(key){
  const arr=[0,1,2,3,4,5,6,7,8,9,10,11].map(j=>draft[`a|${key}|${j}`]??cur?.answers?.[key]?.[j]??'');
  return tcol().doc(me).set({answers:{[key]:arr}},{merge:true});
 }
+/* suppression complète d'une session : équipes, images, puis la session */
+async function delSession(id){const ref=fs.collection('bt_sessions').doc(id);
+ for(const c of['teams','imgs']){const q=await ref.collection(c).get(),bt=fs.batch();q.docs.forEach(d=>bt.delete(d.ref));if(q.docs.length)await bt.commit()}
+ await ref.delete()}
 async function delTeams(){const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().doc(x.id)));await bt.commit();mk={};gk={}}
 async function resetRound(r){
  const D=FV.delete(),keys=th(r).map((_,i)=>`${r}_${i}`),bt=fs.batch();
@@ -756,7 +766,7 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
  if(['nm','nn','nt','sn','stt'].includes(k))draft[k]=v;
  else if(k.startsWith('a|')){draft[k]=v;const key=k.split('|')[1];later(k.slice(0,-2),()=>flush(key))}
  else if(k.startsWith('g|')){draft[k]=v;const key=k.slice(2);later(k,()=>tcol().doc(me).set({guess:{[key]:draft[k]}},{merge:true}))}
- else if(k.startsWith('tn|'))draft[k]=v;
+ else if(k.startsWith('tn|')||k.startsWith('sr|'))draft[k]=v;
  else if(k.startsWith('rn|')){const r=k.split('|')[1];cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].n=v}
  else if(k.startsWith('n|')){const[,r,i]=k.split('|');cfg[r][i].n=v}
  else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v}
@@ -831,7 +841,11 @@ document.addEventListener('click',async e=>{
  if(a==='resetround'&&confirm('Réinitialiser '+RN[r]+' ? Réponses, x2 et points de cette manche seront effacés.'))resetRound(r);
  if(a==='clrteams'&&confirm('Effacer toutes les équipes et leurs réponses ?'))delTeams();
  if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},cs:{},pl:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
- if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){await delTeams();const im=await sdoc().collection('imgs').get(),bi=fs.batch();im.docs.forEach(d=>bi.delete(d.ref));await bi.commit();await sdoc().delete();view='list';bind(null);render()}
+ if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){const id=sid;view='list';bind(null);await delSession(id);render()}
+ if(a==='sren'){renS=b.dataset.id;const S=sessions.find(x=>x.id===renS);draft['sr|'+renS]=S?.name||'';render()}
+ if(a==='srx'){renS=null;render()}
+ if(a==='srok'){const id=b.dataset.id,n=(draft['sr|'+id]||'').trim();if(!n)return;await fs.collection('bt_sessions').doc(id).update({name:n});delete draft['sr|'+id];renS=null;render()}
+ if(a==='sdel'){const S=sessions.find(x=>x.id===b.dataset.id);if(S&&confirm(`Supprimer définitivement la session « ${S.name||'Sans nom'} » ?\n\nLes équipes, leurs réponses, les points et les images seront effacés. Cette action est irréversible.`)){b.disabled=true;b.textContent='Suppression…';await delSession(S.id)}}
 });
 })();
 </script></body></html>
