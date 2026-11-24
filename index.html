@@ -350,6 +350,14 @@ html:has(.g-ov,.ov),body:has(.g-ov,.ov){overflow:hidden;overscroll-behavior:none
 /* déplacer une manche */
 .a-rmv{display:flex;align-items:center;gap:4px}.a-rmv span{font:700 10px Poppins;letter-spacing:.14em;text-transform:uppercase;color:var(--c);margin-right:2px}
 .a-rmv button{width:40px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.2);color:#fff;display:grid;place-items:center;cursor:pointer}.a-rmv button:disabled{opacity:.25;cursor:default}
+/* enregistrer un thème : jaune = à enregistrer, vert = enregistré */
+.a-thf{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 0}.a-thf .btn{margin:0!important;min-height:50px;width:100%}
+.adm .btn.a-sv{background:var(--y);color:var(--n);font-weight:800;gap:8px;transition:background .25s,color .25s}
+.adm .btn.a-sv.ok{background:var(--g);color:#04210f;animation:svok .45s cubic-bezier(.2,1.6,.4,1)}
+.adm .btn.a-sv.busy{opacity:.65;cursor:wait}
+@keyframes svok{0%{transform:scale(.94)}100%{transform:none}}
+.unsv{flex:none;padding:3px 8px;border-radius:999px;background:rgba(255,230,0,.15);color:var(--y);font:800 10px Poppins;letter-spacing:.04em;text-transform:uppercase}
+@media (prefers-reduced-motion:reduce){.adm .btn.a-sv.ok{animation:none}}
 /* poignées de déplacement */
 .a-grip{display:grid;place-items:center;width:22px;height:38px;flex:none;border-radius:7px;color:rgba(255,255,255,.45);cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
 .a-grip:hover{color:#fff;background:rgba(255,255,255,.08)}.a-tb .a-grip{color:rgba(255,255,255,.8)}
@@ -847,10 +855,10 @@ function prep(){
    ${genreBtn(x,r,i)}<div class="a-qs">${x.ty==='img'?imgRows(x,r,i):x.qm==='qcm'?qcmRows(x,r,i):''}`;
    if(x.ty!=='img'&&x.qm!=='qcm')for(let j=0;j<(x.q||[]).length;j++){const q=x.q[j]||{a:'',t:''};
     h+=`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x,dzBtn(r,i,j,q))}</div>`}
-   h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const[d,tt]=thProg(x),last=i===T.length-1&&r===cfgNR;return`<button class="btn a-next ${d===tt?'y':''}" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer ✓':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button>`})()}</div></section>`});
+   h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const last=i===T.length-1&&r===cfgNR;return`<div class="a-thf">${svBtn(r,i)}<button class="btn gh a-next" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button></div>`})()}</div></section>`});
   h+=`<button class="btn sm gh" data-a="addth" data-r="${r}" style="margin:0">+ Ajouter un thème</button></div></section>`;
  });
- return h+`<div class="a-bar"><button class="btn blk y" data-a="savecfg">Enregistrer les questions</button></div>
+ return h+`<div class="a-bar">${(o=>`<button id="sv-all" class="btn blk a-sv ${o?'ok':''}" data-a="savecfg">${o?'Tout est enregistré <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>':'Tout enregistrer'}</button>`)(allSaved())}</div>
  <div class="c" style="margin-top:20px"><h2>Nettoyage</h2><button class="btn sm gh" data-a="clrteams">Effacer les équipes</button><button class="btn sm gh" data-a="reset">Tout réinitialiser</button><button class="btn sm dg" data-a="delsess">Supprimer la session</button></div>`;
 }
 function rscreen(r){
@@ -971,6 +979,15 @@ function dzCtl(x,key){const L=x.q.map((q,j)=>q.dz?j:-1).filter(j=>j>=0);let j=dz
 function imgCtl(x,key){const N=x.q.length,c=Math.max(0,Math.min(N-1,g.cs?.[key]??0)),l=Math.min(3,g.pl?.[key]??0),q=x.q[c];
  return`<div class="a-imc"><div class="a-imc-p">${pic(q.im,'sm')}</div><div class="f"><b>Image ${c+1} / ${N}</b><small>Réponse : ${esc(q.r||'(non renseignée)')}</small>${x.im==='pr'?`<small>Dévoilée : ${[25,50,75,100][l]} % · vaut ${[3,2,1,0][l]} pt${l<2?'s':''}</small>`:''}</div></div>
  <div class="a-imb">${x.im==='pr'?`<button class="btn" data-a="pmore" data-key="${key}" ${l>=3?'disabled':''}>Révéler plus</button>`:''}<button class="btn sm gh" data-a="cmove" data-key="${key}" data-d="-1" ${c?'':'disabled'} aria-label="Image précédente">◀</button><button class="btn y" data-a="cmove" data-key="${key}" data-d="1" ${c<N-1?'':'disabled'}>Image suivante ▶</button></div>`}
+/* enregistrement : comparaison stable (ordre des clés ignoré) entre la préparation et la base */
+const sj=o=>JSON.stringify(o??null,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.keys(v).sort().reduce((a,x)=>(v[x]!==undefined&&(a[x]=v[x]),a),{}):v);
+const thSaved=(r,i)=>sj(cfg[r]?.[i])===sj(g.rounds?.[r]?.[i]);
+const allSaved=()=>sj(cfg)===sj(g.rounds)&&sj(cfgI)===sj(g.rinfo)&&cfgNR===(g.nr??3);
+const SVOK='Enregistré <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
+const svBtn=(r,i)=>{const ok=thSaved(r,i);return`<button id="sv-${r}_${i}" class="btn a-sv ${ok?'ok':''}" data-a="svth" data-r="${r}" data-t="${i}">${ok?SVOK:'Enregistrer'}</button>`};
+/* une modification en cours de frappe : les boutons repassent tout de suite en « Enregistrer » */
+function markDirty(r,i){const set=(el,txt)=>{if(el&&el.classList.contains('ok')){el.classList.remove('ok');el.innerHTML=txt}};
+ if(i!=null)set(document.getElementById('sv-'+r+'_'+i),'Enregistrer');set(document.getElementById('sv-all'),'Tout enregistrer')}
 /* bouton « supprimer cette question » (au moins une question par thème) */
 const QX=(r,i,j,x,pre='')=>{const n=(x.q||[]).length;return`<span class="a-qa">${pre}${n>1?`<button class="a-qx" data-a="rmq" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Supprimer la question ${j+1}">✕</button>`:''}</span>`};
 /* une question est-elle remplie ? (pour l'avancement des thèmes repliés) */
@@ -988,7 +1005,7 @@ const CHEV=d=>`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" strok
 const thMv=(r,i,n,cls)=>!g.rd?.[r]&&n>1?`<button class="${cls}" data-a="mvth" data-r="${r}" data-t="${i}" data-d="-1" ${i?'':'disabled'} aria-label="Monter le thème ${i+1}">▲</button><button class="${cls}" data-a="mvth" data-r="${r}" data-t="${i}" data-d="1" ${i<n-1?'':'disabled'} aria-label="Descendre le thème ${i+1}">▼</button>`:'';
 /* thème replié : une ligne avec son avancement */
 function thCol(x,r,i,n){const[d,t]=thProg(x),ok=t&&d===t;
- return`<section class="a-theme cfg col" id="th-${r}_${i}" data-row="t|${r}|${i}">${TG(r,i,n)}<button class="a-thc" data-a="thx" data-r="${r}" data-t="${i}" aria-expanded="false"><span class="k">${i+1}</span><span class="f"><b>${esc(x.n)||'Thème '+(i+1)}</b><small>${GEN[genOf(x)].t} · ${d}/${t} rempli${d>1?'es':'e'}</small><span class="pgb"><i style="width:${t?d/t*100:0}%"></i></span></span>${ok?'<span class="okb">✓</span>':''}${CHEV(0)}</button></section>`}
+ return`<section class="a-theme cfg col" id="th-${r}_${i}" data-row="t|${r}|${i}">${TG(r,i,n)}<button class="a-thc" data-a="thx" data-r="${r}" data-t="${i}" aria-expanded="false"><span class="k">${i+1}</span><span class="f"><b>${esc(x.n)||'Thème '+(i+1)}</b><small>${GEN[genOf(x)].t} · ${d}/${t} rempli${d>1?'es':'e'}</small><span class="pgb"><i style="width:${t?d/t*100:0}%"></i></span></span>${thSaved(r,i)?'':'<span class="unsv">À enregistrer</span>'}${ok?'<span class="okb">✓</span>':''}${CHEV(0)}</button></section>`}
 /* préparer un thème images : mode + photos avec leur réponse */
 function imgRows(x,r,i){const m=['cl','ca','pr'].includes(x.im)?x.im:'cl';
  return`<button class="a-bulk" data-a="bulk" data-r="${r}" data-t="${i}" data-drop="${r}|${i}|*"><b>Importer plusieurs photos</b><small>elles remplissent les cases vides dans l'ordre · sur ordinateur, glisse-les ici</small></button>${(x.q||[]).map((q,j)=>`<div class="a-iq" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<button class="a-ip ${q.im?'':'add'}" data-a="pick" data-r="${r}" data-t="${i}" data-j="${j}" data-drop="${r}|${i}|${j}" aria-label="${q.im?'Changer':'Ajouter'} la photo ${j+1}">${q.im?`${pic(q.im,'sm')}<span>Changer</span>`:`+ Photo<br>${j+1}`}</button>${x.qm==='qcm'&&m!=='pr'?`<div class="f a-qcm ${x.nc==2?'two':''}">${[...Array(x.nc==2?2:4).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<label class="f"><span>Réponse ${j+1}</span><input class="in" data-k="q|${r}|${i}|${j}|r" placeholder="Ex : Jean-Paul Belmondo" value="${esc(q.r||'')}"></label>`}${QX(r,i,j,x)}</div>`).join('')}
@@ -1090,13 +1107,13 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
  else if(k.startsWith('a|')){draft[k]=v;const key=k.split('|')[1];later(k.slice(0,-2),()=>flush(key))}
  else if(k.startsWith('g|')){draft[k]=v;const key=k.slice(2);later(k,()=>tcol().doc(me).set({guess:{[key]:draft[k]}},{merge:true}))}
  else if(k.startsWith('tn|')||k.startsWith('sr|'))draft[k]=v;
- else if(k.startsWith('rn|')){const r=k.split('|')[1];cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].n=v}
- else if(k.startsWith('n|')){const[,r,i]=k.split('|');cfg[r][i].n=v}
- else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v}
- else if(k.startsWith('qc|')){const[,r,i,j,n]=k.split('|'),q=cfg[r][i].q[j];q.c=q.c||[];q.c[+n]=v}
+ else if(k.startsWith('rn|')){const r=k.split('|')[1];cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].n=v;markDirty(r)}
+ else if(k.startsWith('n|')){const[,r,i]=k.split('|');cfg[r][i].n=v;markDirty(r,i)}
+ else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v;markDirty(r,i)}
+ else if(k.startsWith('qc|')){const[,r,i,j,n]=k.split('|'),q=cfg[r][i].q[j];q.c=q.c||[];q.c[+n]=v;markDirty(r,i)}
  else if(k==='gbl'&&gsh)gsh.d.bl=v;
  else if(k==='dzq'&&dzs){dzs.q=v;clearTimeout(dzs.tm);dzs.tm=setTimeout(dzSearch,350)}
- else if(k.startsWith('bl|')){const[,r,i]=k.split('|');cfg[r][i].bl=v}});
+ else if(k.startsWith('bl|')){const[,r,i]=k.split('|');cfg[r][i].bl=v;markDirty(r,i)}});
 document.addEventListener('click',async e=>{
  if(window.__noClick){window.__noClick=0;return} // fin d'un glisser d'onglet : pas de clic
  const b=e.target.closest('button[data-a]');if(!b)return;
@@ -1173,7 +1190,7 @@ document.addEventListener('click',async e=>{
  if(a==='rmrd'&&!started()&&cfgNR>1&&confirm(`Supprimer la Manche ${r+1} et tous ses thèmes ? (n'oublie pas d'enregistrer ensuite)`)){for(let k=r;k<cfgNR;k++){cfg[k]=cfg[k+1];cfgI[k]=cfgI[k+1]||{}}delete cfg[cfgNR];delete cfgI[cfgNR];cfgNR--;prepR=Math.min(r,cfgNR);openTh=null;render()}
  if(a==='addth'){(cfg[r]=cfg[r]||[]).push(blank());openTh=r+'_'+(cfg[r].length-1);render()}
  if(a==='rmth'&&confirm('Supprimer ce thème ?')){cfg[r].splice(t,1);render()}
- if(a==='savecfg'){await sdoc().update({rounds:cfg,rinfo:cfgI,nr:cfgNR});b.textContent='Questions enregistrées ✓'}
+ if(a==='savecfg'||a==='svth'){b.disabled=true;b.classList.add('busy');try{await sdoc().update({rounds:cfg,rinfo:cfgI,nr:cfgNR})}catch(e){alert('Enregistrement impossible : '+(e.message||e))}b.disabled=false;b.classList.remove('busy');render()}
  if(a==='launch')gset(r===FI()?{r,rd:{[r]:'open'},fz:place(FI()-1).filter(x=>x.pos<=2).map(x=>x.id)}:{r,rd:{[r]:'open'}});
  if(a==='closenight'){await gset({over:true});tab='rank';render();window.scrollTo(0,0)}
  if(a==='tiebreak'){await gset({tb:true,tbp:{}});tab='tb';render();window.scrollTo(0,0)}
