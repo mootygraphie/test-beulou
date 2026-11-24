@@ -544,7 +544,7 @@ const ERR=e=>{app.innerHTML='<div class="c"><h2>Erreur Firebase</h2><p>'+esc((e.
 const blank=()=>({n:'',ty:'mus',im:'cl',qm:'cl',nc:4,ea:true,et:true,eb:false,bl:'',sx:false,q:[0,1,2,3,4,5].map(()=>({a:'',t:'',b:'',r:'',im:''}))});
 const th=r=>(g.rounds?.[r]||[]).map(x=>{const q=(x.q||[]).map(y=>Object.assign({a:'',t:'',b:'',r:'',im:''},y));const img=x.ty==='img',im=['cl','ca','pr'].includes(x.im)?x.im:'cl';
  const qcm=x.qm==='qcm'&&(!img||im!=='pr'); // QCM : questions, ou images en classique / carrousel
- return{n:x.n||'',ty:img?'img':'mus',im,qm:qcm?'qcm':'cl',nc:x.nc==2?2:4,ea:!img&&!qcm&&!!x.ea,et:!img&&!qcm&&!!x.et,eb:!img&&!qcm&&!!x.eb,bl:x.bl||'',sx:!!x.sx,q:q.slice(0,QMAX),pts:qcm?1:img?(im==='pr'?1:2):x.ea&&x.et?1:2}});
+ return{n:x.n||'',ty:img?'img':'mus',im,qm:qcm?'qcm':'cl',nc:x.nc==2?2:4,ea:!img&&!qcm&&!!x.ea,et:!img&&!qcm&&!!x.et,eb:!img&&!qcm&&!!x.eb,bl:x.bl||'',sx:!!x.sx,q:q.slice(0,QMAX),pts:qcm?1:img?(im==='pr'?1:2):1}});
 const hh=s=>{let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))%1000003;return h};
 const qord=(key,j,n)=>[...Array(n).keys()].sort((a,b)=>hh(key+'|'+j+'|'+a)-hh(key+'|'+j+'|'+b));
 const qpend={};let rvw=null,renS=null,cfgNR=3,prepR=0,openTh=null,drg=null;
@@ -555,8 +555,10 @@ const IML={cl:'Classique',ca:'Carrousel',pr:'Progressif'};
 const IMD={cl:'Toutes les images d\'un coup, chaque équipe avance à son rythme · 2 pts par bonne réponse',ca:'Tu fais défiler les images une par une · 2 pts par bonne réponse',pr:'L\'image se dévoile par étapes : 3, 2 puis 1 pt selon le moment où l\'équipe verrouille'};
 const ORD=[5,10,6,9,1,14,3,12,0,7,15,8,2,13,4,11];
 /* marques : [artiste,titre]×6 puis 6 cases bonus (1 pt chacune) */
-const ms=(m,x)=>sum((m||[]).slice(0,2*QMAX).map(v=>v||0))*(x?x.pts:1)+(x&&x.eb?sum((m||[]).slice(MB,MB+QMAX).map(v=>v||0)):0);
-const ptsMax=x=>{const n=(x.q||[]).length,img=x.ty==='img';return img&&x.im==='pr'?3*n:x.qm==='qcm'?n:2*n+(!img&&x.eb?n:0)};
+/* points d'un thème : seules les cases demandées comptent (artiste / titre / bonus : 1 pt chacune) */
+const ms=(m,x)=>{m=m||[];if(!x)return sum(m.slice(0,2*QMAX).map(v=>v||0));let t=0;
+ for(let j=0;j<QMAX;j++){const a=m[2*j]||0,b=m[2*j+1]||0;t+=x.ty==='img'||x.qm==='qcm'?a*x.pts:((x.ea?a:0)+(x.et?b:0))*x.pts+(x.eb?(m[MB+j]||0):0)}return t};
+const ptsMax=x=>{const n=(x.q||[]).length,img=x.ty==='img';return img&&x.im==='pr'?3*n:x.qm==='qcm'?n:img?2*n:((x.ea?1:0)+(x.et?1:0)+(x.eb?1:0))*n};
 const bLab=x=>x.bl||'Bonus';
 const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
