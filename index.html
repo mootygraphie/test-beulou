@@ -624,7 +624,9 @@ if(ADMIN){
   render()};
  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
  /* renommer une session : Entrée valide, Échap annule */
- document.addEventListener('keydown',e=>{const k=e.target.dataset&&e.target.dataset.k;if(!k||!k.startsWith('sr|'))return;
+ document.addEventListener('keydown',e=>{const k=e.target.dataset&&e.target.dataset.k;
+  if(k==='dzq'&&e.key==='Enter'&&dzs){e.preventDefault();clearTimeout(dzs.tm);dzSearch();return} // Entrée : recherche Deezer immédiate
+  if(!k||!k.startsWith('sr|'))return;
   if(e.key==='Enter'){e.preventDefault();document.querySelector('[data-a="srok"]')?.click()}else if(e.key==='Escape'){renS=null;render()}})}
 const saveCfgNow=()=>sdoc().update({rounds:cfg,rinfo:cfgI,nr:cfgNR});
 /* import groupé : remplit les cases vides dans l'ordre, puis ajoute des questions si besoin */
@@ -1114,7 +1116,7 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
  else if(k.startsWith('q|')){const[,r,i,j,f]=k.split('|');cfg[r][i].q[j][f]=v;markDirty(r,i)}
  else if(k.startsWith('qc|')){const[,r,i,j,n]=k.split('|'),q=cfg[r][i].q[j];q.c=q.c||[];q.c[+n]=v;markDirty(r,i)}
  else if(k==='gbl'&&gsh)gsh.d.bl=v;
- else if(k==='dzq'&&dzs){dzs.q=v;clearTimeout(dzs.tm);dzs.tm=setTimeout(dzSearch,350)}
+ else if(k==='dzq'&&dzs){dzs.q=v;clearTimeout(dzs.tm);dzs.tm=setTimeout(dzSearch,1000)}
  else if(k.startsWith('bl|')){const[,r,i]=k.split('|');cfg[r][i].bl=v;markDirty(r,i)}});
 document.addEventListener('click',async e=>{
  if(window.__noClick){window.__noClick=0;return} // fin d'un glisser d'onglet : pas de clic
