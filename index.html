@@ -650,6 +650,25 @@ body.sk-school .dw.open{background:#fff}body.sk-sombre .dw.open{background:#1414
 @keyframes cdp{50%{filter:brightness(1.15)}}
 .lv-cd{margin:0;padding:16px;border-radius:16px;background:rgba(255,10,140,.15);border:2px solid var(--p);text-align:center;font:600 14px Poppins}.lv-cd b{font-size:26px;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.cdb{animation:none}}
+/* préparation */
+.a-sum{display:flex;align-items:center;gap:12px}.a-sum .f{flex:1;min-width:0}.a-sum b{display:block;font:800 16px Poppins}.a-sum small{color:var(--mut);font-size:12px}.a-sum .btn{margin:0}
+.a-ov{display:flex;flex-direction:column;gap:8px}
+.a-ovr{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.03);color:#fff;text-align:left;cursor:pointer}
+.a-ovr.on{border-color:var(--c);background:rgba(0,232,255,.07)}.a-ovr .a-num{width:38px;height:38px;font-size:17px}
+.a-ovr .f{flex:1;min-width:0}.a-ovr b{display:block;font:700 14px Poppins}.a-ovr small{color:var(--mut);font-size:12px}
+.a-ovs{flex:none;font:800 11px Poppins;padding:4px 9px;border-radius:999px}.a-ovs.ok{background:rgba(61,255,165,.15);color:var(--g)}.a-ovs.w{background:var(--y);color:var(--n)}
+.a-pf{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:10px}
+.a-pf li{display:flex;gap:10px;align-items:flex-start}.a-pf li>i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:900 12px Poppins;font-style:normal}
+.a-pf li.ok>i{background:var(--g);color:#04210f}.a-pf li.w>i{background:var(--y);color:var(--n)}.a-pf li.i>i{background:rgba(0,232,255,.2);color:var(--c)}
+.a-pf li.ld>i{border:3px solid rgba(255,255,255,.2);border-top-color:var(--c);animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.a-pf b{display:block;font:700 14px Poppins}.a-pf small{display:block;color:var(--mut);font-size:12px}.a-pf small.d{color:var(--y)}
+.a-svd{position:fixed;right:14px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:31;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(7,11,48,.95);border:1px solid var(--line);font:700 12px Poppins;color:var(--y);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.a-svd::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}.a-svd.ok{color:var(--g)}.a-svd.ko{color:#ff7a9c}
+.a-dz{opacity:.85}.a-dz.open{opacity:1}.a-dzh{display:flex;align-items:center;gap:10px;width:100%;padding:0;border:0;background:none;color:#fff;text-align:left;cursor:pointer}
+.a-dzh b{display:block;font:800 14px Poppins;color:#ff7a9c}.a-dzh small{color:var(--mut);font-size:12px}.a-dzh>span:last-child{font:700 20px Poppins}
+.a-dz .sld{margin:12px 0 0;border-color:#ff7a9c;background:rgba(255,122,156,.08)}.a-dz .sl-k,.a-dz .sl-f{background:#ff7a9c}.a-dz .sl-t b{color:#ff7a9c}
+.a-pst{display:flex;flex-direction:column;gap:8px;margin:8px 0}.a-pst textarea{height:auto;padding:10px 12px;font-size:14px;line-height:1.5;resize:vertical}
+.a-dzl{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(61,255,165,.6);background:none;color:var(--g);display:grid;place-items:center;padding:0;cursor:pointer}.a-dzl svg{width:14px;height:14px}.a-dzl.on{background:var(--g);color:#04210f}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -988,8 +1007,36 @@ const ICO={dup:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stro
 const stat=s=>{const rd=s.rd||{};if(s.over||rd[s.nr??3]==='validated')return['Terminée','cy'];if(Object.keys(rd).length)return['En cours','pk'];
  return filled(s.rounds)?['Prête','ok']:['Brouillon','']};
 /* thèmes graphiques : changent seulement l'écran des joueurs */
-const SKINS=[['s80','Années 80','Néon, grille rétro, VHS'],['s90','Années 90','Memphis, couleurs pop'],['sombre','Sombre','Affiche de concert, noir et rouge sang'],['soul','Soul','Pochette vinyle, brun chaud et or'],['school','Scolaire','Cahier à carreaux, stylo rouge']];
+const SKINS=[['s80','TV Glitch','Néon, mire et parasites VHS'],['s90','Années 90','Memphis, couleurs pop'],['sombre','Sombre','Affiche de concert, noir et rouge sang'],['soul','Soul','Pochette vinyle, brun chaud et or'],['school','Scolaire','Cahier à carreaux, stylo rouge']];
 const skPick=(cur,a)=>`<div class="a-skg">${SKINS.map(([id,n,d])=>`<button class="a-skc ${cur===id?'on':''}" data-a="${a}" data-v="${id}" aria-pressed="${cur===id}"><span class="a-skp sk-${id}"><em>Manche 1</em></span><b>${n}</b><small>${d}</small></button>`).join('')}</div>`;
+/* préparation : enregistrement automatique, vue d'ensemble, vérification, écoute, coller une liste */
+let svBusy=0,svErr='',infT=null,pasteK=null,PF=null;
+const svdHtml=()=>{const ok=cfg&&allSaved();return`<span id="svd" class="a-svd ${svErr?'ko':ok?'ok':''}" role="status">${svErr?'Enregistrement impossible : '+esc(svErr):ok?'Enregistré':'Enregistrement…'}</span>`};
+setInterval(async()=>{if(!ADMIN||view!=='sess'||!cfg||!g||isArch(g)||drg)return;const e=document.getElementById('svd');if(e&&!svBusy){const n=svdHtml();if(e.outerHTML!==n)e.outerHTML=n}
+ if(svBusy||allSaved())return;svBusy=1;try{await sdoc().update({rounds:cfg,rinfo:cfgI,nr:cfgNR});svErr=''}catch(x){svErr=x.message||String(x)}svBusy=0},1500);
+const qDur=x=>x.ty==='img'?(x.im==='pr'?35:30):x.qm==='qcm'?30:45;
+function overview(){let h='';for(let r=0;r<=cfgNR;r++){const T=cfg[r]||[],nq=T.reduce((a,x)=>a+(x.q||[]).length,0),min=Math.round(T.reduce((a,x)=>a+(x.q||[]).length*qDur(x),0)/60+(T.length?4:0));
+ const inc=T.filter(x=>{const[d,t]=thProg(x);return d<t}).length;
+ h+=`<button class="a-ovr ${prepR===r?'on':''}" data-a="prr" data-v="${r}"><span class="a-num">${r<cfgNR?r+1:'F'}</span><span class="f"><b>${r<cfgNR?'Manche '+(r+1):'Finale'}${cfgI[r]?.n?' · '+esc(cfgI[r].n):''}</b><small>${T.length} thème${T.length>1?'s':''} · ${nq} question${nq>1?'s':''} · environ ${min} min</small></span><span class="a-ovs ${inc?'w':'ok'}">${!T.length?'Vide':inc?inc+' à compléter':'Prête ✓'}</span></button>`}
+ return`<div class="c"><h2>Vue d'ensemble</h2><div class="a-ov">${h}</div></div>`}
+function pfCard(){let h=`<div class="c"><h2>Vérifier la soirée</h2>`;
+ if(!PF)return h+`<p class="mut" style="margin:0 0 12px">Contrôle que chaque question est remplie, que chaque extrait Deezer se charge et que chaque image est bien là. À faire la veille ou juste avant.</p><button class="btn sm y" data-a="pfrun">Lancer la vérification</button></div>`;
+ return h+`<ul class="a-pf">${PF.items.map(([t,st,sum,det])=>`<li class="${st}"><i>${st==='ok'?'✓':st==='w'?'!':st==='ld'?'':'i'}</i><div><b>${t}</b><small>${esc(sum)}</small>${(det||[]).slice(0,6).map(d=>`<small class="d">${esc(d)}</small>`).join('')}${(det||[]).length>6?`<small class="d">… et ${det.length-6} autre(s)</small>`:''}</div></li>`).join('')}</ul>${PF.run?'':`<button class="btn sm gh" data-a="pfrun">Relancer la vérification</button>`}</div>`}
+async function preflight(){PF={run:1,items:[['Vérification en cours','ld','Questions, extraits, images…']]};render();
+ const it=[],RN=r=>r<cfgNR?'Manche '+(r+1):'Finale',inc=[],noDz=[],dz=[],noIm=[],ims=[];
+ for(let r=0;r<=cfgNR;r++)(cfg[r]||[]).forEach((x,i)=>{const nm=`${RN(r)} · ${tn(x,i)}`,[d,t]=thProg(x);if(d<t)inc.push(`${nm} : ${t-d} question${t-d>1?'s':''} à compléter`);if(x.sx&&!x.n)inc.push(`${nm} : nom secret à renseigner`);
+  (x.q||[]).forEach((q,j)=>{if(x.ty==='img'){if(q.im)ims.push([q.im,`${nm} · image ${j+1}`]);else noIm.push(`${nm} · image ${j+1} manquante`)}else if(q.dz)dz.push([q.dz,`${nm} · Q${j+1}`]);else noDz.push(`${nm} · Q${j+1}`)})});
+ for(let r=0;r<cfgNR;r++)if(cfgI[r]?.sx&&!cfgI[r]?.n)inc.push(`${RN(r)} : nom secret de la manche à renseigner`);
+ it.push(['Questions',inc.length?'w':'ok',inc.length?inc.length+' point'+(inc.length>1?'s':'')+' à compléter':'Toutes les questions sont remplies',inc]);
+ const bad=[];for(const[id,l]of dz){try{await Promise.race([dzGet(id),new Promise((_,ko)=>setTimeout(()=>ko(new Error('délai')),8000))])}catch(e){bad.push(l+' : extrait indisponible')}}
+ it.push(['Extraits Deezer',bad.length?'w':'ok',dz.length?`${dz.length-bad.length} / ${dz.length} disponibles`:'Aucun extrait lié',bad]);
+ if(noDz.length)it.push(['Questions sans extrait','i',`${noDz.length} question${noDz.length>1?'s':''} : tu lanceras la musique toi-même`,noDz]);
+ const gone=[];for(const[id,l]of ims){try{const d=await sdoc().collection('imgs').doc(id).get();if(!d.exists)gone.push(l+' : image introuvable')}catch(e){gone.push(l+' : lecture impossible')}}
+ it.push(['Images',gone.length||noIm.length?'w':'ok',ims.length+noIm.length?`${ims.length-gone.length} / ${ims.length+noIm.length} prêtes`:'Aucune image',[...noIm,...gone]]);
+ it.push(['Équipes','i',teams.length?teams.length+' équipe'+(teams.length>1?'s':'')+' déjà inscrite'+(teams.length>1?'s':''):'Aucune équipe pour l\'instant : normal avant la soirée']);
+ it.push(['Son des téléphones','i',g.snd?'Activé : les équipes devront autoriser le son':'Désactivé : le son passe par ta sono']);
+ PF={items:it};render()}
+const dzL=(r,i,j,q)=>q.dz?`<button class="a-dzl ${dzp.id===q.dz&&!AU.paused?'on':''}" data-a="dzprev" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Écouter l'extrait de la question ${j+1}">${dzp.id===q.dz&&!AU.paused?PAUSEI:PLAYI}</button>`:'';
 /* sessions : une session dont la date est passée part dans les archives et devient non modifiable */
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const isArch=s=>!!s&&!!s.date&&s.date<today();
@@ -1046,8 +1093,10 @@ function teamsTab(){
 function prep(){
  const url=location.origin+location.pathname+'?s='+sid;
  let h=`<div class="c"><h2>Lien des équipes</h2><div class="lk">${esc(url)}</div><button class="btn sm" data-a="copy">Copier le lien</button><button class="btn sm y" data-a="qr">QR code</button><a class="btn sm gh" href="${esc(url)}" target="_blank" style="text-decoration:none">Tester</a><p class="mut" style="margin:10px 0 0">Lien propre à cette session : les équipes ne voient que celle-ci.</p></div>`;
- h+=`<div class="c"><h2>Session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="sdt" value="${esc(draft.sdt??g.date??'')}"></div></div><label style="margin-top:14px">Thème graphique des joueurs</label>${skPick(g.sk||'s80','ssk')}<div style="margin-top:14px"><button class="btn sm" data-a="saveinfo">Enregistrer</button></div>
+ h+=`<div class="c a-sum"><div class="f"><b>${esc(g.title||g.name||'')}</b><small>${g.date?fdate(g.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'Pas encore de date'} · ${SKINS.find(k=>k[0]===(g.sk||'s80'))[1]}${g.snd?' · son sur les téléphones':''}</small></div><button class="btn sm gh" data-a="rgt" aria-expanded="${!!draft.rg}">${draft.rg?'Fermer':'Réglages'}</button></div>`;
+ if(draft.rg)h+=`<div class="c"><h2>Réglages</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="sdt" value="${esc(draft.sdt??g.date??'')}"></div></div><label style="margin-top:14px">Thème graphique des joueurs</label>${skPick(g.sk||'s80','ssk')}
  <button class="a-tgl ${g.snd?'on':''}" data-a="sndopt" role="switch" aria-checked="${!!g.snd}"><span class="kn" aria-hidden="true"></span><span class="f"><b>Son aussi sur les téléphones des équipes</b><small>Pour jouer à distance : quand tu lances un extrait Deezer, il est joué aussi chez chaque équipe. Elles devront activer le son pour rejoindre la partie.</small></span></button></div>`;
+ h+=overview()+pfCard();
  const lock=started();prepR=Math.min(prepR,cfgNR);
  if(openTh===null){openTh='';for(let r=0;r<=cfgNR&&!openTh;r++)(cfg[r]||[]).forEach((x,i)=>{if(!openTh){const[d,t]=thProg(x);if(d<t){openTh=r+'_'+i;prepR=r}}});if(!openTh)openTh=prepR+'_0'}
  [prepR].forEach(r=>{const n=r===cfgNR?'Finale':'Manche '+(r+1);
@@ -1059,12 +1108,12 @@ function prep(){
    h+=`<section class="a-theme cfg" id="th-${r}_${i}" data-row="t|${r}|${i}"><header class="a-tb ${x.sx?'sx':''}">${TG(r,i,T.length)}<span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span><button class="a-hmv" data-a="thx" data-r="${r}" data-t="${i}" aria-label="Replier le thème" aria-expanded="true">${CHEV(1)}</button><button class="rm" title="Supprimer ce thème" aria-label="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">${TRASH}</button></header>
    ${genreBtn(x,r,i)}<div class="a-qs">${x.ty==='img'?imgRows(x,r,i):x.qm==='qcm'?qcmRows(x,r,i):''}`;
    if(x.ty!=='img'&&x.qm!=='qcm')for(let j=0;j<(x.q||[]).length;j++){const q=x.q[j]||{a:'',t:''};
-    h+=`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x,dzBtn(r,i,j,q))}</div>`}
-   h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const last=i===T.length-1&&r===cfgNR;return`<div class="a-thf">${svBtn(r,i)}<button class="btn gh a-next" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button></div>`})()}</div></section>`});
+    h+=`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x,dzL(r,i,j,q)+dzBtn(r,i,j,q))}</div>`}
+   if(x.ty!=='img'&&x.qm!=='qcm')h+=`<button class="btn sm gh a-addq" data-a="pastex" data-r="${r}" data-t="${i}">Coller une liste</button>`+(pasteK===r+'_'+i?`<div class="a-pst"><label for="pst">Une ligne par chanson : ${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}</label><textarea class="in" id="pst" rows="6" placeholder="${x.ea&&x.et?'Indochine - L\'aventurier&#10;Téléphone - Un autre monde':'Une chanson par ligne'}"></textarea><button class="btn sm y" data-a="pfill" data-r="${r}" data-t="${i}">Remplir les questions</button></div>`:'');
+   h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const last=i===T.length-1&&r===cfgNR;return`<div class="a-thf"><button class="btn gh a-next" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button></div>`})()}</div></section>`});
   h+=`<button class="btn sm gh" data-a="addth" data-r="${r}" style="margin:0">+ Ajouter un thème</button></div></section>`;
  });
- return h+`<div class="a-bar">${(o=>`<button id="sv-all" class="btn blk a-sv ${o?'ok':''}" data-a="savecfg">${o?'Tout est enregistré <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>':'Tout enregistrer'}</button>`)(allSaved())}</div>
- <div class="c" style="margin-top:20px"><h2>Nettoyage</h2><button class="btn sm gh" data-a="clrteams">Effacer les équipes</button><button class="btn sm gh" data-a="reset">Tout réinitialiser</button><button class="btn sm dg" data-a="delsess">Supprimer la session</button></div>`;
+ return h+svdHtml()+`<section class="c a-dz ${draft.dzo?'open':''}"><button class="a-dzh" data-a="dzo" aria-expanded="${!!draft.dzo}"><span class="f"><b>Zone sensible</b><small>Effacer les équipes, tout réinitialiser, supprimer la session</small></span><span aria-hidden="true">${draft.dzo?'−':'+'}</span></button>${draft.dzo?slide('clrteams','Effacer les équipes','Glisser jusqu\'au bout · réponses et points effacés','')+slide('reset','Tout réinitialiser','Glisser jusqu\'au bout · les questions sont conservées','')+slide('delsess','Supprimer la session','Glisser jusqu\'au bout · définitif',''):''}</section>`;
 }
 function rscreen(r){
  const T=th(r),I=ri(r),st=g.rd?.[r],on=g.r===r&&st==='open',over=st==='closed'||st==='validated';
@@ -1277,7 +1326,7 @@ function imgRows(x,r,i){const m=['cl','ca','pr'].includes(x.im)?x.im:'cl';
  <p class="mut" style="margin:6px 0 0;font-size:12px">Les photos sont réduites automatiquement et enregistrées tout de suite.</p>`}
 /* lignes d'un QCM : bonne réponse + 1 ou 3 mauvaises */
 function qcmRows(x,r,i){const n=x.nc==2?2:4;
- return`${(x.q||[]).map((q,j)=>`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x,x.ty!=='img'?dzBtn(r,i,j,q):'')}</div>`).join('')}`}
+ return`${(x.q||[]).map((q,j)=>`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="a-qcm ${n===2?'two':''}">${[...Array(n).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>${QX(r,i,j,x,x.ty!=='img'?dzL(r,i,j,q)+dzBtn(r,i,j,q):'')}</div>`).join('')}`}
 /* genres de thème : un bouton avec flèche ouvre un volet (genre, puis options) */
 const GEN=[
  {t:'Blind test',d:'Artiste et titre à écrire',c:'p',p:'M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z'},
@@ -1370,6 +1419,7 @@ const later=(key,fn)=>{clearTimeout(timers[key]);timers[key]=setTimeout(fn,500)}
 document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;const v=e.target.value;
  if(k==='sq'){draft.sq=v;arcPg=0;render();return}
  if(['nm','nn','nt','sn','stt','nd','sdt'].includes(k))draft[k]=v;
+ if(ADMIN&&g&&['sn','stt','sdt'].includes(k)){clearTimeout(infT);infT=setTimeout(()=>gset({name:(draft.sn??g.name??'').trim(),title:(draft.stt??g.title??'').trim(),date:draft.sdt??g.date??''}),700)}
  else if(k.startsWith('a|')){draft[k]=v;const key=k.split('|')[1];later(k.slice(0,-2),()=>flush(key))}
  else if(k.startsWith('g|')){draft[k]=v;const key=k.slice(2);later(k,()=>tcol().doc(me).set({guess:{[key]:draft[k]}},{merge:true}))}
  else if(k.startsWith('tn|')||k.startsWith('sr|'))draft[k]=v;
@@ -1414,6 +1464,13 @@ document.addEventListener('click',async e=>{
   draft.nn=draft.nt=draft.nd='';draft.nf=0;view='sess';tab='prep';bind(ref.id);render()}
  if(a==='nsk'){draft.nsk=b.dataset.v;render()}
  if(a==='ssk'){gset({sk:b.dataset.v})}
+ if(a==='rgt'){draft.rg=!draft.rg;render()}
+ if(a==='dzo'){draft.dzo=!draft.dzo;render()}
+ if(a==='pfrun')preflight();
+ if(a==='pastex'){pasteK=pasteK===r+'_'+t?null:r+'_'+t;render();setTimeout(()=>document.getElementById('pst')?.focus(),50)}
+ if(a==='pfill'){const x=cfg[r][t],L=(document.getElementById('pst')?.value||'').split('\n').map(l=>l.trim()).filter(Boolean).slice(0,QMAX);
+  L.forEach((l,j)=>{const m=l.split(/\s+[-–]\s+/),q=x.q[j]||(x.q[j]={a:'',t:''});const a2=x.ea&&x.et?m[0]:x.ea?l:'',t2=x.ea&&x.et?m.slice(1).join(' - ')||'':x.et?l:'';if((q.a||'')!==a2||(q.t||'')!==t2){delete q.dz;delete q.cv}q.a=a2;q.t=t2});pasteK=null;render()}
+ if(a==='dzprev'){const q=cfg[r]?.[t]?.q?.[+b.dataset.j];if(!q?.dz)return;dzp.from='prep';const u=dzFresh(q.dz);if(u)dzPlay(q.dz,u);else dzGet(q.dz).then(v=>{dzPlay(q.dz,v);render()}).catch(e=>alert('Extrait indisponible : '+(e.message||e)));render()}
  if(a==='nfo'){draft.nf=!draft.nf;render()}
  if(a==='arcx'){arcOpen=!arcOpen;arcPg=0;render()}
  if(a==='arcp'){arcPg=Math.max(0,+b.dataset.v);render()}
@@ -1505,9 +1562,9 @@ document.addEventListener('click',async e=>{
  if(a==='gotb'){document.querySelector('.ov')?.remove();await gset({tb:true,tbp:{}});tab='tb';render();window.scrollTo(0,0)}
  if(a==='closeov')document.querySelector('.ov')?.remove();
  if(a==='resetround'&&confirm('Réinitialiser '+RNf(r)+' ? Réponses, x2 et points de cette manche seront effacés.'))resetRound(r);
- if(a==='clrteams'&&confirm('Effacer toutes les équipes et leurs réponses ?'))delTeams();
- if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},cs:{},pl:{},ct:{},cd:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
- if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){const id=sid;view='list';bind(null);try{await delSession(id)}catch(e){alert('Suppression impossible : '+(e.message||e))}render()}
+ if(a==='clrteams')delTeams();
+ if(a==='reset'){await delTeams();await sdoc().update({r:-1,th:{},rd:{},cs:{},pl:{},ct:{},cd:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
+ if(a==='delsess'){const id=sid;view='list';bind(null);try{await delSession(id)}catch(e){alert('Suppression impossible : '+(e.message||e))}render()}
  if(a==='sren'){renS=b.dataset.id;const S=sessions.find(x=>x.id===renS);draft['sr|'+renS]=S?.name||'';render();setTimeout(()=>{const el=document.querySelector(`[data-k="sr|${renS}"]`);if(el){el.focus();el.select()}},30)}
  if(a==='srx'){renS=null;render()}
  if(a==='srok'){const id=b.dataset.id,n=(draft['sr|'+id]||'').trim();if(!n)return;await fs.collection('bt_sessions').doc(id).update({name:n});delete draft['sr|'+id];renS=null;render()}
