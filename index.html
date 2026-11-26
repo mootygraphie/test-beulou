@@ -644,6 +644,12 @@ body.sk-school .dw.open{background:#fff}body.sk-sombre .dw.open{background:#1414
 .a-skp.sk-sombre{background:#0b0b0b;border:1px solid rgba(242,239,232,.25)}.a-skp.sk-sombre em{font:900 22px 'Big Shoulders Display';letter-spacing:.06em;text-transform:uppercase;color:#f2efe8;border-bottom:3px solid #9e1b24}
 .a-skp.sk-soul{background:repeating-radial-gradient(circle at 105% 100%,rgba(243,230,207,.07) 0 1px,transparent 1px 6px),#17120e}.a-skp.sk-soul em{font:800 19px Syne;color:#f3e6cf}
 .a-skp.sk-school{background:repeating-linear-gradient(180deg,transparent 0 7px,rgba(110,140,220,.3) 7px 8px),#fffdf5}.a-skp.sk-school em{font-family:'Gochi Hand';font-size:22px;color:#2549b8}
+/* compte à rebours de clôture */
+.cdb{position:sticky;top:64px;z-index:19;display:flex;flex-direction:column;align-items:center;gap:2px;margin:-8px -14px 12px;padding:10px 14px;background:var(--p);color:#fff;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.35);animation:cdp 1.2s ease-in-out infinite}
+.cdb b{font:800 17px var(--fb)}.cdb b span{font-size:22px;font-variant-numeric:tabular-nums}.cdb>span{font:600 13px var(--fb)}
+@keyframes cdp{50%{filter:brightness(1.15)}}
+.lv-cd{margin:0;padding:16px;border-radius:16px;background:rgba(255,10,140,.15);border:2px solid var(--p);text-align:center;font:600 14px Poppins}.lv-cd b{font-size:26px;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.cdb{animation:none}}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -933,7 +939,9 @@ function team(){
  if(!t)return GD+BRAND(true)+T+FR(`<h3>Équipe introuvable</h3><p class="mut">La partie a été réinitialisée.</p><button class="btn blk" data-a="leave">Rejoindre à nouveau</button>`);
  const v=vr(),tot=sum(v.map(r=>score(t,r)))+tbp(t),pos=v.length?place(v[v.length-1]).find(x=>x.id===me)?.pos:null;
  const pend=g.rd?.[FI()]==='validated'&&!fin(),showPos=pos&&(g.r<0||g.rd?.[g.r]==='validated')&&!pend;
- const bar=`<div class="tbar"><div class="tm"><small>Ton équipe</small><b>${esc(t.name)}</b>${g.snd&&SOK?`<small class="sndc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>Son activé</small>`:''}</div><div class="tsc"><b>${tot}</b><small>pts</small></div>${showPos?`<div class="tpos">#${pos}</div>`:''}</div>`;
+ const cdb=g.r>=0&&g.rd?.[g.r]==='open'&&g.cd?.[g.r]&&!(g.r===FI()&&!inFinal(me))?`<div class="cdb"><b>Fin de la manche dans <span class="cdn">${Math.ceil(cdLeft(g.r))}</span> s</b><span>Finis de répondre et pense à cocher ton « x2 »</span></div>`:'';
+ let bar=`<div class="tbar"><div class="tm"><small>Ton équipe</small><b>${esc(t.name)}</b>${g.snd&&SOK?`<small class="sndc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>Son activé</small>`:''}</div><div class="tsc"><b>${tot}</b><small>pts</small></div>${showPos?`<div class="tpos">#${pos}</div>`:''}</div>`;
+ bar+=cdb;
  const r=g.r,st=g.rd?.[r],I=r>=0?ri(r):{};
  const showRk=v.length&&(r<0||st==='validated')&&!pend,rk=showRk?rankInner():'',RKB=rk?FR(rk):'';
  const spect=r===FI()&&!inFinal(me),FN=finalists().map(id=>teams.find(x=>x.id===id)?.name).filter(Boolean);
@@ -1116,6 +1124,15 @@ function lvArm(r,t,j){const x=th(r)[t];LV=x?.ty==='img'&&x.im==='pr'?{key:`${r}_
 setInterval(()=>{if(!ADMIN||!LV||!LV.run||!g)return;const now=performance.now();LV.el=Math.min(30,LV.el+(now-LV.last)/1000);LV.last=now;
  const l=elLvl(LV.el),cur=g.pl?.[LV.key]??0;if((g.cs?.[LV.key]??0)!==LV.j){LV=null;return}if(l>cur)gset({pl:{[LV.key]:l}});if(LV.el>=30){LV.run=false;render()}
  const b=document.getElementById('lvb');if(b)b.style.width=(LV.el/30*100).toFixed(1)+'%';const tx=document.getElementById('lvt');if(tx)tx.textContent=rvTxt(LV.el)},200);
+/* clôture : 30 s de compte à rebours chez les joueurs, puis la manche se ferme toute seule (sans annulation) */
+const CDL=30;
+function closeRound(r){LV=null;const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'},cd:{[r]:FV.delete()}})}
+const cdLeft=r=>{const t=g?.cd?.[r];if(!t)return null;if(ADMIN)return Math.max(0,CDL-(Date.now()-t)/1000);if(!CDS[r])CDS[r]=performance.now();return Math.max(0,CDL-(performance.now()-CDS[r])/1000)};
+const CDS={}; // côté joueur : on compte à partir du moment où l'annonce arrive (pas d'écart d'horloge entre appareils)
+setInterval(()=>{if(!g||g.r<0)return;const r=g.r,v=cdLeft(r);if(v==null||g.rd?.[r]!=='open')return;
+ document.querySelectorAll('.cdn').forEach(e=>e.textContent=Math.ceil(v));
+ if(ADMIN&&v<=0&&!closing){closing=1;closeRound(r);setTimeout(()=>closing=0,3000)}},250);
+let closing=0;
 /* glisser pour confirmer : une action sans retour ne part qu'en allant jusqu'au bout */
 const slide=(a,label,sub,attrs)=>`<div class="sld" data-slide><i class="sl-f"></i><span class="sl-t"><b>${label}</b><small>${sub}</small></span><span class="sl-k" role="button" tabindex="0" aria-label="${label} : glisser vers la droite, ou Entrée deux fois">›</span><button hidden class="sl-go" data-a="${a}" ${attrs}></button></div>`;
 (()=>{let D=null,KA=0;const set=(d,x)=>{d.k.style.transform=`translateX(${x}px)`;d.f.style.width=(x+64)+'px';d.t.style.opacity=String(1-Math.min(1,x/d.max)*.8)};
@@ -1152,9 +1169,10 @@ function liveScr(r){const T=th(r),I=ri(r),on=g.r===r&&g.rd?.[r]==='open',ct=g.ct
   sub=`${RN} · Thème ${ct+1} · Question ${j+1}/${N}`;title=esc(tn(x,ct));
   const op=T.map((_,i)=>g.th?.[`${r}_${i}`]==='open'?i+1:0).filter(Boolean);
   body=lvQ(r,ct,x,key,j)+`<p class="lv-note"><b>Thème${op.length>1?'s':''} ouvert${op.length>1?'s':''} : ${op.join(', ')}.</b> Les équipes peuvent modifier leurs réponses jusqu'à la clôture.</p>`;
-  foot=(last?(nt?`<button class="btn blk y lv-go" data-a="lvth" data-r="${r}" data-t="${ct+1}">Ouvrir le thème ${ct+2} · ${esc(tn(nt,ct+1))}</button>`:slide('closeround',`Clôturer ${FIN?'la finale':'la manche'}`,'Glisser jusqu\'au bout · les réponses sont figées',`data-r="${r}"`)):'')
+  foot=(last?(nt?`<button class="btn blk y lv-go" data-a="lvth" data-r="${r}" data-t="${ct+1}">Ouvrir le thème ${ct+2} · ${esc(tn(nt,ct+1))}</button>`:slide('cdstart',`Clôturer ${FIN?'la finale':'la manche'}`,'Glisser jusqu\'au bout · 30 s de compte à rebours chez les joueurs',`data-r="${r}"`)):'')
    +`<div class="lv-nav"><button class="btn gh" data-a="lvq" data-r="${r}" data-t="${ct}" data-d="-1" ${j?'':'disabled'}>‹ Précédent</button><button class="btn ${last?'gh':''}" data-a="lvq" data-r="${r}" data-t="${ct}" data-d="1" ${last?'disabled':''}>Suivant ›</button></div>`}
- return`<div class="lv"><header class="lv-h"><button class="lv-x" data-a="lvexit" aria-label="Quitter le mode soirée (équipes, classement)">‹</button><div class="f"><small>${sub}</small><b>${title}</b></div><span class="lv-st ${on?'on':''}">${on?'En jeu':'En attente'}</span></header><main class="lv-m">${body}</main><footer class="lv-f">${foot}</footer></div>`}
+ if(on&&g.cd?.[r])foot=foot.replace(/<div class="sld"[\s\S]*?<\/button><\/div>/,'');
+ return`<div class="lv"><header class="lv-h"><button class="lv-x" data-a="lvexit" aria-label="Quitter le mode soirée (équipes, classement)">‹</button><div class="f"><small>${sub}</small><b>${title}</b></div><span class="lv-st ${on?'on':''}">${on?(g.cd?.[r]?'Clôture…':'En jeu'):'En attente'}</span></header><main class="lv-m">${body}</main><footer class="lv-f">${foot}</footer></div>`}
 /* tie break : écran plein, rien d'autre de cliquable que les points et la validation */
 function tbBlock(){
  const S=place(FI()),P=finalists().map(id=>S.find(x=>x.id===id)).filter(Boolean); // ordre fixe : les cartes ne bougent jamais
@@ -1345,7 +1363,7 @@ async function delTeams(){const bt=fs.batch();teams.forEach(x=>bt.delete(tcol().
 async function resetRound(r){
  const D=FV.delete(),keys=th(r).map((_,i)=>`${r}_${i}`),bt=fs.batch();
  teams.forEach(t=>{const o={['x2.'+r]:D,['guess.R'+r]:D,['gok.R'+r]:D};keys.forEach(k=>{o['qa.'+k]=D;o['lk.'+k]=D;o['answers.'+k]=D;o['done.'+k]=D;o['marks.'+k]=D;o['guess.'+k]=D;o['gok.'+k]=D});bt.update(tcol().doc(t.id),o)});
- const so={['rd.'+r]:D,['ct.'+r]:D};keys.forEach(k=>{so['th.'+k]=D;so['cs.'+k]=D;so['pl.'+k]=D});if(r===FI())Object.assign(so,{fz:D,tb:D,tbp:D,over:D});if(g.r===r)so.r=-1;bt.update(sdoc(),so);
+ const so={['rd.'+r]:D,['ct.'+r]:D,['cd.'+r]:D};keys.forEach(k=>{so['th.'+k]=D;so['cs.'+k]=D;so['pl.'+k]=D});if(r===FI())Object.assign(so,{fz:D,tb:D,tbp:D,over:D});if(g.r===r)so.r=-1;bt.update(sdoc(),so);
  await bt.commit();mk={};gk={};
 }
 const later=(key,fn)=>{clearTimeout(timers[key]);timers[key]=setTimeout(fn,500)};
@@ -1462,7 +1480,8 @@ document.addEventListener('click',async e=>{
   if(LV.el>=30){LV.el=0;LV.run=true;await gset({pl:{[k]:0}})}else LV.run=!LV.run;LV.last=performance.now();render()}
  if(a==='lvexit'){lvHide=1;render()}
  if(a==='lventer'){lvHide=0;render()}
- if(a==='closeround'){LV=null;const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'}})}
+ if(a==='cdstart'){if(!g.cd?.[r])await gset({cd:{[r]:Date.now()}})}
+ if(a==='closeround')closeRound(r);
  if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});const k=`${r}_${t}`;o[k]='open';gset({th:o,cs:{[k]:g.cs?.[k]??0},pl:{[k]:g.pl?.[k]??0}})}
  if(a==='tclose')gset({th:{[`${r}_${t}`]:'closed'}});
  if(a==='idle')gset({r:-1});
@@ -1487,7 +1506,7 @@ document.addEventListener('click',async e=>{
  if(a==='closeov')document.querySelector('.ov')?.remove();
  if(a==='resetround'&&confirm('Réinitialiser '+RNf(r)+' ? Réponses, x2 et points de cette manche seront effacés.'))resetRound(r);
  if(a==='clrteams'&&confirm('Effacer toutes les équipes et leurs réponses ?'))delTeams();
- if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},cs:{},pl:{},ct:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
+ if(a==='reset'&&confirm('Tout remettre à zéro (équipes, réponses, points, état des manches) ? Les questions sont conservées.')){await delTeams();await sdoc().update({r:-1,th:{},rd:{},cs:{},pl:{},ct:{},cd:{},fz:FV.delete(),tb:FV.delete(),tbp:FV.delete(),over:FV.delete()})}
  if(a==='delsess'&&confirm('Supprimer définitivement cette session ?')){const id=sid;view='list';bind(null);try{await delSession(id)}catch(e){alert('Suppression impossible : '+(e.message||e))}render()}
  if(a==='sren'){renS=b.dataset.id;const S=sessions.find(x=>x.id===renS);draft['sr|'+renS]=S?.name||'';render();setTimeout(()=>{const el=document.querySelector(`[data-k="sr|${renS}"]`);if(el){el.focus();el.select()}},30)}
  if(a==='srx'){renS=null;render()}
