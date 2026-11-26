@@ -721,6 +721,21 @@ body.tvm #app{max-width:none;padding:0}
 .a-ytr{display:flex;flex-direction:column;gap:8px;margin:-2px 0 12px 46px;padding:10px;border-radius:12px;background:rgba(255,10,140,.06);border:1px dashed rgba(255,10,140,.35)}
 .a-ytr .in.ko{border-color:#ff7a9c}.a-ytt{display:flex;gap:8px;align-items:flex-end}.a-ytt label{flex:1;margin:0;display:flex;flex-direction:column;gap:4px}.a-ytt .btn{margin:0;flex:none}
 .lv .a-tgl{width:100%;max-width:520px}
+/* connexion : bloc centré dans l'écran */
+.lgw{position:fixed;inset:0;z-index:5;overflow:auto;padding:24px 16px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 0}
+.lgw .brand{margin:0 0 6px}.lgw .brand img{height:170px}
+.lg{width:min(100%,400px);margin:0!important;padding:24px 22px!important;text-align:center}
+.lg-t{margin:0;font:900 24px Poppins;text-transform:none;color:#fff}.lg-s{margin:6px 0 18px;color:var(--mut);font-size:14px}
+.lg label{text-align:left}.lg .in{text-align:left}.lg .btn{margin-top:10px}
+/* sessions : lignes plus aérées */
+.a-srow .a-ico{width:38px;height:38px}
+/* voyant d'enregistrement dans l'en-tête */
+.a-top .a-svd{position:static;box-shadow:none;background:none;border:0;padding:0;font-size:11px;white-space:nowrap}
+/* annuler : discret */
+.a-undo{left:50%!important;right:auto!important;transform:translateX(-50%);width:auto!important;max-width:calc(100% - 32px)!important;gap:12px!important;padding:6px 6px 6px 14px!important;border-radius:999px!important;background:rgba(10,15,58,.96)!important;color:#fff!important;border:1px solid rgba(255,255,255,.2);font:600 13px Poppins!important;box-shadow:0 6px 20px rgba(0,0,0,.45)!important}
+.a-undo span{white-space:nowrap}.a-undo button{padding:6px 12px!important;border-radius:999px!important;font-size:12px!important}
+.a-undo i{height:2px!important}
+.lv .a-undo{bottom:calc(140px + env(safe-area-inset-bottom))!important}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -760,8 +775,8 @@ async function userRec(id){if(!id)return null;try{const d=await fs.collection('b
 let USER=null;
 async function login(){
  try{const s=JSON.parse(localStorage.getItem('bt_user')||'null');if(s){const r=await userRec(s.id);if(r&&r.h===s.h&&!r.mc){USER={id:s.id,name:r.name};return true}}}catch(x){}
- return new Promise(res=>{const show=(step,rec,id)=>{app.innerHTML=BRAND(true)+(step==='in'?`<form class="c lg" id="lgf"><h2>Connexion</h2><label for="lgu">Pseudo</label><input class="in" id="lgu" autocomplete="username" autocapitalize="none" required><label for="lgp">Mot de passe</label><input class="in" id="lgp" type="password" autocomplete="current-password" required><p class="er" id="lge"></p><button class="btn blk">Se connecter</button></form>`
-   :`<form class="c lg" id="lgf"><h2>Bonjour ${String(rec.name).replace(/[&<>"]/g,'')}</h2><p class="mut" style="margin:0 0 12px">Première connexion : choisis ton propre mot de passe (6 caractères minimum).</p><label for="lgn">Nouveau mot de passe</label><input class="in" id="lgn" type="password" autocomplete="new-password" minlength="6" required><label for="lgc">Confirme-le</label><input class="in" id="lgc" type="password" autocomplete="new-password" required><p class="er" id="lge"></p><button class="btn blk">Enregistrer et continuer</button></form>`);
+ return new Promise(res=>{const show=(step,rec,id)=>{app.innerHTML=`<div class="lgw">`+BRAND(true)+(step==='in'?`<form class="c lg" id="lgf"><h1 class="lg-t">Accès admin</h1><p class="lg-s">Connecte-toi pour préparer et animer tes soirées.</p><label for="lgu">Pseudo</label><input class="in" id="lgu" autocomplete="username" autocapitalize="none" required><label for="lgp">Mot de passe</label><input class="in" id="lgp" type="password" autocomplete="current-password" required><p class="er" id="lge"></p><button class="btn blk">Se connecter</button></form>`+'</div>'
+   :`<form class="c lg" id="lgf"><h1 class="lg-t">Bonjour ${String(rec.name).replace(/[&<>"]/g,'')}</h1><p class="lg-s">Première connexion : choisis ton propre mot de passe (6 caractères minimum).</p><label for="lgn">Nouveau mot de passe</label><input class="in" id="lgn" type="password" autocomplete="new-password" minlength="6" required><label for="lgc">Confirme-le</label><input class="in" id="lgc" type="password" autocomplete="new-password" required><p class="er" id="lge"></p><button class="btn blk">Enregistrer et continuer</button></form></div>`);
    const f=document.getElementById('lgf'),er=document.getElementById('lge');setTimeout(()=>f.querySelector('input').focus(),50);
    f.onsubmit=async e=>{e.preventDefault();er.textContent='';
     if(step==='in'){const uid=document.getElementById('lgu').value.trim().toLowerCase(),pw=document.getElementById('lgp').value,r=await userRec(uid);
@@ -1134,7 +1149,7 @@ const fdate=(d,o)=>new Date(d+'T12:00:00').toLocaleDateString('fr-FR',o);
 let arcOpen=false,arcPg=0;
 function sRow(s,ar){const[l,c]=stat(s),k='sr|'+s.id,dt=s.date?`<span class="a-dt"><b>${fdate(s.date,{day:'2-digit'})}</b><small>${fdate(s.date,{month:'short'}).replace('.','')}</small></span>`:`<span class="a-dt nd"><small>Sans date</small></span>`;
  if(renS===s.id)return`<div class="c a-srow ren"><input class="in" data-k="${k}" maxlength="60" aria-label="Nouveau nom de la session" value="${esc(draft[k]??s.name??'')}"><button class="a-ico ok" data-a="srok" data-id="${s.id}" aria-label="Valider le nouveau nom">${ICO.ok}</button><button class="a-ico" data-a="srx" aria-label="Annuler">${ICO.x}</button></div>`;
- return`<div class="c a-srow ${ar?'arc':''}"><button class="a-sopen" data-a="opens" data-id="${s.id}">${dt}<span class="f"><b>${esc(s.name||'Sans nom')}</b><small>${esc(s.title||'')}</small><span class="a-st"><i class="${ar?'':c}"></i>${ar?'Archivée':l}${s.date?' · '+fdate(s.date,{weekday:'long',year:'numeric'}):''}</span></span></button>${ar?'':`<button class="a-ico" data-a="sren" data-id="${s.id}" aria-label="Renommer « ${esc(s.name||'Sans nom')} »">${ICO.pen}</button>`}<button class="a-ico" data-a="sdup" data-id="${s.id}" aria-label="Dupliquer « ${esc(s.name||'Sans nom')} »">${ICO.dup}</button><button class="a-ico red" data-a="sdel" data-id="${s.id}" aria-label="Supprimer « ${esc(s.name||'Sans nom')} »">${ICO.x}</button></div>`}
+ return`<div class="c a-srow ${ar?'arc':''}"><button class="a-sopen" data-a="opens" data-id="${s.id}">${dt}<span class="f"><b>${esc(s.name||'Sans nom')}</b><small>${esc(s.title||'')}</small><span class="a-st"><i class="${ar?'':c}"></i>${ar?'Archivée':l}${s.date?' · '+fdate(s.date,{weekday:'long',year:'numeric'}):''}</span></span></button><button class="a-ico" data-a="sdup" data-id="${s.id}" aria-label="Dupliquer « ${esc(s.name||'Sans nom')} »">${ICO.dup}</button><button class="a-ico red" data-a="sdel" data-id="${s.id}" aria-label="Supprimer « ${esc(s.name||'Sans nom')} »">${ICO.x}</button></div>`}
 function alist(){
  let h=BRAND(true)+`<h1 class="a-h1">Sessions</h1><p class="a-sub">Crée, prépare et pilote tes soirées blind test.</p><div class="a-out"><span class="a-who">${esc(USER?.name||'')}</span><button class="btn gh sm" data-a="logout">Se déconnecter</button></div>`;
  if(!STANDALONE&&!window.__inst){const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -1160,7 +1175,7 @@ const liveR=()=>{if(g.r>=0)return g.r;const n=RIDX().find(r=>g.rd?.[r]!=='valida
 function asess(){try{localStorage.setItem('bt_last',JSON.stringify({sid,tab}))}catch(e){}
  const inG=/^\d$/.test(tab)||tab==='tb',live=g.r>=0&&g.rd?.[g.r]==='open';
  const head={prep:['Préparer','Questions'],teams:['Équipes',teams.length+' inscrite'+(teams.length>1?'s':'')],rank:['Résultats','Classement'],tb:['La soirée','Tie break']}[tab]||['La soirée',RNf(+tab)];
- let h=`<div class="a-head"><div class="a-strip"></div><div class="a-top"><button class="btn gh sm" data-a="back" aria-label="Retour aux sessions" style="margin:0">‹</button><div class="a-tt"><span class="a-kick">${esc(g.name||'')} · ${head[0]}</span><b>${head[1]}</b></div><img src="logo.png" alt=""></div>`;
+ let h=`<div class="a-head"><div class="a-strip"></div><div class="a-top"><button class="btn gh sm" data-a="back" aria-label="Retour aux sessions" style="margin:0">‹</button><div class="a-tt"><span class="a-kick">${esc(g.name||'')} · ${head[0]}</span><b>${head[1]}</b></div>${tab==='prep'&&!isArch(g)?svdHtml():'<img src="logo.png" alt="">'}</div>`;
  if(tab==='prep'&&cfg){const L=started(),N=cfgNR+1;h+=`<div class="a-seg" style="grid-template-columns:repeat(${N+(L?0:1)},minmax(0,1fr))">${[...Array(N).keys()].map(i=>{const T=cfg[i]||[],ok=T.length&&T.every(x=>{const[d,t]=thProg(x);return d===t});return`<button class="a-sg ${prepR===i?'on':''}" data-a="prr" data-v="${i}"${!L&&i<cfgNR&&cfgNR>1?` data-grip="r|${i}" data-row="r|${i}"`:''} aria-label="${i===cfgNR?'Finale':'Manche '+(i+1)}">${i<cfgNR?i+1:'F'}<i class="${ok?'ok':''}"></i></button>`}).join('')}${L?'':'<button class="a-sg a-sgp" data-a="addrd" aria-label="Ajouter une manche">+</button>'}</div>`}
  if(inG)h+=`<div class="a-seg" style="grid-template-columns:repeat(${RIDX().length+(g.tb?1:0)},minmax(0,1fr))">${RIDX().map(i=>{const n=RNf(i),st=g.rd?.[i];return`<button class="a-sg ${tab===String(i)?'on':''}" data-a="tab" data-v="${i}" aria-label="${n}">${i<FI()?i+1:'F'}<i class="${st==='validated'?'ok':st==='open'?'live':''}"></i></button>`}).join('')}${g.tb?`<button class="a-sg tbt ${tab==='tb'?'on':''}" data-a="tab" data-v="tb" aria-label="Tie break">T<i class="${fin()?'ok':'live'}"></i></button>`:''}</div>`;
  h+=`</div>`;
@@ -1203,7 +1218,7 @@ function prep(){
    h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const last=i===T.length-1&&r===cfgNR;return`<div class="a-thf"><button class="btn gh a-next" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button></div>`})()}</div></section>`});
   h+=`<button class="btn sm gh" data-a="addth" data-r="${r}" style="margin:0">+ Ajouter un thème</button></div></section>`;
  });
- return h+svdHtml()+undoBar()+`<section class="c a-dz ${draft.dzo?'open':''}"><button class="a-dzh" data-a="dzo" aria-expanded="${!!draft.dzo}"><span class="f"><b>Zone sensible</b><small>Effacer les équipes, tout réinitialiser, supprimer la session</small></span><span aria-hidden="true">${draft.dzo?'−':'+'}</span></button>${draft.dzo?slide('clrteams','Effacer les équipes','Glisser jusqu\'au bout · réponses et points effacés','')+slide('reset','Tout réinitialiser','Glisser jusqu\'au bout · les questions sont conservées','')+slide('delsess','Supprimer la session','Glisser jusqu\'au bout · définitif',''):''}</section>`;
+ return h+undoBar()+`<section class="c a-dz ${draft.dzo?'open':''}"><button class="a-dzh" data-a="dzo" aria-expanded="${!!draft.dzo}"><span class="f"><b>Zone sensible</b><small>Effacer les équipes, tout réinitialiser, supprimer la session</small></span><span aria-hidden="true">${draft.dzo?'−':'+'}</span></button>${draft.dzo?slide('clrteams','Effacer les équipes','Glisser jusqu\'au bout · réponses et points effacés','')+slide('reset','Tout réinitialiser','Glisser jusqu\'au bout · les questions sont conservées','')+slide('delsess','Supprimer la session','Glisser jusqu\'au bout · définitif',''):''}</section>`;
 }
 function rscreen(r){
  const T=th(r),I=ri(r),st=g.rd?.[r],on=g.r===r&&st==='open',over=st==='closed'||st==='validated';
@@ -1299,8 +1314,8 @@ setInterval(async()=>{const w=ytPlace();if(!w){if(YP?.getPlayerState?.()===1)YP.
  if(st!==1){YP.seekTo(tgt,true);YP.playVideo()}else if(Math.abs(cur-tgt)>1.5)YP.seekTo(tgt,true)},300);
 /* annuler : 5 s pour revenir en arrière après une action importante */
 let UNDO=null;
-function undoSnap(label){const c=x=>JSON.parse(JSON.stringify(x??{})),id=Date.now();UNDO={label,id,snap:{r:g.r,rd:c(g.rd),th:c(g.th),ct:c(g.ct),cs:c(g.cs),pl:c(g.pl)}};setTimeout(()=>{if(UNDO?.id===id){UNDO=null;render()}},5000)}
-const undoBar=()=>UNDO?`<div class="a-undo" role="status"><span>${esc(UNDO.label)}</span><button data-a="undo">Annuler</button><i style="animation-duration:${Math.max(0,5000-(Date.now()-UNDO.id))}ms"></i></div>`:'';
+function undoSnap(label){const c=x=>JSON.parse(JSON.stringify(x??{})),id=Date.now();UNDO={label,id,snap:{r:g.r,rd:c(g.rd),th:c(g.th),ct:c(g.ct),cs:c(g.cs),pl:c(g.pl)}};setTimeout(()=>{if(UNDO?.id===id){UNDO=null;render()}},2000)}
+const undoBar=()=>UNDO?`<div class="a-undo" role="status"><span>${esc(UNDO.label)}</span><button data-a="undo">Annuler</button><i style="animation-duration:${Math.max(0,2000-(Date.now()-UNDO.id))}ms"></i></div>`:'';
 /* réponses reçues pour la question en cours */
 function answered(t,x,key,j){if(x.ty==='img'&&x.im==='pr')return!!t.lk?.[key]?.[j];if(x.qm==='qcm')return!!(t.qa?.[key]?.[j]||[]).length;return!!String(t.answers?.[key]?.[j]||'').trim()}
 function rcvOf(r,x,key,j){const TM=r===FI()?teams.filter(t=>inFinal(t.id)):teams;return TM.map(t=>({t,ok:answered(t,x,key,j)}))}
