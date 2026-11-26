@@ -792,6 +792,7 @@ body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);backgroun
 .a-hi{flex:1;min-width:0;font:500 14px Poppins;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.a-hi b{color:#fff;font-weight:800}
 .a-ub{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;min-width:38px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font:700 13px Poppins;text-decoration:none;cursor:pointer}
 .a-ub:hover{border-color:var(--c);color:var(--c)}button.a-ub{padding:0}
+.a-svi{margin:16px 0 4px!important;background:var(--y)!important;color:var(--n)!important}.a-svi.ok{background:rgba(61,255,165,.15)!important;color:var(--g)!important;opacity:1!important}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -1258,7 +1259,7 @@ function teamsTab(){
 function prep(){
  const url=location.origin+location.pathname+'?s='+sid;
  let h=`<section class="c a-reg ${draft.rg?'open':''}"><button class="a-regh" data-a="rgt" aria-expanded="${!!draft.rg}"><span class="f"><b>${esc(g.title||g.name||'')}</b><small>${g.date?fdate(g.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'Pas encore de date'} · ${SKINS.find(k=>k[0]===(g.sk||'s80'))[1]}${g.snd?' · son sur les téléphones':''}</small></span><span class="a-regc">Réglages <i aria-hidden="true">${draft.rg?'−':'+'}</i></span></button>`;
- if(draft.rg)h+=`<div class="a-regb"><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="sdt" value="${esc(draft.sdt??g.date??'')}"></div></div><label style="margin-top:14px">Thème graphique des joueurs</label>${skPick(g.sk||'s80','ssk')}
+ if(draft.rg)h+=`<div class="a-regb"><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="sdt" value="${esc(draft.sdt??g.date??'')}"></div></div><label style="margin-top:14px">Thème graphique des joueurs</label>${skPick(g.sk||'s80','ssk')}${(()=>{const ch=(draft.sn!=null&&draft.sn!==(g.name||''))||(draft.stt!=null&&draft.stt!==(g.title||''))||(draft.sdt!=null&&draft.sdt!==(g.date||''));return`<button id="svinfo" class="btn blk a-svi ${ch?'':'ok'}" data-a="saveinfo" ${ch?'':'disabled'}>${ch?'Enregistrer':'Enregistré ✓'}</button>`})()}
  <button class="a-tgl ${g.snd?'on':''}" data-a="sndopt" role="switch" aria-checked="${!!g.snd}"><span class="kn" aria-hidden="true"></span><span class="f"><b>Son aussi sur les téléphones des équipes</b><small>Pour jouer à distance : quand tu lances un extrait Deezer, il est joué aussi chez chaque équipe. Elles devront activer le son pour rejoindre la partie.</small></span></button></div>`;
  h+=`</section>`;
  h+=`<div class="a-sh2"><section class="c a-shc"><h2>Joueurs</h2><p class="mut">Le lien pour rejoindre la partie.</p><div class="a-shb"><a class="btn sm gh" href="${esc(url)}" target="_blank" rel="noopener">Tester</a><button class="btn sm" data-a="share">${SHI} Partager</button><button class="btn sm y" data-a="qr">QR code</button></div></section>
@@ -1640,7 +1641,7 @@ document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;co
   if(f==='yd')q.yd=+v||30;return}
  if(k==='sq'){draft.sq=v;arcPg=0;render();return}
  if(['nm','nn','nt','sn','stt','nd','sdt'].includes(k))draft[k]=v;
- if(ADMIN&&g&&['sn','stt','sdt'].includes(k)){clearTimeout(infT);infT=setTimeout(()=>gset({name:(draft.sn??g.name??'').trim(),title:(draft.stt??g.title??'').trim(),date:draft.sdt??g.date??''}),700)}
+ if(ADMIN&&g&&['sn','stt','sdt'].includes(k)){const bt=document.getElementById('svinfo');if(bt){bt.disabled=false;bt.classList.remove('ok');bt.innerHTML='Enregistrer'}}
  else if(k.startsWith('a|')){draft[k]=v;const key=k.split('|')[1];later(k.slice(0,-2),()=>flush(key))}
  else if(k.startsWith('g|')){draft[k]=v;const key=k.slice(2);later(k,()=>tcol().doc(me).set({guess:{[key]:draft[k]}},{merge:true}))}
  else if(k.startsWith('tn|')||k.startsWith('sr|'))draft[k]=v;
@@ -1717,7 +1718,7 @@ document.addEventListener('click',async e=>{
   if(navigator.share){try{await navigator.share({title:t,text:tv?'Écran projection · '+t:'Rejoins la partie · '+t,url:u})}catch(x){}}
   else{try{await navigator.clipboard.writeText(u);b.innerHTML=SHI+' Lien copié';setTimeout(()=>{b.innerHTML=SHI+' Partager'},1800)}catch(x){prompt('Copie ce lien :',u)}}}
  if(a==='copy'){try{await navigator.clipboard.writeText(location.origin+location.pathname+'?s='+sid+(b.dataset.tv?'&tv':''));b.textContent='Copié'}catch(x){b.textContent='Copie impossible'}}
- if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim(),date:draft.sdt??g.date??''});draft.sn=draft.stt=draft.sdt=undefined;b.textContent='Enregistré'}
+ if(a==='saveinfo'){b.disabled=true;try{await gset({name:(draft.sn??g.name??'').trim(),title:(draft.stt??g.title??'').trim(),date:draft.sdt??g.date??''});draft.sn=draft.stt=draft.sdt=undefined;render()}catch(x){b.disabled=false;alert('Enregistrement impossible : '+(x.message||x))}}
  if(a==='rsx'){cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].sx=!cfgI[r].sx;render()}
  if(a==='tg'){const x=cfg[r][t],f=b.dataset.f;x[f]=!x[f];if(f!=='sx'&&f!=='eb'&&!x.ea&&!x.et)x[f]=true;render()}
  if(a==='gopen'){const x=cfg[r][t];gsh={r,i:t,step:'genre',d:{k:genOf(x),ea:x.ea!==false,et:x.et!==false,eb:!!x.eb,bl:x.bl||'',nc:x.nc==2?2:4,im:x.im==='ca'?'ca':'cl',sx:!!x.sx}};render()}
