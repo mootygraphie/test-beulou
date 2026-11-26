@@ -736,6 +736,18 @@ body.tvm #app{max-width:none;padding:0}
 .a-undo span{white-space:nowrap}.a-undo button{padding:6px 12px!important;border-radius:999px!important;font-size:12px!important}
 .a-undo i{height:2px!important}
 .lv .a-undo{bottom:calc(140px + env(safe-area-inset-bottom))!important}
+/* écran projection : accueil avec QR code, dans l'esprit de la pop-in */
+.tv-qrm{width:min(100%,150vh);max-width:82cqi;overflow:hidden;border-radius:2.4cqi;border:.25cqi solid var(--c);background:radial-gradient(ellipse at 30% 20%,var(--card2),var(--deep2) 80%);box-shadow:0 0 0 .4cqi var(--p),0 0 6cqi rgba(0,232,255,.25)}
+.tv-qrm .a-strip{height:.5cqi}
+.tv-qrm-b{display:grid;grid-template-columns:1fr auto;align-items:center;gap:5cqi;padding:4cqi 5cqi}
+.tv-qrm-l{display:flex;flex-direction:column;align-items:flex-start;gap:1.2cqi;min-width:0}
+.tv-qrm-l img{height:11cqi;max-width:100%;object-fit:contain;filter:drop-shadow(0 .5cqi 1.4cqi rgba(0,0,0,.6))}
+.tv-qrm-l h1{margin:0;font:400 5cqi/1.05 var(--ff);text-transform:none;color:var(--y);text-shadow:-.3cqi 0 var(--p),.3cqi 0 var(--c);overflow-wrap:anywhere}
+.tv-qrm-l p{margin:0;font:700 2.4cqi var(--fb);color:var(--fg)}
+.tv-url{display:inline-block;padding:.6cqi 1.4cqi;border-radius:999px;background:rgba(var(--ink),.1);font:600 1.5cqi var(--fb);color:var(--mut)}
+.tv-qrm-c{width:26cqi;padding:1.4cqi;border-radius:2cqi;background:#fff;box-shadow:0 0 0 .5cqi var(--y),.8cqi .8cqi 0 .5cqi var(--p)}
+.tv-qrm-c svg{display:block;width:100%;height:auto}
+.tv-qrl{display:grid;place-items:center;aspect-ratio:1;font:700 1.6cqi var(--fb);color:#0a0f3a}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -1028,8 +1040,8 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
  const big=(k,t,p)=>`<div class="tv-big"><small>${k}</small><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div>`;
  if(fin())m=`<div class="tv-pod"><h1 class="tv-h">Classement final</h1>${podium()}</div>`;
  else if(g.tb&&!fin())m=`<div class="tv-tb">${tbLive()}</div>`;
- else if(r<0){if(!QRT)loadQR().then(()=>{const q=qrcode(0,'M');q.addData(url);q.make();QRT=q.createSvgTag({cellSize:8,margin:2,scalable:true,alt:'QR code pour rejoindre'});render()}).catch(()=>{});
-  m=`<div class="tv-join">${big('Bienvenue',esc(g.title||'Beulou Test'),'Rejoignez la partie avec votre téléphone')}<div class="tv-qr">${QRT||''}<b>${esc(url.replace(/^https?:\/\//,''))}</b></div></div>`}
+ else if(r<0){top='';if(!QRT)loadQR().then(()=>{const q=qrcode(0,'M');q.addData(url);q.make();QRT=q.createSvgTag({cellSize:8,margin:2,scalable:true,alt:'QR code pour rejoindre'});render()}).catch(()=>{});
+  m=`<div class="tv-qrm"><div class="a-strip"></div><div class="tv-qrm-b"><div class="tv-qrm-l"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<span class=qrm-t>BEULOU TEST</span>'"><h1>${esc(g.title||g.name||'Beulou Test')}</h1><p>Scannez pour rejoindre la partie</p><span class="tv-url">${esc(url.replace(/^https?:\/\//,''))}</span></div><div class="tv-qrm-c">${QRT||'<span class="tv-qrl">QR code…</span>'}</div></div></div>`}
  else if(st==='open'){const ct=g.ct?.[r];
   if(g.cd?.[r])m=`<div class="tv-cd"><small>Fin de la manche dans</small><b class="cdn">${Math.ceil(cdLeft(r)??30)}</b><span>Finissez de répondre et pensez à cocher votre « x2 »</span></div>`;
   else if(ct==null)m=big(RN,esc(I.n||RNf(r)),'Le premier thème arrive');
