@@ -581,6 +581,27 @@ body.dragging,body.dragging *{-webkit-user-select:none;user-select:none;cursor:g
 .du-t.dim{filter:saturate(.45) brightness(.65)}
 .du-f{padding:14px;text-align:center;background:#04061c}.du-f b{display:block;font:800 16px var(--fb);color:var(--y)}.du-f b.g{color:var(--g)}.du-f span{display:block;margin-top:4px;font:500 13px var(--fb);color:var(--mut)}
 @media (prefers-reduced-motion:reduce){.sl-k,.du-t .n.bump{animation:none}}
+/* connexion */
+.lg{max-width:420px;margin:0 auto 16px}.lg .btn{margin-top:6px}
+.a-who{font:700 13px Poppins;color:var(--c);margin-right:8px}
+/* liste des sessions */
+.a-srch{margin:0 0 14px}.a-srch .in{height:48px;padding-left:16px}
+.a-dt{flex:none;width:52px;padding:6px 0;border-radius:12px;background:var(--y);color:var(--n);text-align:center;box-shadow:3px 3px 0 var(--p);margin-right:4px}
+.a-dt b{display:block;font:900 22px/1 Poppins}.a-dt small{display:block;font:800 11px Poppins!important;text-transform:uppercase;color:inherit!important}
+.a-dt.nd{background:rgba(255,255,255,.08);color:var(--mut);box-shadow:none;padding:8px 0}.a-dt.nd small{font-size:9px!important;line-height:1.2}
+.a-arc{margin:18px 0 0;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.18);padding:4px 10px;opacity:.75}
+.a-arc.open{opacity:1;padding-bottom:10px}
+.a-arch{display:flex;align-items:center;gap:10px;width:100%;padding:10px 4px;border:0;background:none;color:var(--mut);text-align:left;cursor:pointer}
+.a-arch b{display:block;font:700 14px Poppins;color:rgba(255,255,255,.7)}.a-arch small{font:500 12px Poppins}.a-arch>span:last-child{font:700 20px Poppins}
+.a-srow.arc{filter:grayscale(1);opacity:.75}.a-srow.arc .a-dt{background:rgba(255,255,255,.18);color:#fff;box-shadow:none}
+.a-pg{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;font:700 13px Poppins;color:var(--mut)}.a-pg .btn{margin:0}
+/* session archivée : lecture seule */
+.a-lockm{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.3);font-size:13px;color:var(--mut)}.a-lockm b{color:#fff}
+.a-lockfs{border:0;margin:0;padding:0;min-width:0}.a-lockfs .in,.a-lockfs button{opacity:.6}
+.a-nfb{margin:0 0 14px!important}
+.a-sopen .f{min-width:0}.a-sopen .f b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.a-sopen .f small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a-st{display:flex;align-items:center;gap:6px;margin-top:3px;font:600 11px Poppins;color:var(--mut)}.a-st i{flex:none;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3)}
+.a-st i.pk{background:var(--p)}.a-st i.ok{background:var(--g)}.a-st i.cy{background:var(--c)}.a-st i.yl{background:var(--y)}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -589,7 +610,7 @@ body.dragging,body.dragging *{-webkit-user-select:none;user-select:none;cursor:g
 const CFG={apiKey:"AIzaSyB5Fozxa9grXSkPTwCZwBaWtWsD2dNfj6c",authDomain:"beulou-test.firebaseapp.com",projectId:"beulou-test",appId:"1:789329554038:web:7ed8ccdb6eae677f59cd57"};
 const SALT="beulou-test-v1:",HASH="1d265c88f523d9e63f2a2df03ccf8b9a90a470c920d8602ac5ffa815fb82302e"; // empreinte du code admin
 const BT=30,BR=60,QMAX=20,BO=20,MB=40; // QMAX questions max par thème ; BO : réponses bonus ; MB : marques bonus
-const ADMIN=location.hash==='#admin';
+const ADMIN=location.hash==='#admin'||!new URLSearchParams(location.search).get('s'); // sans lien de session : écran de connexion puis admin
 if(ADMIN)document.body.classList.add('adm');
 /* webapp : proposée uniquement côté admin (manifeste et service worker chargés seulement ici) */
 let BIP=null;const STANDALONE=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
@@ -609,9 +630,30 @@ function askPin(){try{if(localStorage.getItem('bt_admin')===HASH)return Promise.
  o.querySelector('#pb').onclick=go;pin.onkeydown=e=>{if(e.key==='Enter')go()};setTimeout(()=>pin.focus(),50)})}
 if(!CFG.apiKey){app.innerHTML='<div class="c"><h2>Config Firebase manquante</h2></div>'}
 else (async()=>{
-if(ADMIN){app.innerHTML=BRAND(true);if(!await askPin())return;app.innerHTML=BRAND(true)}
 firebase.initializeApp(CFG);
 const fs=firebase.firestore(),FV=firebase.firestore.FieldValue;
+/* comptes admin : pseudo + mot de passe. Seules les empreintes sont stockées (jamais le mot de passe).
+   Les comptes de départ sont ici ; dès qu'un mot de passe est changé, la nouvelle empreinte vit dans bt_users. */
+const USERS={boris:{name:'Boris',h:'5f82090e65b3dc6b854624529482c6fa22754139a0715947ceb5e9aace3463e7'},pauline:{name:'Pauline',h:'3aa725b9a35f25984b7cf70223284999441d481d4e6c6b1078098326d0ce277e',mc:1}};
+const hpw=async(id,pw)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(SALT+id+':'+pw)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+async function userRec(id){if(!id)return null;try{const d=await fs.collection('bt_users').doc(id).get();if(d.exists)return d.data()}catch(e){}const u=USERS[id];return u?{name:u.name,h:u.h,mc:u.mc||0}:null}
+let USER=null;
+async function login(){
+ try{const s=JSON.parse(localStorage.getItem('bt_user')||'null');if(s){const r=await userRec(s.id);if(r&&r.h===s.h&&!r.mc){USER={id:s.id,name:r.name};return true}}}catch(x){}
+ return new Promise(res=>{const show=(step,rec,id)=>{app.innerHTML=BRAND(true)+(step==='in'?`<form class="c lg" id="lgf"><h2>Connexion</h2><label for="lgu">Pseudo</label><input class="in" id="lgu" autocomplete="username" autocapitalize="none" required><label for="lgp">Mot de passe</label><input class="in" id="lgp" type="password" autocomplete="current-password" required><p class="er" id="lge"></p><button class="btn blk">Se connecter</button></form>`
+   :`<form class="c lg" id="lgf"><h2>Bonjour ${String(rec.name).replace(/[&<>"]/g,'')}</h2><p class="mut" style="margin:0 0 12px">Première connexion : choisis ton propre mot de passe (6 caractères minimum).</p><label for="lgn">Nouveau mot de passe</label><input class="in" id="lgn" type="password" autocomplete="new-password" minlength="6" required><label for="lgc">Confirme-le</label><input class="in" id="lgc" type="password" autocomplete="new-password" required><p class="er" id="lge"></p><button class="btn blk">Enregistrer et continuer</button></form>`);
+   const f=document.getElementById('lgf'),er=document.getElementById('lge');setTimeout(()=>f.querySelector('input').focus(),50);
+   f.onsubmit=async e=>{e.preventDefault();er.textContent='';
+    if(step==='in'){const uid=document.getElementById('lgu').value.trim().toLowerCase(),pw=document.getElementById('lgp').value,r=await userRec(uid);
+     if(!r||r.h!==await hpw(uid,pw)){er.textContent='Pseudo ou mot de passe incorrect';document.getElementById('lgp').value='';return}
+     if(r.mc)return show('chg',r,uid);done(uid,r.name,r.h)}
+    else{const a=document.getElementById('lgn').value,b=document.getElementById('lgc').value;
+     if(a.length<6){er.textContent='6 caractères minimum';return}if(a!==b){er.textContent='Les deux mots de passe ne sont pas identiques';return}
+     const h=await hpw(id,a);if(h===rec.h){er.textContent='Choisis un mot de passe différent de celui de départ';return}
+     try{await fs.collection('bt_users').doc(id).set({name:rec.name,h,mc:0})}catch(x){er.textContent='Enregistrement impossible : '+(x.message||x);return}done(id,rec.name,h)}}};
+  const done=(id,name,h)=>{try{localStorage.setItem('bt_user',JSON.stringify({id,h}))}catch(x){}USER={id,name};res(true)};
+  show('in')})}
+if(ADMIN){if(!await login())return;app.innerHTML=BRAND(true)}
 const sdoc=()=>fs.collection('bt_sessions').doc(sid),tcol=()=>sdoc().collection('teams');
 const Q=new URLSearchParams(location.search);
 let sessions=[],sready=false,sid=null,view='list',g=null,gl=false,teams=[],tready=false,unG,unT,cfg=null,cfgI=null,tab='prep',draft={},mk={},gk={},exp={},me=null;
@@ -889,21 +931,34 @@ function team(){
 }
 
 /* ============ ADMIN ============ */
-const ICO={pen:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
+const ICO={dup:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>',pen:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
  x:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
  ok:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>'};
 const stat=s=>{const rd=s.rd||{};if(s.over||rd[s.nr??3]==='validated')return['Terminée','cy'];if(Object.keys(rd).length)return['En cours','pk'];
  return filled(s.rounds)?['Prête','ok']:['Brouillon','']};
+/* sessions : une session dont la date est passée part dans les archives et devient non modifiable */
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const isArch=s=>!!s&&!!s.date&&s.date<today();
+const nrm=v=>String(v||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const fdate=(d,o)=>new Date(d+'T12:00:00').toLocaleDateString('fr-FR',o);
+let arcOpen=false,arcPg=0;
+function sRow(s,ar){const[l,c]=stat(s),k='sr|'+s.id,dt=s.date?`<span class="a-dt"><b>${fdate(s.date,{day:'2-digit'})}</b><small>${fdate(s.date,{month:'short'}).replace('.','')}</small></span>`:`<span class="a-dt nd"><small>Sans date</small></span>`;
+ if(renS===s.id)return`<div class="c a-srow ren"><input class="in" data-k="${k}" maxlength="60" aria-label="Nouveau nom de la session" value="${esc(draft[k]??s.name??'')}"><button class="a-ico ok" data-a="srok" data-id="${s.id}" aria-label="Valider le nouveau nom">${ICO.ok}</button><button class="a-ico" data-a="srx" aria-label="Annuler">${ICO.x}</button></div>`;
+ return`<div class="c a-srow ${ar?'arc':''}"><button class="a-sopen" data-a="opens" data-id="${s.id}">${dt}<span class="f"><b>${esc(s.name||'Sans nom')}</b><small>${esc(s.title||'')}</small><span class="a-st"><i class="${ar?'':c}"></i>${ar?'Archivée':l}${s.date?' · '+fdate(s.date,{weekday:'long',year:'numeric'}):''}</span></span></button>${ar?'':`<button class="a-ico" data-a="sren" data-id="${s.id}" aria-label="Renommer « ${esc(s.name||'Sans nom')} »">${ICO.pen}</button>`}<button class="a-ico" data-a="sdup" data-id="${s.id}" aria-label="Dupliquer « ${esc(s.name||'Sans nom')} »">${ICO.dup}</button><button class="a-ico red" data-a="sdel" data-id="${s.id}" aria-label="Supprimer « ${esc(s.name||'Sans nom')} »">${ICO.x}</button></div>`}
 function alist(){
- let h=BRAND(true)+`<h1 class="a-h1">Sessions</h1><p class="a-sub">Crée, prépare et pilote tes soirées blind test.</p><div class="a-out"><button class="btn gh sm" data-a="logout">Se déconnecter</button></div>`;
+ let h=BRAND(true)+`<h1 class="a-h1">Sessions</h1><p class="a-sub">Crée, prépare et pilote tes soirées blind test.</p><div class="a-out"><span class="a-who">${esc(USER?.name||'')}</span><button class="btn gh sm" data-a="logout">Se déconnecter</button></div>`;
  if(!STANDALONE&&!window.__inst){const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   h+=`<div class="c a-inst"><img src="icon-192.png" alt=""><div class="f"><b>Installer l'appli Beulou Test</b><small>${BIP?'Elle s\'ouvre en plein écran, directement sur l\'admin.':ios?'Dans Safari : touche <span class="shr" aria-label="Partager"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v7h14v-7"/></svg></span> Partager, puis « Sur l\'écran d\'accueil ».':'Dans le menu du navigateur : « Installer l\'application » ou « Ajouter à l\'écran d\'accueil ».'}</small></div>${BIP?'<button class="btn y" data-a="install" style="margin:0">Installer</button>':''}</div>`}
- h+=`<div class="c"><h2>Nouvelle session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="nn" placeholder="Ex : Soirée équipe Marketing" value="${esc(draft.nn||'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="nt" placeholder="Ex : Beulou Test #4" value="${esc(draft.nt||'')}"></div></div><div style="margin-top:14px"><button class="btn" data-a="newsess">Créer la session</button></div></div>`;
+ h+=!draft.nf?`<button class="btn blk a-nfb" data-a="nfo">+ Nouvelle session</button>`:`<div class="c"><h2>Nouvelle session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="nn" placeholder="Ex : Soirée équipe Marketing" value="${esc(draft.nn||'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="nt" placeholder="Ex : Beulou Test #4" value="${esc(draft.nt||'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="nd" value="${esc(draft.nd||'')}"></div></div><div style="margin-top:14px"><button class="btn gh" data-a="nfo">Annuler</button><button class="btn" data-a="newsess">Créer la session</button></div></div>`;
+ const q=nrm(draft.sq||''),hit=x=>!q||nrm((x.name||'')+' '+(x.title||'')).includes(q),on=sessions.filter(x=>!isArch(x)&&hit(x)),ar=sessions.filter(x=>isArch(x)&&hit(x));
+ h+=`<div class="a-srch"><input class="in" type="search" data-k="sq" placeholder="Rechercher une session (en ligne et archives)" aria-label="Rechercher une session" value="${esc(draft.sq||'')}"></div>`;
  if(!sessions.length)h+=`<div class="c mut">Aucune session pour le moment.</div>`;
- sessions.forEach(s=>{const[l,c]=stat(s);
-  const dt=new Date(s.created||0).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}),k='sr|'+s.id;
-  h+=renS===s.id?`<div class="c a-srow ren"><input class="in" data-k="${k}" maxlength="60" aria-label="Nouveau nom de la session" value="${esc(draft[k]??s.name??'')}"><button class="a-ico ok" data-a="srok" data-id="${s.id}" aria-label="Valider le nouveau nom">${ICO.ok}</button><button class="a-ico" data-a="srx" aria-label="Annuler">${ICO.x}</button></div>`
-  :`<div class="c a-srow"><button class="a-sopen" data-a="opens" data-id="${s.id}"><span class="f"><b>${esc(s.name||'Sans nom')}</b><small>${esc(s.title||'')} · ${dt}</small></span><span class="chip ${c}">${l}</span></button><button class="a-ico" data-a="sren" data-id="${s.id}" aria-label="Renommer « ${esc(s.name||'Sans nom')} »">${ICO.pen}</button><button class="a-ico red" data-a="sdel" data-id="${s.id}" aria-label="Supprimer « ${esc(s.name||'Sans nom')} »">${ICO.x}</button></div>`});
+ else if(q&&!on.length&&!ar.length)h+=`<div class="c mut">Aucune session ne correspond à « ${esc(draft.sq)} ».</div>`;
+ h+=on.map(s=>sRow(s,false)).join('');
+ if(ar.length){const P=Math.ceil(ar.length/5),pg=Math.min(arcPg,P-1),open=arcOpen||!!q;
+  h+=`<section class="a-arc ${open?'open':''}"><button class="a-arch" data-a="arcx" aria-expanded="${open}"><span class="f"><b>Archives · ${ar.length}</b><small>Sessions dont la date est passée · lecture seule</small></span><span aria-hidden="true">${open?'−':'+'}</span></button>`;
+  if(open)h+=ar.slice(pg*5,pg*5+5).map(s=>sRow(s,true)).join('')+(P>1?`<div class="a-pg"><button class="btn gh sm" data-a="arcp" data-v="${pg-1}" ${pg?'':'disabled'}>‹ Précédentes</button><span>${pg+1} / ${P}</span><button class="btn gh sm" data-a="arcp" data-v="${pg+1}" ${pg<P-1?'':'disabled'}>Suivantes ›</button></div>`:'');
+  h+=`</section>`}
  return h;
 }
 const IC={
@@ -923,6 +978,8 @@ function asess(){
  const N=`<nav class="a-nav" aria-label="Menu admin"><div>${nav.map(([k,n])=>{const on=k==='game'?inG:tab===k;
   return`<button class="a-nb ${on?'on':''}" data-a="tab" data-v="${k==='game'?liveR():k}"><span class="p">${IC[k]}</span>${n}${k==='game'&&live?'<span class="lv"></span>':''}${k==='teams'&&teams.length?`<span class="bd">${teams.length}</span>`:''}</button>`}).join('')}</div></nav>`;
  if(/^\d$/.test(tab)&&!lvHide&&liveable(+tab))return liveScr(+tab)+gSheet()+dzSheet();
+ const body0=()=>tab==='tb'?(g.tb?tbBlock():rscreen(3)):tab==='prep'?prep():tab==='teams'?teamsTab():tab==='rank'?(rankHtml()||'<div class="c mut">Aucune manche validée.</div>'):rscreen(+tab);
+ if(isArch(g))return h+`<p class="a-lockm"><b>Session archivée</b> · la date est passée : tout est en lecture seule. Duplique-la depuis la liste pour la réutiliser.</p><fieldset disabled class="a-lockfs">${body0()}</fieldset>`+N;
  const body=tab==='tb'?(g.tb?tbBlock():rscreen(3)):tab==='prep'?prep():tab==='teams'?teamsTab():tab==='rank'?((fin()&&teams.length?`<div class="c"><h2>Podium final</h2>${podium()}</div>`:'')+(rankHtml()||'<div class="c mut">Aucune manche validée pour le moment.</div>')):rscreen(+tab);
  return h+body+N+gSheet()+dzSheet();
 }
@@ -935,7 +992,7 @@ function teamsTab(){
 function prep(){
  const url=location.origin+location.pathname+'?s='+sid;
  let h=`<div class="c"><h2>Lien des équipes</h2><div class="lk">${esc(url)}</div><button class="btn sm" data-a="copy">Copier le lien</button><button class="btn sm y" data-a="qr">QR code</button><a class="btn sm gh" href="${esc(url)}" target="_blank" style="text-decoration:none">Tester</a><p class="mut" style="margin:10px 0 0">Lien propre à cette session : les équipes ne voient que celle-ci.</p></div>`;
- h+=`<div class="c"><h2>Session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div></div><div style="margin-top:14px"><button class="btn sm" data-a="saveinfo">Enregistrer</button></div>
+ h+=`<div class="c"><h2>Session</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="sdt" value="${esc(draft.sdt??g.date??'')}"></div></div><div style="margin-top:14px"><button class="btn sm" data-a="saveinfo">Enregistrer</button></div>
  <button class="a-tgl ${g.snd?'on':''}" data-a="sndopt" role="switch" aria-checked="${!!g.snd}"><span class="kn" aria-hidden="true"></span><span class="f"><b>Son aussi sur les téléphones des équipes</b><small>Pour jouer à distance : quand tu lances un extrait Deezer, il est joué aussi chez chaque équipe. Elles devront activer le son pour rejoindre la partie.</small></span></button></div>`;
  const lock=started();prepR=Math.min(prepR,cfgNR);
  if(openTh===null){openTh='';for(let r=0;r<=cfgNR&&!openTh;r++)(cfg[r]||[]).forEach((x,i)=>{if(!openTh){const[d,t]=thProg(x);if(d<t){openTh=r+'_'+i;prepR=r}}});if(!openTh)openTh=prepR+'_0'}
@@ -1247,7 +1304,8 @@ async function resetRound(r){
 }
 const later=(key,fn)=>{clearTimeout(timers[key]);timers[key]=setTimeout(fn,500)};
 document.addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;const v=e.target.value;
- if(['nm','nn','nt','sn','stt'].includes(k))draft[k]=v;
+ if(k==='sq'){draft.sq=v;arcPg=0;render();return}
+ if(['nm','nn','nt','sn','stt','nd','sdt'].includes(k))draft[k]=v;
  else if(k.startsWith('a|')){draft[k]=v;const key=k.split('|')[1];later(k.slice(0,-2),()=>flush(key))}
  else if(k.startsWith('g|')){draft[k]=v;const key=k.slice(2);later(k,()=>tcol().doc(me).set({guess:{[key]:draft[k]}},{merge:true}))}
  else if(k.startsWith('tn|')||k.startsWith('sr|'))draft[k]=v;
@@ -1262,7 +1320,7 @@ document.addEventListener('click',async e=>{
  if(window.__noClick){window.__noClick=0;return} // fin d'un glisser d'onglet : pas de clic
  const b=e.target.closest('button[data-a]');if(!b)return;
  const a=b.dataset.a,r=+b.dataset.r,t=+b.dataset.t;
- if(a==='logout'&&confirm('Se déconnecter de l\'admin sur cet appareil ?')){try{localStorage.removeItem('bt_admin')}catch(x){}location.reload()}
+ if(a==='logout'&&confirm('Se déconnecter de l\'admin sur cet appareil ?')){try{localStorage.removeItem('bt_user');localStorage.removeItem('bt_admin')}catch(x){}location.reload()}
  if(a==='zoom'&&b.dataset.id){zoomId=b.dataset.id;render()}
  if(a==='zoomx'){zoomId=null;render()}
  if(a==='isel'){isel[b.dataset.key]=+b.dataset.j;render()}
@@ -1288,15 +1346,24 @@ document.addEventListener('click',async e=>{
  if(a==='done'){const key=`${g.r}_${t}`;await flush(key);exp[key]=false;tcol().doc(me).set({done:{[key]:true}},{merge:true})}
  if(a==='newsess'){const n=(draft.nn||'').trim()||'Session '+new Date().toLocaleDateString('fr-FR');
   const rounds={};[0,1,2,3].forEach(i=>rounds[i]=[blank(),blank(),blank()]);
-  const ref=fs.collection('bt_sessions').doc();await ref.set({name:n,title:(draft.nt||'').trim()||n,created:Date.now(),nr:3,rounds,rinfo:{},r:-1,th:{},rd:{}});
-  draft.nn=draft.nt='';view='sess';tab='prep';bind(ref.id);render()}
+  const ref=fs.collection('bt_sessions').doc();await ref.set({name:n,title:(draft.nt||'').trim()||n,date:draft.nd||'',created:Date.now(),by:USER?.id||'',nr:3,rounds,rinfo:{},r:-1,th:{},rd:{}});
+  draft.nn=draft.nt=draft.nd='';draft.nf=0;view='sess';tab='prep';bind(ref.id);render()}
+ if(a==='nfo'){draft.nf=!draft.nf;render()}
+ if(a==='arcx'){arcOpen=!arcOpen;arcPg=0;render()}
+ if(a==='arcp'){arcPg=Math.max(0,+b.dataset.v);render()}
+ if(a==='sdup'){const src=sessions.find(x=>x.id===b.dataset.id);if(!src)return;b.disabled=true;b.classList.add('busy');
+  try{const ref=fs.collection('bt_sessions').doc(),o=JSON.parse(JSON.stringify(src));delete o.id;
+   ['r','th','rd','cs','pl','ct','fz','tb','tbp','over','np'].forEach(k=>delete o[k]);
+   await ref.set({...o,name:(src.name||'Session')+' (copie)',date:'',created:Date.now(),by:USER?.id||'',r:-1,th:{},rd:{}});
+   const im=await fs.collection('bt_sessions').doc(src.id).collection('imgs').get();for(const d of im.docs)await ref.collection('imgs').doc(d.id).set(d.data());
+   view='sess';tab='prep';draft={};bind(ref.id);render()}catch(e){alert('Duplication impossible : '+(e.message||e))}b.disabled=false;b.classList.remove('busy')}
  if(a==='opens'){view='sess';tab='prep';draft={};bind(b.dataset.id);render()}
  if(a==='back'){view='list';bind(null);render()}
  if(a==='install'&&BIP){BIP.prompt();const c=await BIP.userChoice.catch(()=>({}));if(c.outcome==='accepted')window.__inst=1;BIP=null;render()}
  if(a==='sndopt'){await gset({snd:!g.snd});if(!g.snd)gset({np:FV.delete()})}
  if(a==='qr'){qrModal()}
  if(a==='copy'){try{await navigator.clipboard.writeText(location.origin+location.pathname+'?s='+sid);b.textContent='Copié'}catch(x){b.textContent='Copie impossible'}}
- if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim()});draft.sn=draft.stt=undefined;b.textContent='Enregistré'}
+ if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim(),date:draft.sdt??g.date??''});draft.sn=draft.stt=draft.sdt=undefined;b.textContent='Enregistré'}
  if(a==='rsx'){cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].sx=!cfgI[r].sx;render()}
  if(a==='tg'){const x=cfg[r][t],f=b.dataset.f;x[f]=!x[f];if(f!=='sx'&&f!=='eb'&&!x.ea&&!x.et)x[f]=true;render()}
  if(a==='gopen'){const x=cfg[r][t];gsh={r,i:t,step:'genre',d:{k:genOf(x),ea:x.ea!==false,et:x.et!==false,eb:!!x.eb,bl:x.bl||'',nc:x.nc==2?2:4,im:x.im==='ca'?'ca':'cl',sx:!!x.sx}};render()}
