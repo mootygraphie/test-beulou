@@ -42,6 +42,9 @@ button{font-family:inherit;color:inherit}
 .ch ol li{position:relative;padding-left:38px;counter-increment:s}
 .ch ol li::before{content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:50%;background:var(--p);font:800 13px/26px Poppins;text-align:center}
 .ch b{color:#fff}.ch em{font-style:normal;color:var(--y);font-weight:700}
+.gl{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.gl li{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:15px}
+.gl li b:first-child{display:block;color:var(--y);font-size:16px;margin-bottom:2px}
 .tip{margin:14px 0 0;padding:12px 14px;border-radius:14px;background:rgba(0,232,255,.08);border:1px solid rgba(0,232,255,.3);font-size:14px}
 .tip::before{content:"Astuce · ";font-weight:800;color:var(--c)}
 .shot{margin:18px auto 0;display:block;width:100%;max-width:300px;border-radius:22px;border:6px solid #05071f;box-shadow:0 0 0 1.5px #2a3290,0 14px 30px rgba(0,0,0,.45)}
@@ -91,6 +94,15 @@ const CH=[
  'Touche <em>Réglages</em> pour modifier le nom, le titre, la date, le thème graphique ou le son sur les téléphones. Tout s\'enregistre seul.',
  'Case <b>Joueurs</b> : <em>Tester</em> (voir la page joueur), <em>Partager</em> (envoyer le lien par message, WhatsApp…), <em>QR code</em> (à montrer à la salle).',
  'Case <b>Projection</b> : <em>Partager</em> ou <em>Ouvrir</em> le lien de l\'écran projection.'],img:['preparer']},
+{t:'Les types de questions',l:'Chaque thème a un genre. Tu le choisis en touchant la ligne du genre, sous le nom du thème.',ul:1,s:[
+ '<b>Blind test</b> Un extrait musical se joue. Les équipes écrivent l\'<b>artiste</b>, le <b>titre</b>, ou les deux. 1 pt par case trouvée.',
+ '<b>Blind test QCM</b> Un extrait se joue, les équipes choisissent parmi <b>2 ou 4 réponses</b>. Les questions arrivent une par une sur leur téléphone. 1 pt par bonne réponse, corrigé tout seul.',
+ '<b>Images</b> Toutes les images s\'affichent d\'un coup. Chaque équipe avance à son rythme et écrit ses réponses. 2 pts par bonne réponse.',
+ '<b>Carrousel</b> Une image à la fois : c\'est toi qui passes à la suivante. 2 pts par bonne réponse.',
+ '<b>Progressif</b> L\'image se dévoile toute seule en 30 s. Plus l\'équipe <b>verrouille</b> tôt, plus elle gagne : 10, 5, 3 puis 1 pt.',
+ '<b>Images QCM</b> Une image et des réponses au choix (2 ou 4). Tout d\'un coup ou une par une. 1 pt par bonne réponse.',
+ '<b>Clip vidéo</b> Un extrait de clip YouTube, sans titre ni commandes. Tu règles le début et la durée. Les équipes écrivent l\'artiste et le titre. Tu choisis si le son passe sur leurs téléphones.'],
+ tip:'Options utiles : un <b>bonus</b> (+1 pt, par exemple l\'année ou le film), un <b>nom de thème secret</b> à deviner (+30 pts), et le <b>x2</b> que chaque équipe place sur un thème de la manche pour doubler ses points.',img:['genres']},
 {t:'Préparer les questions',l:'Une soirée = des manches, une manche = des thèmes, un thème = des questions.',s:[
  'Choisis la manche avec les onglets <b>1, 2, 3, F</b> (F = finale). <b>+</b> ajoute une manche.',
  'Ouvre un thème et choisis son <b>genre</b> : blind test, QCM, images, carrousel, image progressive, images QCM ou clip vidéo.',
@@ -135,8 +147,8 @@ const $=id=>document.getElementById(id),out=$('out');let mode='all',cur=0;
 const txt=c=>(c.t+' '+c.l+' '+c.s.join(' ')+' '+(c.tip||'')).replace(/<[^>]+>/g,'');
 const nrm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 function hl(html,q){if(!q)return html;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');return html.replace(/(<[^>]+>)|([^<]+)/g,(m,tag,t)=>tag||t.replace(re,'<mark>$1</mark>'))}
-function card(c,i,q){const imgs=c.img.map(n=>`<img class="shot ${c.wide?'wide':''}" src="aide/${n}.jpg" alt="Capture : ${c.t}" loading="lazy">`).join('');
- return`<section class="ch" id="c${i}"><h2><i>${i+1}</i>${hl(c.t,q)}</h2><p class="lead">${hl(c.l,q)}</p><ol>${c.s.map(x=>`<li>${hl(x,q)}</li>`).join('')}</ol>${c.tip?`<p class="tip">${hl(c.tip,q)}</p>`:''}${imgs?(c.img.length>1?`<div class="shots">${imgs}</div>`:imgs):''}</section>`}
+function card(c,i,q){const L=c.ul?'ul':'ol';const imgs=c.img.map(n=>`<img class="shot ${c.wide?'wide':''}" src="aide/${n}.jpg" alt="Capture : ${c.t}" loading="lazy">`).join('');
+ return`<section class="ch" id="c${i}"><h2><i>${i+1}</i>${hl(c.t,q)}</h2><p class="lead">${hl(c.l,q)}</p><${L} class="${c.ul?'gl':''}">${c.s.map(x=>`<li>${hl(x,q)}</li>`).join('')}</${L}>${c.tip?`<p class="tip">${hl(c.tip,q)}</p>`:''}${imgs?(c.img.length>1?`<div class="shots">${imgs}</div>`:imgs):''}</section>`}
 function render(){const q=$('q').value.trim();$('qx').hidden=!q;
  $('mAll').classList.toggle('on',mode==='all');$('mStep').classList.toggle('on',mode==='step');
  if(q){const n=nrm(q),hit=CH.map((c,i)=>[c,i]).filter(([c])=>nrm(txt(c)).includes(n));
