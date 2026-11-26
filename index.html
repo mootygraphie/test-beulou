@@ -642,7 +642,7 @@ body.sk-school .dw.open{background:#fff}body.sk-sombre .dw.open{background:#1414
 .a-skp.sk-s80{background:#0a0f3a}.a-skp.sk-s80 em{font-family:'Protest Riot';color:#ffe600;text-shadow:-2px 0 #ff0a8c,2px 0 #00e8ff}
 .a-skp.sk-s90{background:#1d0f3a}.a-skp.sk-s90 em{font-family:'Bungee';color:#ffd23f;text-shadow:2px 2px 0 #ff3ea5,4px 4px 0 #1fd1c1}
 .a-skp.sk-sombre{background:#0b0b0b;border:1px solid rgba(242,239,232,.25)}.a-skp.sk-sombre em{font:900 22px 'Big Shoulders Display';letter-spacing:.06em;text-transform:uppercase;color:#f2efe8;border-bottom:3px solid #9e1b24}
-.a-skp.sk-soul{background:repeating-radial-gradient(circle at 105% 100%,rgba(243,230,207,.07) 0 1px,transparent 1px 6px),#17120e}.a-skp.sk-soul em{font:800 19px Syne;color:#f3e6cf}
+.a-skp.sk-soul{background:repeating-radial-gradient(circle at 105% 100%,rgba(243,230,207,.07) 0 1px,transparent 1px 6px),#17120e}.a-skp.sk-soul em{font:800 15px Syne;color:#f3e6cf;white-space:nowrap}
 .a-skp.sk-school{background:repeating-linear-gradient(180deg,transparent 0 7px,rgba(110,140,220,.3) 7px 8px),#fffdf5}.a-skp.sk-school em{font-family:'Gochi Hand';font-size:22px;color:#2549b8}
 /* compte à rebours de clôture */
 .cdb{position:sticky;top:64px;z-index:19;display:flex;flex-direction:column;align-items:center;gap:2px;margin:-8px -14px 12px;padding:10px 14px;background:var(--p);color:#fff;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.35);animation:cdp 1.2s ease-in-out infinite}
@@ -748,6 +748,16 @@ body.tvm #app{max-width:none;padding:0}
 .tv-qrm-c{width:26cqi;padding:1.4cqi;border-radius:2cqi;background:#fff;box-shadow:0 0 0 .5cqi var(--y),.8cqi .8cqi 0 .5cqi var(--p)}
 .tv-qrm-c svg{display:block;width:100%;height:auto}
 .tv-qrl{display:grid;place-items:center;aspect-ratio:1;font:700 1.6cqi var(--fb);color:#0a0f3a}
+/* préparer : volet Réglages et partage */
+.a-reg{padding:0!important;overflow:hidden}
+.a-regh{display:flex;align-items:center;gap:12px;width:100%;padding:16px 18px;border:0;background:none;color:#fff;text-align:left;cursor:pointer}
+.a-regh .f{flex:1;min-width:0}.a-regh b{display:block;font:800 16px Poppins}.a-regh small{color:var(--mut);font-size:12px}
+.a-regc{flex:none;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);font:700 13px Poppins}.a-regc i{font-style:normal;font:800 16px/1 Poppins;color:var(--c)}
+.a-reg.open .a-regh{border-bottom:1px solid var(--line)}.a-regb{padding:16px 18px 18px}
+.a-sh2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 16px;align-items:stretch}
+.a-shc{display:flex;flex-direction:column;margin:0!important}.a-shc .mut{margin:-6px 0 12px;font-size:12px}
+.a-shb{margin-top:auto;display:flex;flex-direction:column;gap:8px}.a-shb .btn{margin:0;width:100%;justify-content:center;text-decoration:none}
+@media (min-width:640px){.a-shb{flex-direction:row;flex-wrap:wrap}.a-shb .btn{width:auto;flex:1}}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -1121,6 +1131,7 @@ const ICO={dup:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stro
  ok:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>'};
 const stat=s=>{const rd=s.rd||{};if(s.over||rd[s.nr??3]==='validated')return['Terminée','cy'];if(Object.keys(rd).length)return['En cours','pk'];
  return filled(s.rounds)?['Prête','ok']:['Brouillon','']};
+const SHI='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5M5 13v7h14v-7"/></svg>';
 /* thèmes graphiques : changent seulement l'écran des joueurs */
 const SKINS=[['s80','TV Glitch','Néon, mire et parasites VHS'],['s90','Années 90','Memphis, couleurs pop'],['sombre','Sombre','Affiche de concert, noir et rouge sang'],['soul','Soul','Pochette vinyle, brun chaud et or'],['school','Scolaire','Cahier à carreaux, stylo rouge']];
 const skPick=(cur,a)=>`<div class="a-skg">${SKINS.map(([id,n,d])=>`<button class="a-skc ${cur===id?'on':''}" data-a="${a}" data-v="${id}" aria-pressed="${cur===id}"><span class="a-skp sk-${id}"><em>Manche 1</em></span><b>${n}</b><small>${d}</small></button>`).join('')}</div>`;
@@ -1208,11 +1219,12 @@ function teamsTab(){
 }
 function prep(){
  const url=location.origin+location.pathname+'?s='+sid;
- let h=`<div class="c"><h2>Lien des équipes</h2><div class="lk">${esc(url)}</div><button class="btn sm" data-a="copy">Copier le lien</button><button class="btn sm y" data-a="qr">QR code</button><a class="btn sm gh" href="${esc(url)}" target="_blank" style="text-decoration:none">Tester</a><p class="mut" style="margin:10px 0 0">Lien propre à cette session : les équipes ne voient que celle-ci.</p>
- <h2 style="margin-top:20px">Écran projection</h2><div class="lk">${esc(url)}&amp;tv</div><button class="btn sm" data-a="copy" data-tv="1">Copier le lien</button><a class="btn sm y" href="${esc(url)}&tv" target="_blank" style="text-decoration:none">Ouvrir</a><p class="mut" style="margin:10px 0 0">À ouvrir sur l'ordinateur branché au vidéoprojecteur ou sur une TV connectée, puis à passer en plein écran. Il suit la soirée tout seul et n'affiche jamais les réponses avant les corrections.</p></div>`;
- h+=`<div class="c a-sum"><div class="f"><b>${esc(g.title||g.name||'')}</b><small>${g.date?fdate(g.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'Pas encore de date'} · ${SKINS.find(k=>k[0]===(g.sk||'s80'))[1]}${g.snd?' · son sur les téléphones':''}</small></div><button class="btn sm gh" data-a="rgt" aria-expanded="${!!draft.rg}">${draft.rg?'Fermer':'Réglages'}</button></div>`;
- if(draft.rg)h+=`<div class="c"><h2>Réglages</h2><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="sdt" value="${esc(draft.sdt??g.date??'')}"></div></div><label style="margin-top:14px">Thème graphique des joueurs</label>${skPick(g.sk||'s80','ssk')}
+ let h=`<section class="c a-reg ${draft.rg?'open':''}"><button class="a-regh" data-a="rgt" aria-expanded="${!!draft.rg}"><span class="f"><b>${esc(g.title||g.name||'')}</b><small>${g.date?fdate(g.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'Pas encore de date'} · ${SKINS.find(k=>k[0]===(g.sk||'s80'))[1]}${g.snd?' · son sur les téléphones':''}</small></span><span class="a-regc">Réglages <i aria-hidden="true">${draft.rg?'−':'+'}</i></span></button>`;
+ if(draft.rg)h+=`<div class="a-regb"><div class="a-g2"><div><label>Nom interne (pour toi)</label><input class="in" data-k="sn" value="${esc(draft.sn??g.name??'')}"></div><div><label>Titre affiché aux équipes</label><input class="in" data-k="stt" value="${esc(draft.stt??g.title??'')}"></div><div><label>Date du blind test</label><input class="in" type="date" data-k="sdt" value="${esc(draft.sdt??g.date??'')}"></div></div><label style="margin-top:14px">Thème graphique des joueurs</label>${skPick(g.sk||'s80','ssk')}
  <button class="a-tgl ${g.snd?'on':''}" data-a="sndopt" role="switch" aria-checked="${!!g.snd}"><span class="kn" aria-hidden="true"></span><span class="f"><b>Son aussi sur les téléphones des équipes</b><small>Pour jouer à distance : quand tu lances un extrait Deezer, il est joué aussi chez chaque équipe. Elles devront activer le son pour rejoindre la partie.</small></span></button></div>`;
+ h+=`</section>`;
+ h+=`<div class="a-sh2"><section class="c a-shc"><h2>Joueurs</h2><p class="mut">Le lien pour rejoindre la partie.</p><div class="a-shb"><button class="btn sm" data-a="share">${SHI} Partager</button><button class="btn sm y" data-a="qr">QR code</button><a class="btn sm gh" href="${esc(url)}" target="_blank" rel="noopener">Tester</a></div></section>
+ <section class="c a-shc"><h2>Projection</h2><p class="mut">Pour le vidéoprojecteur ou la TV.</p><div class="a-shb"><button class="btn sm" data-a="share" data-tv="1">${SHI} Partager</button><a class="btn sm y" href="${esc(url)}&tv" target="_blank" rel="noopener">Ouvrir</a></div></section></div>`;
  h+=overview()+pfCard();
  const lock=started();prepR=Math.min(prepR,cfgNR);
  if(openTh===null){openTh='';for(let r=0;r<=cfgNR&&!openTh;r++)(cfg[r]||[]).forEach((x,i)=>{if(!openTh){const[d,t]=thProg(x);if(d<t){openTh=r+'_'+i;prepR=r}}});if(!openTh)openTh=prepR+'_0'}
@@ -1663,6 +1675,9 @@ document.addEventListener('click',async e=>{
  if(a==='install'&&BIP){BIP.prompt();const c=await BIP.userChoice.catch(()=>({}));if(c.outcome==='accepted')window.__inst=1;BIP=null;render()}
  if(a==='sndopt'){await gset({snd:!g.snd});if(!g.snd)gset({np:FV.delete()})}
  if(a==='qr'){qrModal()}
+ if(a==='share'){const tv=!!b.dataset.tv,u=location.origin+location.pathname+'?s='+sid+(tv?'&tv':''),t=g.title||g.name||'Beulou Test';
+  if(navigator.share){try{await navigator.share({title:t,text:tv?'Écran projection · '+t:'Rejoins la partie · '+t,url:u})}catch(x){}}
+  else{try{await navigator.clipboard.writeText(u);b.innerHTML=SHI+' Lien copié';setTimeout(()=>{b.innerHTML=SHI+' Partager'},1800)}catch(x){prompt('Copie ce lien :',u)}}}
  if(a==='copy'){try{await navigator.clipboard.writeText(location.origin+location.pathname+'?s='+sid+(b.dataset.tv?'&tv':''));b.textContent='Copié'}catch(x){b.textContent='Copie impossible'}}
  if(a==='saveinfo'){await gset({name:(draft.sn??g.name).trim(),title:(draft.stt??g.title).trim(),date:draft.sdt??g.date??''});draft.sn=draft.stt=draft.sdt=undefined;b.textContent='Enregistré'}
  if(a==='rsx'){cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].sx=!cfgI[r].sx;render()}
