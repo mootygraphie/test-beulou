@@ -967,7 +967,7 @@ function bind(id){
  unT=tcol().onSnapshot(x=>{teams=x.docs.map(d=>({id:d.id,...d.data()}));tready=true;render()},ERR);
 }
 window.__rr=()=>render();
-if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,...d.data()}));
+if(ADMIN)fs.collection('bt_sessions').orderBy('created','desc').onSnapshot(x=>{sessions=x.docs.map(d=>({id:d.id,...d.data()})).filter(mine);
  if(!sready){try{const l=JSON.parse(localStorage.getItem('bt_last')||'null');if(l&&sessions.some(s=>s.id===l.sid)){view='sess';tab=l.tab||'prep';bind(l.sid)}}catch(e){}}
  sready=true;render()},ERR);
 else bind(Q.get('s'));
@@ -1172,6 +1172,8 @@ const stat=s=>{const rd=s.rd||{};if(s.over||rd[s.nr??3]==='validated')return['Te
 const SHI='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5M5 13v7h14v-7"/></svg>';
 const HLPI='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg>',
  OUTI='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/></svg>';
+/* chacun ne voit que ses sessions ; les anciennes (créées avant les comptes) appartiennent à Boris */
+const mine=x=>(x.by||'boris')===USER?.id;
 /* thèmes graphiques : changent seulement l'écran des joueurs */
 const SKINS=[['s80','TV Glitch','Néon, mire et parasites VHS'],['s90','Années 90','Memphis, couleurs pop'],['sombre','Sombre','Affiche de concert, noir et rouge sang'],['soul','Soul','Pochette vinyle, brun chaud et or'],['school','Scolaire','Cahier à carreaux, stylo rouge']];
 const skPick=(cur,a)=>`<div class="a-skg">${SKINS.map(([id,n,d])=>`<button class="a-skc ${cur===id?'on':''}" data-a="${a}" data-v="${id}" aria-pressed="${cur===id}"><span class="a-skp sk-${id}"><em>Manche 1</em></span><b>${n}</b><small>${d}</small></button>`).join('')}</div>`;
