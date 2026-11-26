@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Test vidéo YouTube</title>
+<style>
+:root{--n:#0a0f3a;--p:#ff0a8c;--c:#00e8ff;--y:#ffe600;--g:#3dffa5}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--n);color:#fff;font:500 15px/1.4 system-ui,-apple-system,sans-serif;padding:16px max(16px,env(safe-area-inset-left)) 40px}
+h1{margin:0 0 4px;font-size:20px;color:var(--y)}p{margin:0 0 14px;color:rgba(255,255,255,.7);font-size:13px}
+/* cadre : la vidéo est agrandie puis rognée pour faire disparaître le titre (haut) et le logo (bas) */
+.frame{position:relative;width:100%;max-width:720px;aspect-ratio:16/9;margin:0 auto 14px;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 0 0 3px var(--c)}
+.frame #yt{position:absolute;left:50%;top:50%;width:100%;height:100%;transform:translate(-50%,-50%)}
+.frame.crop #yt{width:136%;height:136%}
+.frame .shield{position:absolute;inset:0;z-index:2}
+.frame.noshield .shield{display:none}
+.row{display:flex;flex-wrap:wrap;gap:8px;max-width:720px;margin:0 auto 10px}
+button{min-height:46px;padding:0 16px;border:0;border-radius:12px;background:var(--p);color:#fff;font:700 14px system-ui,sans-serif;cursor:pointer}
+button.gh{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.25)}
+button.on{background:var(--g);color:#04210f}
+label{display:flex;align-items:center;gap:8px;font-size:13px}
+input{height:40px;border-radius:10px;border:1.5px solid rgba(255,255,255,.25);background:rgba(0,0,0,.3);color:#fff;padding:0 10px;font-size:14px}
+#log{max-width:720px;margin:10px auto 0;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.3);font:12px/1.5 ui-monospace,monospace;white-space:pre-wrap;min-height:60px}
+</style></head><body>
+<h1>Test vidéo YouTube</h1>
+<p>Page de test indépendante de l'app : elle vérifie que le clip s'intègre, ce qu'on arrive à masquer, et le comportement du son sur ton téléphone.</p>
+<div class="row"><label>Vidéo <input id="vid" value="vOePuhfS7r8" size="14"></label><label>Début (s) <input id="st" value="30" size="4" inputmode="numeric"></label><button class="gh" id="load">Charger</button></div>
+<div class="frame crop" id="fr"><div id="yt"></div><div class="shield" aria-hidden="true"></div></div>
+<div class="row"><button id="play">Lecture 30 s</button><button class="gh" id="pause">Pause</button><button class="gh" id="mute">Son coupé : non</button></div>
+<div class="row"><button class="gh on" id="crop">Recadrage : oui</button><button class="gh on" id="shield">Clics bloqués : oui</button></div>
+<div id="log"></div>
+<script>
+const $=id=>document.getElementById(id),log=m=>{$('log').textContent=new Date().toLocaleTimeString('fr-FR')+'  '+m+'\n'+$('log').textContent};
+const ERR={2:'identifiant de vidéo invalide',5:'erreur du lecteur HTML5',100:'vidéo introuvable ou privée',101:'le propriétaire interdit la lecture hors YouTube',150:'le propriétaire interdit la lecture hors YouTube',153:'configuration du lecteur refusée (page ouverte hors d\'un vrai site ?)'};
+let P=null,stopT=null;
+window.onYouTubeIframeAPIReady=()=>build();
+function build(){if(P){P.destroy();P=null}$('fr').querySelector('#yt')||$('fr').insertAdjacentHTML('afterbegin','<div id="yt"></div>');
+ P=new YT.Player('yt',{videoId:$('vid').value.trim(),playerVars:{controls:0,disablekb:1,fs:0,rel:0,iv_load_policy:3,playsinline:1,modestbranding:1,cc_load_policy:0,start:+$('st').value||0},
+  events:{onReady:()=>log('Prête : la vidéo accepte l\'intégration.'),onError:e=>log('Erreur '+e.data+' : '+(ERR[e.data]||'inconnue')),
+   onStateChange:e=>{const s={'-1':'non démarrée',0:'terminée',1:'lecture',2:'pause',3:'chargement',5:'en file'}[e.data];log('État : '+s+(e.data===1&&P.isMuted()?' (son coupé par le navigateur)':''))}}})}
+$('load').onclick=()=>build();
+$('play').onclick=()=>{if(!P)return;P.seekTo(+$('st').value||0,true);P.playVideo();clearTimeout(stopT);stopT=setTimeout(()=>{P.pauseVideo();log('Fin des 30 s')},30000)};
+$('pause').onclick=()=>{P?.pauseVideo();clearTimeout(stopT)};
+$('mute').onclick=e=>{if(!P)return;P.isMuted()?P.unMute():P.mute();setTimeout(()=>e.target.textContent='Son coupé : '+(P.isMuted()?'oui':'non'),150)};
+$('crop').onclick=e=>{const on=$('fr').classList.toggle('crop');e.target.classList.toggle('on',on);e.target.textContent='Recadrage : '+(on?'oui':'non')};
+$('shield').onclick=e=>{const off=$('fr').classList.toggle('noshield');e.target.classList.toggle('on',!off);e.target.textContent='Clics bloqués : '+(off?'non':'oui')};
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body></html>
