@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Beulou Test">
 <title>Beulou Test</title>
-<link href="https://fonts.googleapis.com/css2?family=Protest+Riot&family=Bungee&family=Big+Shoulders+Display:wght@700;900&family=Syne:wght@700;800&family=Gochi+Hand&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Protest+Riot&family=Bungee&family=Big+Shoulders+Display:wght@700;900&family=Syne:wght@700;800&family=Gochi+Hand&family=Caveat:wght@600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--p:#ff0a8c;--c:#00e8ff;--y:#ffe600;--n:#0a0f3a;--n2:#10164a;--n3:#1a2270;--g:#3dffa5;--cream:#fff3dc;--mut:rgba(255,255,255,.68);--line:rgba(255,255,255,.13);
 --fb:'Poppins',sans-serif;--fh:'Poppins',sans-serif;--ff:'Protest Riot',cursive;--fw:900;
@@ -758,6 +758,35 @@ body.tvm #app{max-width:none;padding:0}
 .a-shc{display:flex;flex-direction:column;margin:0!important}.a-shc .mut{margin:-6px 0 12px;font-size:12px}
 .a-shb{margin-top:auto;display:flex;flex-direction:column;gap:8px}.a-shb .btn{margin:0;width:100%;justify-content:center;text-decoration:none}
 @media (min-width:640px){.a-shb{flex-direction:row;flex-wrap:wrap}.a-shb .btn{width:auto;flex:1}}
+/* thème Scolaire : la correction ressemble à une copie corrigée au stylo rouge */
+.rv-note{display:none}
+body.sk-school .rvs{position:relative;background:#fff;color:var(--fg);border:0;border-radius:4px;box-shadow:0 2px 0 rgba(28,37,82,.12);padding:16px 18px 22px;flex-wrap:wrap}
+body.sk-school .rvs>span{font:400 22px/1.2 'Gochi Hand',cursive;color:var(--c)}
+body.sk-school .rvs b{font:700 30px/1 Caveat,cursive;color:#d62828;border:3px solid #d62828;border-radius:50%;padding:10px 14px;transform:rotate(-8deg);box-shadow:none;text-shadow:none}
+body.sk-school .rv-note{display:block;width:100%;margin-top:8px;font:700 26px/1 Caveat,cursive;color:#d62828;transform:rotate(-2deg);text-decoration:underline wavy rgba(214,40,40,.5) 2px;text-underline-offset:6px}
+body.sk-school .rvc{background:#fff;border:0;border-left:2px solid rgba(214,40,40,.55);border-radius:4px;box-shadow:0 2px 0 rgba(28,37,82,.1);background-image:repeating-linear-gradient(180deg,transparent 0 31px,rgba(110,140,220,.25) 31px 32px)}
+body.sk-school .rvc header{background:none;border-bottom:2px solid rgba(37,73,184,.25)}
+body.sk-school .rvc header>span{background:none;border:2px solid var(--c);color:var(--c);box-shadow:none;font-family:'Gochi Hand',cursive}
+body.sk-school .rvc header b{font:400 22px/1.1 'Gochi Hand',cursive;color:var(--c);text-transform:none;text-decoration:underline;text-decoration-color:rgba(37,73,184,.4)}
+body.sk-school .rvc header em{font:700 30px/1 Caveat,cursive;color:#d62828;text-shadow:none;border:2.5px solid #d62828;border-radius:50%;padding:4px 10px;transform:rotate(-6deg)}
+body.sk-school .rvq{border-bottom:0}
+body.sk-school .rvq .f{display:flex;flex-direction:column}
+body.sk-school .rv-m{order:1;font:400 20px/1.2 'Gochi Hand',cursive;color:#1f3a93}body.sk-school .rv-m i{display:none}
+body.sk-school .rv-m.ko span{text-decoration:line-through;text-decoration-color:#d62828;text-decoration-thickness:2px}
+body.sk-school .rv-m.nr span{color:rgba(31,58,147,.45)}
+body.sk-school .rv-g{order:2;font:700 22px/1.1 Caveat,cursive;color:#d62828;transform:rotate(-1.5deg);transform-origin:left}
+body.sk-school .rv-g::before{content:"→ ";font-weight:700}
+body.sk-school .rvq:has(.rv-m.ok) .rv-g{display:none}
+body.sk-school .rv-m.ok span::after{content:" ✓";font:700 26px/1 Caveat,cursive;color:#d62828}
+body.sk-school .rv-m.ko span::after,body.sk-school .rv-m.nr span::after{content:" ✗";font:700 24px/1 Caveat,cursive;color:#d62828;text-decoration:none;display:inline-block}
+body.sk-school .rvm{order:3;font-family:Caveat,cursive}body.sk-school .rvm small{font:700 15px Caveat,cursive;color:#d62828}
+body.sk-school .rvm i{background:none!important;color:#d62828!important;font:700 18px Caveat,cursive;width:auto;height:auto}
+body.sk-school .rvp{font:700 26px/1 Caveat,cursive!important;color:#d62828!important;text-shadow:none!important;transform:rotate(-8deg)}
+body.sk-school .rvn{background:none;border:1.5px solid rgba(37,73,184,.5);color:var(--c);font-family:'Gochi Hand',cursive}
+body.sk-school .rvsec{background:#fff;color:var(--fg);border-color:#d62828;font-family:'Gochi Hand',cursive;font-size:17px}
+body.sk-school .rvtabs button{color:var(--fg);border-color:rgba(28,37,82,.3)}body.sk-school .rvtabs button.on{background:var(--c);color:#fff;border-color:var(--c)}
+body.sk-school .rvm:not(:has(small)){display:none}
+body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);background:#fff}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -972,12 +1001,14 @@ function tbLive(){
  return`<div class="du"><div class="du-h"><small>En direct</small><h2>Tie break</h2></div>${P.map((x,i)=>{const t=teams.find(z=>z.id===x.id),n=tbp(t),up=tbSeen[x.id]!=null&&n>tbSeen[x.id];tbSeen[x.id]=n;
   return`<div class="du-t ${'abc'[i]||'c'} ${P.length>2?'s3':''} ${!tied&&x.sc===top?'lead':''} ${!tied&&x.sc!==top?'dim':''}"><div><b>${esc(x.name)}</b><small>${x.sc} pts au total</small>${x.id===me?'<span class="tag">Vous</span>':''}</div><span class="n ${up?'bump':''}">${n}</span></div>`}).join('')}
  <div class="du-f">${tied?'<b>Égalité : prochain point décisif</b>':`<b class="g">${esc(lead?.name||'')} prend l'avantage</b>`}<span>${fz?'Vous jouez ! Levez la main dès que vous avez la réponse.':'Vous êtes spectateurs : faites du bruit pour votre favori.'}</span></div></div>`}
+/* thème Scolaire : l'appréciation du prof en marge */
+const profNote=(sc,mx)=>{const p=mx?sc/mx:0;return p>=.85?'Excellent travail !':p>=.65?'Très bien, continue':p>=.45?'Bien, mais peut mieux faire':p>=.25?'Des efforts à fournir':'Il faut réviser !'};
 /* « Voir les bonnes réponses » : manches validées, juste / faux et points par question */
 const RVB=()=>vr().length?`<button class="btn blk rvb" data-a="rvw" data-v="">Voir les bonnes réponses</button>`:'';
 function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v=>`<i class="${v?'ok':'ko'}">${v?'✓':'✕'}</i>`;
  const spect=r===FI()&&!inFinal(me);
  let h=`<div class="rvh"><button class="btn sm gh" data-a="rvwx">‹ Retour</button><b>Bonnes réponses</b></div><div class="rvtabs">${V.map(k=>`<button class="${k===r?'on':''}" data-a="rvw" data-v="${k}">${RNf(k)}</button>`).join('')}</div>
- <div class="rvs"><span>${RNf(r)}${I.n?' · '+esc(I.n):''}</span><b>${spect?'Pas jouée':'+'+(score(t,r)+(r===FI()?tbp(t):0))+' pts'}</b></div>`;
+ <div class="rvs"><span>${RNf(r)}${I.n?' · '+esc(I.n):''}</span><b>${spect?'Pas jouée':'+'+(score(t,r)+(r===FI()?tbp(t):0))+' pts'}</b>${spect?'':`<em class="rv-note">${profNote(score(t,r),th(r).reduce((a,x)=>a+ptsMax(x),0))}</em>`}</div>`;
  if(I.sx)h+=`<div class="rvsec ${t.gok?.['R'+r]?'ok':''}">Thème de la manche : <b>${esc(I.n||'')}</b> ${t.gok?.['R'+r]?'· trouvé +'+BR:'· raté'}</div>`;
  th(r).forEach((x,i)=>{const key=`${r}_${i}`,m=t.marks?.[key]||[],x2=t.x2?.[r]==i,A=t.answers?.[key]||[];
   const tot=ms(m,x)*(x2?2:1)+(x.sx&&t.gok?.[key]?BT:0);
