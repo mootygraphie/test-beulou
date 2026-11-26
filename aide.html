@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0f3a">
+<link rel="icon" type="image/png" href="favicon.png">
+<title>Aide · Beulou Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Protest+Riot&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Page d'aide de Beulou Test. À mettre à jour à chaque nouvelle fonctionnalité (voir CLAUDE.md). */
+:root{--n:#0a0f3a;--n2:#10164a;--p:#ff0a8c;--c:#00e8ff;--y:#ffe600;--g:#3dffa5;--mut:rgba(255,255,255,.68);--line:rgba(255,255,255,.13)}
+*{box-sizing:border-box}
+html{scroll-padding-top:150px}
+body{margin:0;min-height:100vh;color:#fff;font:500 16px/1.6 Poppins,system-ui,sans-serif;background:var(--n);background-image:radial-gradient(ellipse at 10% -10%,rgba(255,46,151,.2),transparent 55%),radial-gradient(ellipse at 100% 0,rgba(0,232,255,.14),transparent 50%),linear-gradient(rgba(0,232,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,232,255,.05) 1px,transparent 1px);background-size:auto,auto,38px 38px,38px 38px;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+a{color:var(--c)}
+button{font-family:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.w{max-width:760px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left)) 60px max(16px,env(safe-area-inset-right))}
+/* en-tête collant : retour, recherche, mode */
+.top{position:sticky;top:0;z-index:10;margin:0 -16px;padding:12px 16px 10px;background:rgba(8,12,48,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top-r{display:flex;align-items:center;gap:10px}
+.back{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line);color:#fff;text-decoration:none;font:700 13px Poppins;white-space:nowrap}
+.top h1{flex:1;margin:0;font:400 24px/1 'Protest Riot',cursive;color:var(--y);text-shadow:-2px 0 var(--p),2px 0 var(--c)}
+.srch{position:relative;margin:10px 0 8px}
+.srch svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--c)}
+.srch input{width:100%;height:48px;padding:0 44px 0 42px;border-radius:14px;border:1.5px solid rgba(255,255,255,.2);background:rgba(0,0,0,.35);color:#fff;font:500 15px Poppins}
+.srch input:focus{outline:0;border-color:var(--c);box-shadow:0 0 0 3px rgba(0,232,255,.2)}
+.srch button{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:50%;background:rgba(255,255,255,.1);cursor:pointer}
+.mode{display:flex;padding:3px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.mode button{flex:1;height:36px;border:0;border-radius:9px;background:none;font:700 13px Poppins;color:var(--mut);cursor:pointer}
+.mode button.on{background:var(--p);color:#fff}
+/* sommaire */
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.toc a{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;text-decoration:none;font:600 13px Poppins}
+.toc a i{font:800 11px Poppins;font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--y);color:var(--n)}
+.intro{margin:18px 0 0;color:var(--mut);font-size:15px}
+/* chapitres */
+.ch{margin:22px 0 0;padding:20px 18px;border-radius:22px;background:rgba(7,11,48,.92);border:1px solid rgba(0,232,255,.3);box-shadow:5px 5px 0 rgba(255,10,140,.55)}
+.ch h2{display:flex;align-items:center;gap:12px;margin:0 0 4px;font:800 20px/1.2 Poppins}
+.ch h2 i{flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--y);color:var(--n);font:900 17px Poppins;font-style:normal}
+.ch .lead{margin:0 0 14px;color:var(--mut);font-size:15px}
+.ch ol{margin:0;padding:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+.ch ol li{position:relative;padding-left:38px;counter-increment:s}
+.ch ol li::before{content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:50%;background:var(--p);font:800 13px/26px Poppins;text-align:center}
+.ch b{color:#fff}.ch em{font-style:normal;color:var(--y);font-weight:700}
+.tip{margin:14px 0 0;padding:12px 14px;border-radius:14px;background:rgba(0,232,255,.08);border:1px solid rgba(0,232,255,.3);font-size:14px}
+.tip::before{content:"Astuce · ";font-weight:800;color:var(--c)}
+.shot{margin:18px auto 0;display:block;width:100%;max-width:300px;border-radius:22px;border:6px solid #05071f;box-shadow:0 0 0 1.5px #2a3290,0 14px 30px rgba(0,0,0,.45)}
+.shot.wide{max-width:100%;border-radius:12px;border-width:5px}
+.shots{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.shots .shot{max-width:240px;margin-top:18px}
+mark{background:var(--y);color:var(--n);border-radius:3px;padding:0 2px}
+.none{margin:24px 0 0;padding:20px;border-radius:18px;border:1.5px dashed var(--line);text-align:center;color:var(--mut)}
+/* pas à pas */
+.step{display:flex;align-items:center;gap:10px;margin:18px 0 0}
+.step .btn{flex:1;height:52px;border:0;border-radius:16px;background:var(--p);font:800 15px Poppins;cursor:pointer}
+.step .btn.gh{background:rgba(255,255,255,.06);border:1.5px solid var(--line)}
+.step .btn:disabled{opacity:.3;cursor:default}
+.dots{display:flex;gap:6px;justify-content:center;margin:14px 0 0}
+.dots button{width:10px;height:10px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer}.dots button.on{background:var(--y);width:24px;border-radius:6px}
+.upd{margin:30px 0 0;text-align:center;color:var(--mut);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body>
+<div class="w">
+ <div class="top">
+  <div class="top-r"><a class="back" href="./">‹ Retour</a><h1>Aide</h1></div>
+  <div class="srch"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="text" enterkeyhint="search" placeholder="Chercher : QR code, tie break, vidéo…" aria-label="Chercher dans l'aide" autocomplete="off"><button id="qx" aria-label="Effacer la recherche" hidden>✕</button></div>
+  <div class="mode" role="group" aria-label="Mode d'affichage"><button id="mAll" class="on">Tout voir</button><button id="mStep">Pas à pas</button></div>
+ </div>
+ <main id="out"></main>
+ <p class="upd">Aide mise à jour le 26 novembre 2026</p>
+</div>
+<script>
+/* Chaque chapitre : titre, phrase d'intro, étapes, astuce, captures (dossier aide/). */
+const CH=[
+{t:'Se connecter',l:'L\'accueil de l\'app est l\'écran de connexion.',s:[
+ 'Tape ton <b>pseudo</b> et ton <b>mot de passe</b>, puis <em>Se connecter</em>.',
+ 'Première connexion de Pauline : l\'app lui demande de choisir <b>son propre mot de passe</b> (6 caractères minimum).',
+ 'Ensuite, l\'app te reconnaît : tu arrives directement sur tes sessions.',
+ 'Pour quitter : le bouton <b>de sortie</b> en haut à droite de la liste des sessions.'],
+ tip:'Tu peux installer l\'app sur ton téléphone : la carte « Installer l\'appli » sur la liste des sessions explique comment.',img:['connexion']},
+{t:'Créer une session',l:'Une session, c\'est une soirée blind test.',s:[
+ 'Touche <em>+ Nouvelle session</em>.',
+ 'Donne un <b>nom</b> (pour toi), un <b>titre</b> (vu par les équipes) et la <b>date</b>.',
+ 'Choisis le <b>thème graphique</b> que verront les joueurs : TV Glitch, Années 90, Sombre, Soul ou Scolaire.',
+ 'Touche <em>Créer la session</em>.'],
+ tip:'La plus récente est en haut. Le champ de recherche trouve aussi les sessions archivées. Le bouton copie <b>duplique</b> une session (avec ses questions, sans la date).',img:['sessions','nouvelle-session']},
+{t:'Archives',l:'Une session dont la date est passée part toute seule dans les archives.',s:[
+ 'Les archives sont dans le volet grisé <b>Archives</b>, en bas de la liste.',
+ 'Elles s\'affichent 5 par page.',
+ 'Une session archivée est <b>en lecture seule</b> : pour la réutiliser, duplique-la.'],img:[]},
+{t:'Régler et partager',l:'En haut de « Préparer ».',s:[
+ 'Touche <em>Réglages</em> pour modifier le nom, le titre, la date, le thème graphique ou le son sur les téléphones. Tout s\'enregistre seul.',
+ 'Case <b>Joueurs</b> : <em>Tester</em> (voir la page joueur), <em>Partager</em> (envoyer le lien par message, WhatsApp…), <em>QR code</em> (à montrer à la salle).',
+ 'Case <b>Projection</b> : <em>Partager</em> ou <em>Ouvrir</em> le lien de l\'écran projection.'],img:['preparer']},
+{t:'Préparer les questions',l:'Une soirée = des manches, une manche = des thèmes, un thème = des questions.',s:[
+ 'Choisis la manche avec les onglets <b>1, 2, 3, F</b> (F = finale). <b>+</b> ajoute une manche.',
+ 'Ouvre un thème et choisis son <b>genre</b> : blind test, QCM, images, carrousel, image progressive, images QCM ou clip vidéo.',
+ 'Remplis les questions. Pour un blind test, la <b>loupe</b> cherche l\'extrait sur Deezer et le bouton <b>lecture</b> te le fait écouter.',
+ 'Gagne du temps avec <em>Coller une liste</em> : une ligne « Artiste - Titre » par chanson.',
+ 'Clip vidéo : colle le <b>lien YouTube</b>, règle le <b>début</b> (ex. 0:45) et la <b>durée</b>, puis <em>Aperçu</em>.'],
+ tip:'Avant la soirée, touche <b>Vérifier la soirée</b> : l\'app contrôle les questions, les extraits, les images et les vidéos.',img:['questions']},
+{t:'Animer la soirée',l:'Onglet « Soirée » : un seul écran à la fois, dans l\'ordre.',s:[
+ '<em>Ouvrir la manche</em>, puis <em>Ouvrir le thème 1</em>.',
+ 'Pour chaque question : lance l\'extrait (gros bouton), puis <em>Suivant</em>. <em>Précédent</em> pour revenir.',
+ 'La réponse est floutée : <b>maintiens le doigt</b> dessus pour la voir.',
+ 'En haut, <b>« 2/3 réponses reçues »</b> te dit qui a répondu.',
+ 'Image progressive : elle se dévoile <b>toute seule en 30 s</b> (10, 5, 3 puis 1 pt).',
+ 'À la dernière question : <em>Ouvrir le thème suivant</em>, puis à la fin <b>glisse</b> <em>Clôturer la manche</em>. Les joueurs ont <b>30 s</b> pour finir.'],
+ tip:'Une erreur ? Le bouton <b>Annuler</b> apparaît 2 s après chaque ouverture. La flèche ‹ en haut quitte le mode soirée (équipes, classement).',img:['soiree','soiree-image']},
+{t:'Côté joueurs',l:'Les équipes jouent sur leur téléphone.',s:[
+ 'Elles scannent le QR code (ou ouvrent le lien) et choisissent un nom d\'équipe.',
+ 'Elles répondent dans le thème en cours. Les QCM arrivent <b>une question à la fois</b>.',
+ 'Elles peuvent changer leurs réponses jusqu\'à la clôture et placer leur <b>x2</b> sur un thème.',
+ 'Le téléphone vibre à chaque nouvelle question.'],img:['joueur']},
+{t:'Corriger',l:'Après la clôture, les corrections s\'ouvrent.',s:[
+ 'Les bonnes réponses sont <b>déjà cochées</b>. En orange : presque juste, à vérifier.',
+ 'Touche <b>Artiste</b> ou <b>Titre</b> pour cocher ou décocher.',
+ '<b>Glisse</b> <em>Valider les corrections</em> : les points partent chez les joueurs.'],
+ tip:'Les joueurs voient ensuite leurs bonnes réponses. En thème Scolaire, ça ressemble à une copie corrigée au stylo rouge.',img:['corrections','resultats']},
+{t:'Finale et tie break',l:'Les 2 meilleures équipes jouent la finale.',s:[
+ 'Les finalistes sont choisis automatiquement après la dernière manche.',
+ 'En cas d\'égalité à la fin : <b>tie break</b>. Touche <em>+1</em> pour l\'équipe qui trouve, <em>−1</em> pour corriger.',
+ 'Quand une équipe passe devant, <b>glisse</b> <em>Valider le tie break</em>.'],img:['tiebreak']},
+{t:'Écran projection',l:'Pour un vidéoprojecteur ou une TV.',s:[
+ 'Dans « Préparer », case <b>Projection</b> : <em>Ouvrir</em> sur l\'ordinateur branché à l\'écran.',
+ 'Passe la page en <b>plein écran</b>.',
+ 'Elle suit la soirée toute seule : QR code, question, image, compte à rebours, classement, podium.'],
+ tip:'Elle n\'affiche jamais les réponses avant les corrections. Pour une vidéo, touche une fois « Activer le son ».',img:['projection'],wide:1},
+{t:'En cas de souci',l:'Les réponses aux questions les plus courantes.',s:[
+ '<b>Coupure ou téléphone verrouillé</b> : rouvre l\'app, tu reviens au même endroit. Rien n\'est perdu.',
+ '<b>Extrait Deezer indisponible</b> : « Vérifier la soirée » le signale, choisis un autre extrait avec la loupe.',
+ '<b>Vidéo bloquée</b> : certaines vidéos YouTube refusent d\'être lues ailleurs que sur YouTube. Choisis-en une autre.',
+ '<b>Mot de passe oublié</b> : demande à Boris de le réinitialiser.'],img:[]}
+];
+const $=id=>document.getElementById(id),out=$('out');let mode='all',cur=0;
+const txt=c=>(c.t+' '+c.l+' '+c.s.join(' ')+' '+(c.tip||'')).replace(/<[^>]+>/g,'');
+const nrm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+function hl(html,q){if(!q)return html;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');return html.replace(/(<[^>]+>)|([^<]+)/g,(m,tag,t)=>tag||t.replace(re,'<mark>$1</mark>'))}
+function card(c,i,q){const imgs=c.img.map(n=>`<img class="shot ${c.wide?'wide':''}" src="aide/${n}.jpg" alt="Capture : ${c.t}" loading="lazy">`).join('');
+ return`<section class="ch" id="c${i}"><h2><i>${i+1}</i>${hl(c.t,q)}</h2><p class="lead">${hl(c.l,q)}</p><ol>${c.s.map(x=>`<li>${hl(x,q)}</li>`).join('')}</ol>${c.tip?`<p class="tip">${hl(c.tip,q)}</p>`:''}${imgs?(c.img.length>1?`<div class="shots">${imgs}</div>`:imgs):''}</section>`}
+function render(){const q=$('q').value.trim();$('qx').hidden=!q;
+ $('mAll').classList.toggle('on',mode==='all');$('mStep').classList.toggle('on',mode==='step');
+ if(q){const n=nrm(q),hit=CH.map((c,i)=>[c,i]).filter(([c])=>nrm(txt(c)).includes(n));
+  out.innerHTML=hit.length?hit.map(([c,i])=>card(c,i,q)).join(''):`<p class="none">Rien trouvé pour « ${q.replace(/</g,'&lt;')} ». Essaie un autre mot.</p>`;return}
+ if(mode==='all'){out.innerHTML=`<p class="intro">Tout ce qu'il faut savoir pour préparer et animer une soirée, en ${CH.length} chapitres courts.</p><nav class="toc" aria-label="Sommaire">${CH.map((c,i)=>`<a href="#c${i}"><i>${i+1}</i>${c.t}</a>`).join('')}</nav>`+CH.map((c,i)=>card(c,i)).join('');return}
+ out.innerHTML=card(CH[cur],cur)+`<div class="step"><button class="btn gh" id="pv" ${cur?'':'disabled'}>‹ Précédent</button><button class="btn" id="nx" ${cur<CH.length-1?'':'disabled'}>Suivant ›</button></div><div class="dots">${CH.map((c,i)=>`<button class="${i===cur?'on':''}" data-i="${i}" aria-label="Chapitre ${i+1} : ${c.t}"></button>`).join('')}</div>`;
+ $('pv').onclick=()=>{cur--;render();scrollTo(0,0)};$('nx').onclick=()=>{cur++;render();scrollTo(0,0)};
+ out.querySelectorAll('.dots button').forEach(b=>b.onclick=()=>{cur=+b.dataset.i;render();scrollTo(0,0)})}
+$('q').oninput=render;$('qx').onclick=()=>{$('q').value='';render();$('q').focus()};
+$('mAll').onclick=()=>{mode='all';render()};$('mStep').onclick=()=>{mode='step';render();scrollTo(0,0)};
+render();
+</script>
+</body></html>
