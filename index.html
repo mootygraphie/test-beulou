@@ -793,6 +793,7 @@ body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);backgroun
 .a-ub{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;min-width:38px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font:700 13px Poppins;text-decoration:none;cursor:pointer}
 .a-ub:hover{border-color:var(--c);color:var(--c)}button.a-ub{padding:0}
 .a-svi{margin:16px 0 4px!important;background:var(--y)!important;color:var(--n)!important}.a-svi.ok{background:rgba(61,255,165,.15)!important;color:var(--g)!important;opacity:1!important}
+.a-arch .f,.a-dzh .f{flex:1;min-width:0}.a-arch>span:last-child,.a-dzh>span:last-child{flex:none;margin-left:auto;width:32px;height:32px;display:grid;place-items:center;border-radius:10px;border:1.5px solid var(--line)}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -879,7 +880,7 @@ const bLab=x=>x.bl||'Bonus';
 const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
 const isSec=k=>k[0]==='R'?!!ri(+k.slice(1)).sx:!!th(+k.split('_')[0])[+k.split('_')[1]]?.sx;
-const bonus=(t,r)=>Object.entries(t.gok||{}).reduce((s,[k,v])=>{if(!v||!isSec(k))return s;const R=k[0]==='R',rr=R?+k.slice(1):+k.split('_')[0];return(r!=null&&rr!==r)?s:s+(R?BR:BT)},0);
+const bonus=(t,r)=>Object.entries(t.gok||{}).reduce((s,[k,v])=>{if(!v||!isSec(k))return s;const R=k[0]==='R',rr=R?+k.slice(1):+k.split('_')[0],tt=R?-1:+k.split('_')[1];return(r!=null&&rr!==r)?s:s+(R?BR:BT*(t.x2?.[rr]==tt?2:1))},0); // le x2 double aussi le nom secret du thème
 const score=(t,r)=>Object.entries(t.marks||{}).reduce((s,[k,m])=>{const[rr,tt]=k.split('_');if(r!=null&&+rr!==r)return s;const x=th(+rr)[+tt];return s+ms(m,x)*(t.x2?.[rr]==tt?2:1)},0)+bonus(t,r);
 const vr=()=>RIDX().filter(r=>g.rd?.[r]==='validated');
 const tbp=t=>g.tbp?.[t.id]||0;
@@ -1017,8 +1018,8 @@ function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v
  <div class="rvs"><span>${RNf(r)}${I.n?' · '+esc(I.n):''}</span><b>${spect?'Pas jouée':'+'+(score(t,r)+(r===FI()?tbp(t):0))+' pts'}</b>${spect?'':`<em class="rv-note">${profNote(score(t,r),th(r).reduce((a,x)=>a+ptsMax(x),0))}</em>`}</div>`;
  if(I.sx)h+=`<div class="rvsec ${t.gok?.['R'+r]?'ok':''}">Thème de la manche : <b>${esc(I.n||'')}</b> ${t.gok?.['R'+r]?'· trouvé +'+BR:'· raté'}</div>`;
  th(r).forEach((x,i)=>{const key=`${r}_${i}`,m=t.marks?.[key]||[],x2=t.x2?.[r]==i,A=t.answers?.[key]||[];
-  const tot=ms(m,x)*(x2?2:1)+(x.sx&&t.gok?.[key]?BT:0);
-  h+=`<section class="rvc"><header><span>${i+1}</span><div><b>${esc(tn(x,i))}</b><small>${x.sx?(t.gok?.[key]?'Thème secret trouvé · +'+BT:'Thème secret raté'):x.ty==='img'?'Images'+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM':'Thème '+(i+1)}${x2?' · x2':''}</small></div><em>+${spect?0:tot}</em></header>`;
+  const tot=(ms(m,x)+(x.sx&&t.gok?.[key]?BT:0))*(x2?2:1);
+  h+=`<section class="rvc"><header><span>${i+1}</span><div><b>${esc(tn(x,i))}</b><small>${x.sx?(t.gok?.[key]?'Thème secret trouvé · +'+BT*(x2?2:1):'Thème secret raté'):x.ty==='img'?'Images'+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM':'Thème '+(i+1)}${x2?' · x2':''}</small></div><em>+${spect?0:tot}</em></header>`;
   x.q.forEach((q,j)=>{let exp,mine,marks,pt;
    if(x.ty==='img'&&x.qm!=='qcm'){exp=esc(q.r||'');mine=esc(A[j]||'');marks=ok(m[j*2]);pt=(m[j*2]||0)*x.pts}
    else if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];exp=esc(q.c?.[0]||'');mine=Q.length?esc(q.c?.[Q[Q.length-1]]||''):'';marks=ok(m[j*2]);pt=m[j*2]||0}
@@ -1323,7 +1324,7 @@ function rscreen(r){
     (x.eb?`<button class="ab sc bnb ${m[MB+j]?'on':''}${PB(fb)}" title="Bonus" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${MB+j}">+1</button>`:'')+`</div>`});
    h+=`</div>`;
   });
-  h+=`<footer class="a-sum">${TM.map(t=>`<span>${esc(t.name)} <b>${ms(getMk(t,key,x),x)*(t.x2?.[r]==i?2:1)+(x.sx&&getGk(t,key,x.n)?BT:0)}</b></span>`).join('')}</footer></section>`;
+  h+=`<footer class="a-sum">${TM.map(t=>`<span>${esc(t.name)} <b>${(ms(getMk(t,key,x),x)+(x.sx&&getGk(t,key,x.n)?BT:0))*(t.x2?.[r]==i?2:1)}</b></span>`).join('')}</footer></section>`;
  });
  h+=undoBar()+`<div class="a-bar">${slide('validate',st==='validated'?'Revalider les corrections':'Valider les corrections','Glisser jusqu\'au bout · les scores partent chez les joueurs',`data-r="${r}"`)}`;
  if(st==='validated'&&r<FI())h+=`<button class="btn blk" data-a="tab" data-v="${r+1}" style="margin-top:8px">Passer à ${RNf(r+1)}</button>`;
@@ -1449,7 +1450,7 @@ function tbBlock(){
  ${done?`<button class="btn blk y tbs-ok" data-a="tab" data-v="rank">Voir le classement final</button>`:(tied?`<button class="btn blk gh tbs-ok" disabled>Encore à égalité : il faut un gagnant</button>`:slide('tbok','Valider le tie break','Glisser jusqu\'au bout',''))+`<button class="tbs-x" data-a="tbcancel">Annuler le tie break</button>`}</section>`;
 }
 /* score de la finale à partir des corrections qu'on vient de valider (sans attendre Firebase) */
-function fScore(t){const F=FI(),I=ri(F);return th(F).reduce((s,x,i)=>{const key=`${F}_${i}`;return s+ms(getMk(t,key,x),x)*(t.x2?.[F]==i?2:1)+(x.sx&&getGk(t,key,x.n)?BT:0)},0)+(I.sx&&getGk(t,'R'+F,I.n)?BR:0)}
+function fScore(t){const F=FI(),I=ri(F);return th(F).reduce((s,x,i)=>{const key=`${F}_${i}`;return s+(ms(getMk(t,key,x),x)+(x.sx&&getGk(t,key,x.n)?BT:0))*(t.x2?.[F]==i?2:1)},0)+(I.sx&&getGk(t,'R'+F,I.n)?BR:0)}
 /* QR code du lien des équipes (bibliothèque chargée seulement au premier clic) */
 const loadQR=()=>window.qrcode?Promise.resolve():new Promise((ok,ko)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';sc.onload=ok;sc.onerror=()=>ko(new Error('connexion impossible'));document.head.appendChild(sc)});
 async function qrModal(){const url=location.origin+location.pathname+'?s='+sid;
