@@ -794,6 +794,19 @@ body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);backgroun
 .a-ub:hover{border-color:var(--c);color:var(--c)}button.a-ub{padding:0}
 .a-svi{margin:16px 0 4px!important;background:var(--y)!important;color:var(--n)!important}.a-svi.ok{background:rgba(61,255,165,.15)!important;color:var(--g)!important;opacity:1!important}
 .a-arch .f,.a-dzh .f{flex:1;min-width:0}.a-arch>span:last-child,.a-dzh>span:last-child{flex:none;margin-left:auto;width:32px;height:32px;display:grid;place-items:center;border-radius:10px;border:1.5px solid var(--line)}
+/* bouton à glisser : fond bleu foncé lisible, texte blanc qui passe en bleu foncé sous le jaune */
+.sld{background:rgba(10,15,58,.92)!important;backdrop-filter:blur(6px)}
+.sl-t b{color:#fff!important;transition:color .15s}.sl-t small{color:rgba(255,255,255,.75)!important;transition:color .15s}
+.sld.half .sl-t b,.sld.half .sl-t small{color:#0a0f3a!important}
+.a-dz .sld{background:rgba(10,15,58,.92)!important}
+/* clôture en cours : plein écran rose côté admin */
+.lv-cdo{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;background:radial-gradient(ellipse at 50% 30%,#ff3aa3,#ff0a8c 55%,#b8005f);color:#fff;text-align:center}
+.lv-cdo small{font:800 13px Poppins;letter-spacing:.2em;text-transform:uppercase;opacity:.85}
+.lv-cdo h1{margin:0;font:400 46px/1.05 'Protest Riot',cursive;text-transform:none;color:#fff;text-shadow:3px 3px 0 rgba(10,15,58,.35)}
+.lv-cdo b{font:900 150px/1 Poppins;font-variant-numeric:tabular-nums;text-shadow:6px 6px 0 rgba(10,15,58,.3);animation:cdbeat 1s ease-in-out infinite}
+.lv-cdo p{margin:0;max-width:22ch;font:600 16px/1.4 Poppins;opacity:.9}
+@keyframes cdbeat{50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.lv-cdo b{animation:none}}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -1126,6 +1139,7 @@ function team(){
  const r=g.r,st=g.rd?.[r],I=r>=0?ri(r):{};
  const showRk=v.length&&(r<0||st==='validated')&&!pend,rk=showRk?rankInner():'',RKB=rk?FR(rk):'';
  const spect=r===FI()&&!inFinal(me),FN=finalists().map(id=>teams.find(x=>x.id===id)?.name).filter(Boolean);
+ if(fin()&&rvw!=null&&vr().length)return GD+bar+review(t); // fin de soirée : on peut revoir toutes les réponses
  if(fin()){const mp=place(FI()).find(x=>x.id===me);
   return GB+bar+BRAND(true)+T+`<h1 class="st sm fun">Classement final</h1>`+FR(podium())+
    `<p class="fres">${mp?.pos===1?'<b>Vous remportez la soirée !</b>':`Vous finissez <b>${mp?.pos}e</b> avec <b>${mp?.sc} pts</b>`}</p>`+RVB()+RKB+reveal(t,3)}
@@ -1387,7 +1401,7 @@ function answered(t,x,key,j){if(x.ty==='img'&&x.im==='pr')return!!t.lk?.[key]?.[
 function rcvOf(r,x,key,j){const TM=r===FI()?teams.filter(t=>inFinal(t.id)):teams;return TM.map(t=>({t,ok:answered(t,x,key,j)}))}
 function rcvBar(r,x,key,j){const L=rcvOf(r,x,key,j),n=L.filter(z=>z.ok).length;return`<div class="lv-rcv"><b>${n}/${L.length}</b><span>réponses reçues</span><span class="lv-rcd">${L.map(z=>`<i class="${z.ok?'ok':''}" title="${esc(z.t.name)}">${esc((z.t.name||'?').replace(/^(les?|la|team)\s+/i,'').slice(0,2).toUpperCase())}</i>`).join('')}</span></div>`}
 /* clôture : 30 s de compte à rebours chez les joueurs, puis la manche se ferme toute seule (sans annulation) */
-const CDL=30;
+const CDL=10;
 function closeRound(r){LV=null;const o={};th(r).forEach((_,i)=>o[`${r}_${i}`]='closed');gset({th:o,rd:{[r]:'closed'},cd:{[r]:FV.delete()}})}
 const cdLeft=r=>{const t=g?.cd?.[r];if(!t)return null;if(ADMIN)return Math.max(0,CDL-(Date.now()-t)/1000);if(!CDS[r])CDS[r]=performance.now();return Math.max(0,CDL-(performance.now()-CDS[r])/1000)};
 const CDS={}; // côté joueur : on compte à partir du moment où l'annonce arrive (pas d'écart d'horloge entre appareils)
@@ -1397,7 +1411,7 @@ setInterval(()=>{if(!g||g.r<0)return;const r=g.r,v=cdLeft(r);if(v==null||g.rd?.[
 let closing=0;
 /* glisser pour confirmer : une action sans retour ne part qu'en allant jusqu'au bout */
 const slide=(a,label,sub,attrs)=>`<div class="sld" data-slide><i class="sl-f"></i><span class="sl-t"><b>${label}</b><small>${sub}</small></span><span class="sl-k" role="button" tabindex="0" aria-label="${label} : glisser vers la droite, ou Entrée deux fois">›</span><button hidden class="sl-go" data-a="${a}" ${attrs}></button></div>`;
-(()=>{let D=null,KA=0;const set=(d,x)=>{d.k.style.transform=`translateX(${x}px)`;d.f.style.width=(x+64)+'px';d.t.style.opacity=String(1-Math.min(1,x/d.max)*.8)};
+(()=>{let D=null,KA=0;const set=(d,x)=>{d.k.style.transform=`translateX(${x}px)`;d.f.style.width=(x+64)+'px';d.el.classList.toggle('half',x>d.max*.4)};
  document.addEventListener('pointerdown',e=>{const k=e.target.closest?.('.sl-k');if(!k)return;e.preventDefault();const el=k.closest('[data-slide]');el.classList.remove('back');el.classList.add('drag');D={el,k,f:el.querySelector('.sl-f'),t:el.querySelector('.sl-t'),x0:e.clientX,max:el.clientWidth-k.offsetWidth-10,x:0};k.setPointerCapture?.(e.pointerId)});
  document.addEventListener('pointermove',e=>{if(!D)return;D.x=Math.max(0,Math.min(D.max,e.clientX-D.x0));set(D,D.x)});
  const end=()=>{if(!D)return;const d=D;D=null;if(d.x>=d.max*.92){set(d,d.max);setTimeout(()=>d.el.querySelector('.sl-go').click(),150)}else{d.el.classList.add('back');d.el.classList.remove('drag');set(d,0)}};
@@ -1436,9 +1450,9 @@ function liveScr(r){const T=th(r),I=ri(r),on=g.r===r&&g.rd?.[r]==='open',ct=g.ct
   sub=`${RN} · Thème ${ct+1} · Question ${j+1}/${N}`;title=esc(tn(x,ct));
   const op=T.map((_,i)=>g.th?.[`${r}_${i}`]==='open'?i+1:0).filter(Boolean);
   body=rcvBar(r,x,key,j)+lvQ(r,ct,x,key,j)+`<p class="lv-note"><b>Thème${op.length>1?'s':''} ouvert${op.length>1?'s':''} : ${op.join(', ')}.</b> Les équipes peuvent modifier leurs réponses jusqu'à la clôture.</p>`;
-  foot=(last?(nt?`<button class="btn blk y lv-go" data-a="lvth" data-r="${r}" data-t="${ct+1}">Ouvrir le thème ${ct+2} · ${esc(tn(nt,ct+1))}</button>`:slide('cdstart',`Clôturer ${FIN?'la finale':'la manche'}`,'Glisser jusqu\'au bout · 30 s de compte à rebours chez les joueurs',`data-r="${r}"`)):'')
+  foot=(last?(nt?`<button class="btn blk y lv-go" data-a="lvth" data-r="${r}" data-t="${ct+1}">Ouvrir le thème ${ct+2} · ${esc(tn(nt,ct+1))}</button>`:slide('cdstart',`Clôturer ${FIN?'la finale':'la manche'}`,'Glisser jusqu\'au bout · 10 s de compte à rebours',`data-r="${r}"`)):'')
    +`<div class="lv-nav"><button class="btn gh" data-a="lvq" data-r="${r}" data-t="${ct}" data-d="-1" ${j?'':'disabled'}>‹ Précédent</button><button class="btn ${last?'gh':''}" data-a="lvq" data-r="${r}" data-t="${ct}" data-d="1" ${last?'disabled':''}>Suivant ›</button></div>`}
- if(on&&g.cd?.[r])foot=foot.replace(/<div class="sld"[\s\S]*?<\/button><\/div>/,'');
+ if(on&&g.cd?.[r])return`<div class="lv-cdo" role="alert"><small>${RN}</small><h1>Clôture en cours</h1><b class="cdn">${Math.ceil(cdLeft(r))}</b><p>Les équipes finissent de répondre et placent leur x2</p></div>`;
  if(!WL||WL.released)wake();
  return`<div class="lv">${undoBar()}<header class="lv-h"><button class="lv-x" data-a="lvexit" aria-label="Quitter le mode soirée (équipes, classement)">‹</button><div class="f"><small>${sub}</small><b>${title}</b></div><span class="lv-st ${on?'on':''}">${on?(g.cd?.[r]?'Clôture…':'En jeu'):'En attente'}</span></header><main class="lv-m">${body}</main><footer class="lv-f">${foot}</footer></div>`}
 /* tie break : écran plein, rien d'autre de cliquable que les points et la validation */
