@@ -839,6 +839,18 @@ body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);backgroun
 .tv-bzh{margin-top:2cqi;padding:2cqi 5cqi;border-radius:2cqi;background:linear-gradient(160deg,#ff2d8a,#a3135a);display:flex;flex-direction:column;align-items:center}.tv-bzh.ok{background:linear-gradient(160deg,#16c784,#0b7a52)}
 .tv-bzh small{font:700 1.4cqi Poppins;letter-spacing:.14em;text-transform:uppercase}.tv-bzh b{font:900 6cqi/1.1 Poppins}
 .tv-bzi .pic{max-height:38cqh;width:auto;border-radius:1.5cqi}
+/* stats de fin de soirée */
+.a-fs{margin-top:12px;padding:12px;border-radius:16px;background:rgba(255,255,255,.06)}.a-fs>small{display:block;font:700 11px Poppins;letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin-bottom:8px}
+.a-fs>div{display:grid;grid-template-columns:48px 1fr 48px;gap:8px;align-items:center}.a-fs .btn,.a-fs .btn.sm{margin:0;font-size:26px;line-height:1;padding:6px 0 10px}.a-fs b{text-align:center;font:800 15px Poppins;display:flex;flex-direction:column}.a-fs b span{font:600 11px Poppins;color:var(--mut)}
+.ms h2{margin:0 0 10px}.ms-r{display:grid;grid-template-columns:76px 1fr auto 30px;gap:8px;align-items:center;margin:0 0 8px;font:600 13px Poppins}
+.ms-r i{height:10px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden}.ms-r i b{display:block;height:100%;background:var(--y);border-radius:5px}.ms-r em{font-style:normal;font-weight:800}.ms-r small{color:var(--mut);text-align:right}
+.ms-aw{display:grid;gap:8px;margin-top:12px}.ms-aw div{padding:10px 12px;border-radius:14px;background:var(--p);color:#fff}.ms-aw small{display:block;font:700 10px Poppins;letter-spacing:.12em;text-transform:uppercase;opacity:.85}.ms-aw b{font:800 15px Poppins}
+.tv-st{width:100%;display:flex;flex-direction:column;align-items:center}
+.tv-sg{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(var(--n),minmax(0,1fr)) auto;gap:1.2cqi 2cqi;align-items:center;width:min(92%,120cqi);font:600 1.8cqi Poppins}
+.tv-sg small{font:700 1.4cqi Poppins;letter-spacing:.12em;text-transform:uppercase;color:var(--c);text-align:center}.tv-sg b{font:800 2.2cqi Poppins;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-sg i{position:relative;height:3.4cqi;border-radius:1cqi;background:rgba(255,255,255,.08);overflow:hidden}.tv-sg i::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--p);border-radius:1cqi}
+.tv-sg i em{position:relative;font-style:normal;font-weight:800;padding-left:1cqi;line-height:3.4cqi}.tv-sg strong{font:900 2.6cqi Poppins;color:var(--y);text-align:right}
+.tv-aw .tv-awl{font:800 2.6cqi Poppins;color:var(--y);text-transform:uppercase;letter-spacing:.08em;margin:1cqi 0 0}.tv-aw h1{font-size:7cqi}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -956,6 +968,65 @@ function rankInner(){
   return`<div class="rk ${x.id===me?'me':''}"><span class="pos p${x.pos}">${x.pos}</span><span class="nm">${esc(x.name)}</span>${ar}<span class="tt">${x.sc}</span><span class="gn">(+${gn})</span></div>`}).join('')}`}
 const CROWN='<svg class="cr" viewBox="0 0 44 34" aria-hidden="true"><path d="M4 30h36l3-22-11 9-10-15-10 15L1 8z" fill="#ffe600" stroke="#ff0a8c" stroke-width="2.5" stroke-linejoin="round"/></svg>';
 const fin=()=>!!g.over;
+/* ============ STATS DE FIN DE SOIRÉE ============ */
+function evStats(){const V=vr(),T=teams,A=[];if(!T.length||!V.length)return{A,V,th:[]};
+ const nm=id=>T.find(t=>t.id===id)?.name||'?';
+ let best=null;V.forEach(r=>T.forEach(t=>{const v=score(t,r);if(v>0&&(!best||v>best.v))best={id:t.id,r,v}}));
+ if(best)A.push({k:'best',l:'Meilleure manche',id:best.id,d:`${best.v} pts en ${RNf(best.r).toLowerCase()}`});
+ const TH=[];V.forEach(r=>th(r).forEach((x,i)=>{const key=r+'_'+i,mx=ptsMax(x),P=r===FI()?T.filter(t=>inFinal(t.id)):T;if(!mx||!P.length)return;
+  TH.push({n:tn(x,i),r,av:P.reduce((s,t)=>s+ms(t.marks?.[key],x),0)/P.length/mx})}));
+ if(TH.length>1){const o=[...TH].sort((a,b)=>a.av-b.av),hard=o[0],easy=o[o.length-1];
+  if(easy.av>hard.av){A.push({k:'easy',l:'Thème le plus facile',t:easy.n,d:`${Math.round(easy.av*100)} % des points trouvés`});A.push({k:'hard',l:'Thème le plus dur',t:hard.n,d:`${Math.round(hard.av*100)} % des points trouvés`})}}
+ const sec=T.map(t=>({id:t.id,n:Object.entries(t.gok||{}).filter(([k,v])=>v&&isSec(k)).length})).sort((a,b)=>b.n-a.n);
+ if(sec[0]?.n)A.push({k:'sec',l:'Roi des secrets',id:sec[0].id,d:`${sec[0].n} nom${sec[0].n>1?'s':''} secret${sec[0].n>1?'s':''} trouvé${sec[0].n>1?'s':''}`});
+ const x2=[];T.forEach(t=>Object.entries(t.x2||{}).forEach(([r,i])=>{if(!V.includes(+r))return;const x=th(+r)[+i];if(!x)return;const v=ms(t.marks?.[r+'_'+i],x);if(v>0)x2.push({id:t.id,v,n:tn(x,+i)})}));
+ x2.sort((a,b)=>b.v-a.v);if(x2[0])A.push({k:'x2',l:'Le x2 en or',id:x2[0].id,d:`+${x2[0].v} pts gagnés sur ${x2[0].n}`});
+ const bw={};Object.values(g.bz||{}).forEach(Q=>Object.values(Q||{}).forEach(o=>{if(o?.w)bw[o.w]=(bw[o.w]||0)+1}));
+ const bz=Object.entries(bw).sort((a,b)=>b[1]-a[1])[0];if(bz)A.push({k:'bz',l:'Main la plus rapide',id:bz[0],d:`${bz[1]} point${bz[1]>1?'s':''} au buzzer`});
+ if(V.length>1){const a=place(V[0]),z=place(V[V.length-1]);let up=null;z.forEach(x=>{const p0=a.find(y=>y.id===x.id)?.pos;if(p0&&p0-x.pos>0&&(!up||p0-x.pos>up.g))up={id:x.id,g:p0-x.pos,p0,p1:x.pos}});
+  if(up)A.push({k:'up',l:'La remontada',id:up.id,d:`${up.p0}e après ${RNf(V[0]).toLowerCase()}, ${up.p1}e à la fin`})}
+ A.forEach(a=>{if(a.id)a.t=nm(a.id)});return{A,V,th:TH}}
+/* diapos de la projection : 0 = podium, 1 = scores par manche, puis une par stat */
+function fsSlides(){const S=evStats();return[{k:'pod',l:'Podium'},...(S.V.length?[{k:'grid',l:'Scores par manche'}]:[]),...S.A.map(a=>({k:'aw',l:a.l,a}))]}
+function tvStats(i){const L=fsSlides(),sl=L[Math.max(0,Math.min(L.length-1,i||0))];
+ if(sl.k==='pod')return`<div class="tv-pod"><h1 class="tv-h">Classement final</h1>${podium()}</div>`;
+ if(sl.k==='grid'){const V=vr(),P=place(FI()),mx=Math.max(1,...P.flatMap(x=>V.map(r=>score(teams.find(t=>t.id===x.id),r))));
+  return`<div class="tv-st"><h1 class="tv-h">Scores par manche</h1><div class="tv-sg" style="--n:${V.length}"><span></span>${V.map(r=>`<small>${r===FI()?'Finale':'M'+(r+1)}</small>`).join('')}<small>Total</small>${P.map(x=>{const t=teams.find(y=>y.id===x.id);return`<b>${esc(x.name)}</b>${V.map(r=>{const v=score(t,r);return`<i style="--w:${(v/mx*100).toFixed(0)}%"><em>${v}</em></i>`}).join('')}<strong>${x.sc}</strong>`}).join('')}</div></div>`}
+ const a=sl.a;return`<div class="tv-big tv-aw"><small>Les stats de la soirée · ${L.indexOf(sl)} / ${L.length-1}</small><p class="tv-awl">${esc(a.l)}</p><h1>${esc(a.t||'')}</h1><p>${esc(a.d)}</p></div>`}
+function fsCtl(){const L=fsSlides(),i=Math.max(0,Math.min(L.length-1,g.fs||0));
+ return`<div class="a-fs"><small>Sur l'écran projection</small><div><button class="btn gh sm" data-a="fsn" data-d="-1" ${i?'':'disabled'} aria-label="Écran précédent">‹</button><b>${esc(L[i].l)}<span>${i+1} / ${L.length}</span></b><button class="btn y sm" data-a="fsn" data-d="1" ${i<L.length-1?'':'disabled'} aria-label="Écran suivant">›</button></div></div>`}
+/* côté joueur : ses scores par manche et ses titres */
+function myStats(t){const V=vr(),S=evStats(),mine=S.A.filter(a=>a.id===t.id);if(!V.length)return'';
+ const rows=V.map(r=>{const P=(r===FI()?teams.filter(x=>inFinal(x.id)):teams).map(x=>({id:x.id,v:score(x,r)})).sort((a,b)=>b.v-a.v),me0=P.find(x=>x.id===t.id);if(!me0)return'';const pos=P.filter(x=>x.v>me0.v).length+1,mx=Math.max(1,...P.map(x=>x.v));
+  return`<div class="ms-r"><span>${RNf(r)}</span><i><b style="width:${(me0.v/mx*100).toFixed(0)}%"></b></i><em>${me0.v} pts</em><small>${pos}e</small></div>`}).join('');
+ return`<div class="c ms"><h2>Tes stats</h2>${rows}${mine.length?`<div class="ms-aw">${mine.map(a=>`<div><small>${esc(a.l)}</small><b>${esc(a.d)}</b></div>`).join('')}</div>`:''}</div>`}
+
+/* ============ CLASSEMENT À PARTAGER (image format story) ============ */
+async function shareRank(){const P=place(FI()),cs=getComputedStyle(document.body),V=n=>cs.getPropertyValue(n).trim();
+ const C={p:V('--p')||'#ff0a8c',y:V('--y')||'#ffe600',c:V('--c')||'#00e8ff',n:V('--n')||'#0a0f3a',t:cs.color||'#fff'};
+ try{await document.fonts.ready}catch(e){}
+ const W=1080,H=1920,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+ const bg=x.createLinearGradient(0,0,0,H);bg.addColorStop(0,C.n);bg.addColorStop(1,'#000');x.fillStyle=C.n;x.fillRect(0,0,W,H);x.globalAlpha=.55;x.fillStyle=bg;x.fillRect(0,0,W,H);x.globalAlpha=1;
+ x.fillStyle=C.p;x.fillRect(0,0,W,14);x.fillStyle=C.c;x.fillRect(0,14,W,6);
+ const F=(w,s)=>`${w} ${s}px Poppins, sans-serif`,fit=(t,w,max)=>{let s=max;x.font=F(800,s);while(s>20&&x.measureText(t).width>w){s-=2;x.font=F(800,s)}return s};
+ x.textAlign='center';x.fillStyle=C.c;x.font=F(700,34);x.fillText('CLASSEMENT FINAL',W/2,170);
+ x.fillStyle=C.t;fit(g.title||'Beulou Test',W-140,84);x.fillText(g.title||'Beulou Test',W/2,262);
+ if(g.date){x.font=F(600,32);x.globalAlpha=.7;x.fillText(new Date(g.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),W/2,318);x.globalAlpha=1}
+ const MED=['#f5c518','#c9d1d9','#d08a4b'],crown=(cx,cy,s,col)=>{x.save();x.translate(cx-s/2,cy-s*.77/2);x.scale(s/44,s/44);x.beginPath();x.moveTo(4,30);x.lineTo(40,30);x.lineTo(43,8);x.lineTo(32,17);x.lineTo(22,2);x.lineTo(12,17);x.lineTo(1,8);x.closePath();x.fillStyle=col;x.fill();x.lineWidth=2.5;x.strokeStyle='rgba(0,0,0,.35)';x.stroke();x.restore()};
+ const rr=(X,Y,w,h,r)=>{x.beginPath();x.roundRect?x.roundRect(X,Y,w,h,r):x.rect(X,Y,w,h)};
+ const n=P.length,gap=22,base=Math.max(96,Math.min(200,(H-640-gap*(n-1)-60)/n)),tot=n*base+60+gap*(n-1);let y=Math.max(400,400+(H-640-tot)/2);
+ P.forEach(t=>{const mine=t.id===me,h=mine?base+60:base,X=mine?50:90,w=W-2*X,med=t.pos<=3?MED[t.pos-1]:null;
+  rr(X,y,w,h,32);if(mine){x.fillStyle=C.y;x.fill()}else{x.globalAlpha=.09;x.fillStyle=C.t;x.fill();x.globalAlpha=1}if(mine){x.lineWidth=6;x.strokeStyle=C.p;x.stroke()}
+  const ink=mine?C.n:C.t,mid=y+h/2,R=Math.min(h*.3,mine?58:46),cx=X+40+R;x.textBaseline='middle';
+  x.beginPath();x.arc(cx,mid+(med?R*.18:0),R,0,7);x.fillStyle=med||(mine?C.n:'rgba(255,255,255,.14)');x.fill();
+  if(med)crown(cx,mid+R*.18-R-R*.32,R*1.15,med);
+  x.textAlign='center';x.fillStyle=med?'#1a1a1a':(mine?C.y:C.t);x.font=F(900,Math.round(R*1.05));x.fillText(String(t.pos),cx,mid+(med?R*.18:0)+2);
+  const nx=cx+R+34;x.textAlign='left';x.fillStyle=ink;const fs0=Math.round(Math.min(mine?72:56,h*.38));fit(t.name,X+w-nx-220,fs0);x.fillText(t.name,nx,mid);
+  x.textAlign='right';x.font=F(800,Math.round(fs0*.85));x.fillText(t.sc+' pts',X+w-44,mid);y+=h+gap});
+ x.textBaseline='alphabetic';x.textAlign='center';x.fillStyle=C.p;x.font=F(900,60);x.fillText('BEULOU TEST',W/2,H-110);
+ const blob=await new Promise(r=>cv.toBlob(r,'image/png'));const name=('classement-'+(g.title||'beulou')).toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png',file=new File([blob],name,{type:'image/png'});
+ if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Classement final'});return}catch(e){if(e.name==='AbortError')return}}
+ const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
 function podium(){const P=place(FI()).slice(0,3),o=[P[1],P[0],P[2]],cl=['p2','p1','p3'];
  return`<div class="pod">${o.map((x,i)=>x?`<div class="pd ${cl[i]} ${x.id===me?'me':''}">${i===1?CROWN:''}<span class="nm">${esc(x.name)}</span><span class="sc">${x.sc} pts</span><div class="bl">${x.pos}</div></div>`:'<div></div>').join('')}</div>`}
 const rankHtml=()=>{const i=rankInner();return i?`<div class="c">${i}</div>`:''};
@@ -1152,7 +1223,7 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
  const r=g.r,I=r>=0?ri(r):{},RN=r===FI()?'Finale':'Manche '+(r+1),st=r>=0?g.rd?.[r]:null,url=location.origin+location.pathname+'?s='+sid;
  let top=`<span class="tv-ti">${esc(g.title||'')}</span>`,m='';
  const big=(k,t,p)=>`<div class="tv-big"><small>${k}</small><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div>`;
- if(fin())m=`<div class="tv-pod"><h1 class="tv-h">Classement final</h1>${podium()}</div>`;
+ if(fin())m=tvStats(g.fs||0);
  else if(g.tb&&!fin())m=`<div class="tv-tb">${tbLive()}</div>`;
  else if(r<0){top='';if(!QRT)loadQR().then(()=>{const q=qrcode(0,'M');q.addData(url);q.make();QRT=q.createSvgTag({cellSize:8,margin:2,scalable:true,alt:'QR code pour rejoindre'});render()}).catch(()=>{});
   m=`<div class="tv-qrm"><div class="a-strip"></div><div class="tv-qrm-b"><div class="tv-qrm-l"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<span class=qrm-t>BEULOU TEST</span>'"><h1>${esc(g.title||g.name||'Beulou Test')}</h1><p>Scannez pour rejoindre la partie</p><span class="tv-url">${esc(url.replace(/^https?:\/\//,''))}</span></div><div class="tv-qrm-c">${QRT||'<span class="tv-qrl">QR code…</span>'}</div></div></div>`}
@@ -1197,7 +1268,7 @@ function team(){
  if(fin()&&rvw!=null&&vr().length)return GD+bar+review(t); // fin de soirée : on peut revoir toutes les réponses
  if(fin()){const mp=place(FI()).find(x=>x.id===me);
   return GB+bar+BRAND(true)+T+`<h1 class="st sm fun">Classement final</h1>`+FR(podium())+
-   `<p class="fres">${mp?.pos===1?'<b>Vous remportez la soirée !</b>':`Vous finissez <b>${mp?.pos}e</b> avec <b>${mp?.sc} pts</b>`}</p>`+RVB()+RKB+reveal(t,3)}
+   `<p class="fres">${mp?.pos===1?'<b>Vous remportez la soirée !</b>':`Vous finissez <b>${mp?.pos}e</b> avec <b>${mp?.sc} pts</b>`}</p><button class="btn blk y" data-a="shrk">Partager le classement</button>`+myStats(t)+RVB()+RKB+reveal(t,3)}
  const RG=(r>=0&&st==='open'&&I.sx&&!spect)?guessBox(t,'R'+r,'Thème de la manche',BR):'';
  if(rvw!=null&&(st==='open'||(g.tb&&!fin())))rvw=null; // la partie reprend : retour forcé au jeu
  if(rvw!=null&&vr().length)return GD+bar+review(t);
@@ -1706,7 +1777,7 @@ function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d
 /* fin de soirée : clôture directe ou tie break en cas d'égalité parfaite */
 function endBlock(TM){
  const P=place(FI()).filter(x=>inFinal(x.id)),tied=P.length>1&&P[0].sc===P[1].sc;
- if(fin())return`<div class="c a-end"><h2>Soirée terminée</h2><p class="a-p">Le classement final et le podium sont affichés chez les équipes.</p><button class="btn blk y" data-a="tab" data-v="rank">Voir le classement final</button></div>`;
+ if(fin())return`<div class="c a-end"><h2>Soirée terminée</h2><p class="a-p">Le classement final et le podium sont affichés chez les équipes. Fais défiler les stats de la soirée sur l'écran projection.</p>${fsCtl()}<button class="btn blk y" data-a="tab" data-v="rank">Voir le classement final</button></div>`;
  if(g.tb)return`<div class="c a-end"><h2>Tie break en cours</h2><p class="a-p">Les finalistes sont à égalité : le tie break se joue dans l'onglet T.</p><button class="btn blk y" data-a="tab" data-v="tb">Aller au tie break</button></div>`;
  return`<div class="c a-end"><h2>Fin de la soirée</h2>${P.map(x=>`<div class="a-tbr"><div class="f"><b>${esc(x.name)}</b></div><span class="a-tbn">${x.sc} pts</span></div>`).join('')}
   ${tied?`<p class="a-warn" style="margin:10px 0 12px">Égalité parfaite entre ${P.filter(x=>x.sc===P[0].sc).map(x=>esc(x.name)).join(' et ')}.</p><button class="btn blk" data-a="tiebreak">Aller au tie break</button>`:'<div style="height:12px"></div>'}
@@ -1796,6 +1867,8 @@ document.addEventListener('click',async e=>{
   try{await tcol().doc(me).set({qa:{[k]:{[j]:[c]}}},{merge:true})}finally{delete qpend[k+'|'+j];render()}}
  if(a==='qm'){cfg[r][t].qm=b.dataset.v;cfg[r][t].nc=cfg[r][t].nc||4;render()}
  if(a==='nc'){cfg[r][t].nc=+b.dataset.v;render()}
+ if(a==='fsn'){const L=fsSlides().length;await gset({fs:Math.max(0,Math.min(L-1,(g.fs||0)+(+b.dataset.d)))});return}
+ if(a==='shrk'){b.disabled=true;b.textContent='Image en préparation…';try{await shareRank()}finally{render()}return}
  if(a==='rvw'){rvw=b.dataset.v===''?vr().at(-1):+b.dataset.v;render();window.scrollTo(0,0)}
  if(a==='rvwx'){rvw=null;render();window.scrollTo(0,0)}
  if(a==='tab'){tab=b.dataset.v;render();window.scrollTo(0,0)}
