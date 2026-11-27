@@ -100,7 +100,7 @@ const CH=[
  '<b>3. La réponse</b> <b>Champs</b> : coche Artiste, Titre et / ou Bonus. Le bonus seul suffit, avec le libellé de ton choix : Année, Artiste original, Film… Ou <b>QCM</b> : 2 ou 4 réponses au choix. Ou <b>Buzzer</b> : la première équipe qui buzze répond à voix haute. En texte libre, c\'est une réponse écrite ou un QCM.',
  '<b>Les points</b> 1 pt par case trouvée. Progressif et floutée : 10, 5, 3 ou 1 pt par case, selon le moment où l\'équipe verrouille. QCM : 1 pt par bonne réponse. Réponse écrite en texte libre : 2 pts. Buzzer : 2 pts.',
  '<b>Exemples</b> Un carrousel de pochettes avec Artiste + Titre. Une image en QCM. Un extrait avec seulement « Bonus : Année ». Un extrait à l\'envers en buzzer. Une suite des paroles : « Allez venez Milord… ».'],
- tip:'Les options du thème : le <b>nom secret</b> à deviner (+30 pts) et le <b>x2</b>, que chaque équipe place sur un thème de la manche pour doubler ses points.',img:['genres','options']},
+ tip:'Les options du thème : le <b>thème mystère</b> à deviner (+30 pts) et le <b>x2</b>, que chaque équipe place sur un thème de la manche pour doubler ses points.',img:['genres','options']},
 {t:'Le buzzer',l:'Les équipes appuient sur un gros bouton. La plus rapide répond à voix haute, et toi tu donnes le point.',s:[
  'Dans le thème, choisis <em>Réponse : Buzzer</em>. Ça marche avec la musique, les images, la vidéo ou le texte libre.',
  'Pendant la soirée, lance la question. Les équipes voient le bouton <b>Buzz</b> sur leur téléphone.',
@@ -108,14 +108,14 @@ const CH=[
  'Bonne réponse : touche <em>Bonne réponse</em>, l\'équipe gagne 2 pts. Sinon, touche <em>Au suivant</em> : la main passe à l\'équipe d\'après.',
  'Une erreur ? <em>Annuler le point</em> ou <em>Remettre le buzzer à zéro</em>. Tu peux aussi corriger dans les corrections.'],
  tip:'Les heures de buzz viennent du serveur : pas de triche possible avec l\'horloge du téléphone.',img:['buzzer','buzzer-admin']},
-{t:'Thèmes secrets',l:'Le nom d\'un thème (ou d\'une manche) est caché. Les équipes doivent le deviner pour gagner des points en plus.',s:[
- 'Thème secret : dans le genre du thème, choisis <em>Nom du thème : Secret</em>. Manche secrète : touche <em>Nom secret</em> à côté du nom de la manche.',
- 'Les équipes voient « Thème secret » au lieu du nom, avec une case pour écrire leur proposition. Elles jouent les questions normalement. Le vrai nom n\'apparaît ni sur les téléphones ni sur la projection : seulement dans les réponses, après la correction.',
+{t:'Thèmes mystère',l:'Le nom d\'un thème (ou d\'une manche) est caché. Les équipes doivent le deviner pour gagner des points en plus.',s:[
+ 'Thème mystère : dans le genre du thème, choisis <em>Nom du thème : Mystère</em>. Manche mystère : touche <em>Nom mystère</em> à côté du nom de la manche.',
+ 'Les équipes voient « Thème mystère » au lieu du nom, avec une case pour écrire leur proposition. Elles jouent les questions normalement. Le vrai nom n\'apparaît ni sur les téléphones ni sur la projection : seulement dans les réponses, après la correction.',
  'Elles peuvent changer leur proposition jusqu\'à la clôture de la manche.',
  'Bien deviné : <b>+30 pts</b> pour un thème, <b>+60 pts</b> pour une manche.',
  'Aux corrections, les propositions proches du bon nom sont déjà cochées. Touche le bouton <b>+30</b> (ou <b>+60</b>) pour cocher ou décocher.',
  'Après la validation, les équipes découvrent le nom et voient « Trouvé » ou « Raté ».'],
- tip:'Le <b>x2</b> double tout le thème, bonus du nom secret compris. Exemple : 8 pts de questions + 30 pts de nom trouvé = 38 pts, avec le x2 : 76 pts. Le nom secret d\'une manche (+60) n\'est pas doublé.',img:[]},
+ tip:'Le <b>x2</b> double tout le thème, bonus du thème mystère compris. Exemple : 8 pts de questions + 30 pts de nom trouvé = 38 pts, avec le x2 : 76 pts. Le nom d\'une manche mystère (+60) n\'est pas doublé.',img:[]},
 {t:'Préparer les questions',l:'Une soirée = des manches, une manche = des thèmes, un thème = des questions.',s:[
  'Choisis la manche avec les onglets <b>1, 2, 3, F</b> (F = finale). <b>+</b> ajoute une manche.',
  'Ouvre un thème et choisis son <b>genre</b> : blind test, QCM, images, carrousel, image progressive, images QCM ou clip vidéo.',
@@ -147,8 +147,8 @@ const CH=[
  'Quand une équipe passe devant, <b>glisse</b> <em>Valider le tie break</em>.'],img:['tiebreak']},
 {t:'Fin de soirée : stats et partage',l:'Quand la finale est validée, la soirée se termine avec le podium, les stats et une image à partager.',s:[
  'Dans l\'onglet de la finale, la carte <em>Soirée terminée</em> a deux flèches. Elles changent ce que montre l\'écran projection.',
- 'Dans l\'ordre : le podium, les scores de chaque manche, puis les stats : meilleure manche, thème le plus facile, thème le plus dur, roi des secrets, x2 en or, main la plus rapide au buzzer, remontada.',
- 'Les stats qui ne servent pas (pas de secret, pas de buzzer…) ne s\'affichent pas.',
+ 'Dans l\'ordre : le podium, les scores de chaque manche, puis les stats : meilleure manche, thème le plus facile, thème le plus dur, roi des mystères, x2 en or, main la plus rapide au buzzer, remontada.',
+ 'Les stats qui ne servent pas (pas de mystère, pas de buzzer…) ne s\'affichent pas.',
  'Chaque équipe voit sur son téléphone <b>Tes stats</b> : ses points et sa place à chaque manche, et les titres qu\'elle a gagnés.',
  'Le bouton <em>Partager le classement</em> crée une image au format story, aux couleurs du thème graphique. La ligne de l\'équipe est mise en avant, avec une couronne or, argent ou bronze pour le podium.'],
  tip:'Sur ordinateur, l\'image est téléchargée. Sur téléphone, tu peux l\'envoyer directement dans une story ou une conversation.',img:['stats-admin','stats-joueur']},

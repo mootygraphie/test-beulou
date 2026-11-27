@@ -954,9 +954,9 @@ const bLab=x=>x.bl||'Bonus';
 const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
 /* noms visibles par les équipes et la projection : jamais le nom d'un thème ou d'une manche secrète */
-const pubTn=(x,i)=>x.sx?'Thème secret':tn(x,i),pubRn=(I,r)=>I.sx?'Manche mystère':(I.n||RNf(r));
+const pubTn=(x,i)=>x.sx?'Thème mystère':tn(x,i),pubRn=(I,r)=>I.sx?'Manche mystère':(I.n||RNf(r));
 const isSec=k=>k[0]==='R'?!!ri(+k.slice(1)).sx:!!th(+k.split('_')[0])[+k.split('_')[1]]?.sx;
-const bonus=(t,r)=>Object.entries(t.gok||{}).reduce((s,[k,v])=>{if(!v||!isSec(k))return s;const R=k[0]==='R',rr=R?+k.slice(1):+k.split('_')[0],tt=R?-1:+k.split('_')[1];return(r!=null&&rr!==r)?s:s+(R?BR:BT*(t.x2?.[rr]==tt?2:1))},0); // le x2 double aussi le nom secret du thème
+const bonus=(t,r)=>Object.entries(t.gok||{}).reduce((s,[k,v])=>{if(!v||!isSec(k))return s;const R=k[0]==='R',rr=R?+k.slice(1):+k.split('_')[0],tt=R?-1:+k.split('_')[1];return(r!=null&&rr!==r)?s:s+(R?BR:BT*(t.x2?.[rr]==tt?2:1))},0); // le x2 double aussi le nom mystère du thème
 const score=(t,r)=>Object.entries(t.marks||{}).reduce((s,[k,m])=>{const[rr,tt]=k.split('_');if(r!=null&&+rr!==r)return s;const x=th(+rr)[+tt];return s+ms(m,x)*(t.x2?.[rr]==tt?2:1)},0)+bonus(t,r);
 const vr=()=>RIDX().filter(r=>g.rd?.[r]==='validated');
 const tbp=t=>g.tbp?.[t.id]||0;
@@ -983,7 +983,7 @@ function evStats(){const V=vr(),T=teams,A=[];if(!T.length||!V.length)return{A,V,
  if(TH.length>1){const o=[...TH].sort((a,b)=>a.av-b.av),hard=o[0],easy=o[o.length-1];
   if(easy.av>hard.av){A.push({k:'easy',l:'Thème le plus facile',t:easy.n,d:`${Math.round(easy.av*100)} % des points trouvés`});A.push({k:'hard',l:'Thème le plus dur',t:hard.n,d:`${Math.round(hard.av*100)} % des points trouvés`})}}
  const sec=T.map(t=>({id:t.id,n:Object.entries(t.gok||{}).filter(([k,v])=>v&&isSec(k)).length})).sort((a,b)=>b.n-a.n);
- if(sec[0]?.n)A.push({k:'sec',l:'Roi des secrets',id:sec[0].id,d:`${sec[0].n} nom${sec[0].n>1?'s':''} secret${sec[0].n>1?'s':''} trouvé${sec[0].n>1?'s':''}`});
+ if(sec[0]?.n)A.push({k:'sec',l:'Roi des mystères',id:sec[0].id,d:`${sec[0].n} mystère${sec[0].n>1?'s':''} résolu${sec[0].n>1?'s':''}`});
  const x2=[];T.forEach(t=>Object.entries(t.x2||{}).forEach(([r,i])=>{if(!V.includes(+r))return;const x=th(+r)[+i];if(!x)return;const v=ms(t.marks?.[r+'_'+i],x);if(v>0)x2.push({id:t.id,v,n:tn(x,+i)})}));
  x2.sort((a,b)=>b.v-a.v);if(x2[0])A.push({k:'x2',l:'Le x2 en or',id:x2[0].id,d:`+${x2[0].v} pts gagnés sur ${x2[0].n}`});
  const bw={};Object.values(g.bz||{}).forEach(Q=>Object.values(Q||{}).forEach(o=>{if(o?.w)bw[o.w]=(bw[o.w]||0)+1}));
@@ -1154,7 +1154,7 @@ function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v
  if(I.sx)h+=`<div class="rvsec ${t.gok?.['R'+r]?'ok':''}">Thème de la manche : <b>${esc(I.n||'')}</b> ${t.gok?.['R'+r]?'· trouvé +'+BR:'· raté'}</div>`;
  th(r).forEach((x,i)=>{const key=`${r}_${i}`,m=t.marks?.[key]||[],x2=t.x2?.[r]==i,A=t.answers?.[key]||[];
   const tot=(ms(m,x)+(x.sx&&t.gok?.[key]?BT:0))*(x2?2:1);
-  h+=`<section class="rvc"><header><span>${i+1}</span><div><b>${esc(tn(x,i))}</b><small>${x.sx?(t.gok?.[key]?'Thème secret trouvé · +'+BT*(x2?2:1):'Thème secret raté'):x.ty==='img'?'Images'+(x.qm==='qcm'?' · QCM':''):x.qm==='bz'?'Buzzer':x.qm==='qcm'?'QCM':'Thème '+(i+1)}${x2?' · x2':''}</small></div><em>+${spect?0:tot}</em></header>`;
+  h+=`<section class="rvc"><header><span>${i+1}</span><div><b>${esc(tn(x,i))}</b><small>${x.sx?(t.gok?.[key]?'Thème mystère trouvé · +'+BT*(x2?2:1):'Thème mystère raté'):x.ty==='img'?'Images'+(x.qm==='qcm'?' · QCM':''):x.qm==='bz'?'Buzzer':x.qm==='qcm'?'QCM':'Thème '+(i+1)}${x2?' · x2':''}</small></div><em>+${spect?0:tot}</em></header>`;
   x.q.forEach((q,j)=>{let exp,mine,marks,pt;
    if(x.qm==='bz'){exp=esc(expTxt(x,q));mine=m[j*2]?'Point au buzzer':t.bzz?.[key]?.[j]!=null?'A buzzé':'';marks=ok(m[j*2]);pt=(m[j*2]||0)*x.bp}
    else if(x.ty==='txt'&&x.qm!=='qcm'){exp=(q.p?`<span class="rvb2">${esc(q.p)}</span>`:'')+esc(q.r||'');mine=esc(A[j]||'');marks=ok(m[j*2]);pt=(m[j*2]||0)*x.pts}
@@ -1218,7 +1218,7 @@ function reveal(t,r){
  if(I.sx&&I.n)it.push(['Thème de la manche',I.n,t.gok?.['R'+r],BR]);
  th(r).forEach((x,i)=>{if(x.sx&&x.n)it.push([`Thème ${i+1}`,x.n,t.gok?.[`${r}_${i}`],BT])});
  if(!it.length)return'';
- return`<div class="rv"><h3>Thèmes secrets</h3>${it.map(([l,n,ok,p])=>`<div><span>${l}<br><b>${esc(n)}</b></span><span class="chip ${ok?'ok':''}">${ok?'Trouvé +'+p:'Raté'}</span></div>`).join('')}</div>`}
+ return`<div class="rv"><h3>Thèmes mystère</h3>${it.map(([l,n,ok,p])=>`<div><span>${l}<br><b>${esc(n)}</b></span><span class="chip ${ok?'ok':''}">${ok?'Trouvé +'+p:'Raté'}</span></div>`).join('')}</div>`}
 /* ===== écran projection : suit la soirée tout seul, n'affiche jamais les réponses avant les corrections ===== */
 let QRT=null,TVSEEN='';
 function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake();
@@ -1294,7 +1294,7 @@ function team(){
   const key=`${r}_${i}`,s=g.th?.[key],done=t.done?.[key],play=s==='open'&&!done,xi=t.x2?.[r];
   const known=s==='open'||s==='closed'; // nom révélé dès l'ouverture du thème (secrets : jamais ici)
   const shown=s?(exp[key]??(play&&(g.ct?.[r]==null||g.ct[r]===i))):false,pop=play&&!popped.has(sid+key);if(pop)popped.add(sid+key);
-  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''} ${x.sx?'sx':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème secret':known?esc(tn(x,i)):'Thème '+(i+1)}<small>${x.sx?'Devine-le : +'+BT+' pts':(known?'Thème '+(i+1):'À venir')+(x.ty==='img'?' · images':'')+(x.qm==='qcm'?' · QCM':'')}${x.eb?' · bonus '+esc(bLab(x)):''}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
+  h+=`<div class="dw ${play?'open':''} ${pop?'pop':''} ${x.sx?'sx':''}"><div class="dh"><button class="dhb" data-a="exp" data-key="${key}" data-sh="${shown?1:0}" ${s?'':'disabled'}><span class="tnum ${x.sx?'sx':''}">${x.sx?'?':i+1}</span><span class="tname">${x.sx?'Thème mystère':known?esc(tn(x,i)):'Thème '+(i+1)}<small>${x.sx?'Devine-le : +'+BT+' pts':(known?'Thème '+(i+1):'À venir')+(x.ty==='img'?' · images':'')+(x.qm==='qcm'?' · QCM':'')}${x.eb?' · bonus '+esc(bLab(x)):''}</small></span></button><button class="x2p ${xi===i?'on':''}" data-a="x2" data-t="${i}" ${xi===i?'data-v="-1"':''} ${s?'':'disabled'}>x2</button><span class="chip ${done?'ok':s==='open'?'pk':''}">${done?'Validé':s==='closed'?'Clos':s==='open'?'En cours':'Bientôt'}</span></div>`;
   if(shown){
    h+=`<div class="db">`+(x.sx?guessBox(t,key,'Nom du thème',BT):'');
    if(x.eb)h+=`<p class="bnh">Bonus : <b>${esc(bLab(x))}</b> · +1 pt par bonus trouvé</p>`;
@@ -1337,9 +1337,9 @@ function pfCard(){let h=`<div class="c"><h2>Vérifier la soirée</h2>`;
  return h+`<ul class="a-pf">${PF.items.map(([t,st,sum,det])=>`<li class="${st}"><i>${st==='ok'?'✓':st==='w'?'!':st==='ld'?'':'i'}</i><div><b>${t}</b><small>${esc(sum)}</small>${(det||[]).slice(0,6).map(d=>`<small class="d">${esc(d)}</small>`).join('')}${(det||[]).length>6?`<small class="d">… et ${det.length-6} autre(s)</small>`:''}</div></li>`).join('')}</ul>${PF.run?'':`<button class="btn sm gh" data-a="pfrun">Relancer la vérification</button>`}</div>`}
 async function preflight(){PF={run:1,items:[['Vérification en cours','ld','Questions, extraits, images…']]};render();
  const it=[],RN=r=>r<cfgNR?'Manche '+(r+1):'Finale',inc=[],noDz=[],dz=[],noIm=[],ims=[],noYt=[];
- for(let r=0;r<=cfgNR;r++)(cfg[r]||[]).forEach((x,i)=>{const nm=`${RN(r)} · ${tn(x,i)}`,[d,t]=thProg(x);if(d<t)inc.push(`${nm} : ${t-d} question${t-d>1?'s':''} à compléter`);if(x.sx&&!x.n)inc.push(`${nm} : nom secret à renseigner`);
+ for(let r=0;r<=cfgNR;r++)(cfg[r]||[]).forEach((x,i)=>{const nm=`${RN(r)} · ${tn(x,i)}`,[d,t]=thProg(x);if(d<t)inc.push(`${nm} : ${t-d} question${t-d>1?'s':''} à compléter`);if(x.sx&&!x.n)inc.push(`${nm} : nom du thème mystère à renseigner`);
   (x.q||[]).forEach((q,j)=>{if(x.ty==='img'){if(q.im)ims.push([q.im,`${nm} · image ${j+1}`]);else noIm.push(`${nm} · image ${j+1} manquante`)}else if(x.ty==='txt'){}else if(x.vid){if(!q.yt)noYt.push(`${nm} · Q${j+1} : lien YouTube manquant`)}else if(q.dz)dz.push([q.dz,`${nm} · Q${j+1}`]);else noDz.push(`${nm} · Q${j+1}`)})});
- for(let r=0;r<cfgNR;r++)if(cfgI[r]?.sx&&!cfgI[r]?.n)inc.push(`${RN(r)} : nom secret de la manche à renseigner`);
+ for(let r=0;r<cfgNR;r++)if(cfgI[r]?.sx&&!cfgI[r]?.n)inc.push(`${RN(r)} : nom de la manche mystère à renseigner`);
  it.push(['Questions',inc.length?'w':'ok',inc.length?inc.length+' point'+(inc.length>1?'s':'')+' à compléter':'Toutes les questions sont remplies',inc]);
  const bad=[];for(const[id,l]of dz){try{await Promise.race([dzGet(id),new Promise((_,ko)=>setTimeout(()=>ko(new Error('délai')),8000))])}catch(e){bad.push(l+' : extrait indisponible')}}
  it.push(['Extraits Deezer',bad.length?'w':'ok',dz.length?`${dz.length-bad.length} / ${dz.length} disponibles`:'Aucun extrait lié',bad]);
@@ -1418,7 +1418,7 @@ function prep(){
  [prepR].forEach(r=>{const n=r===cfgNR?'Finale':'Manche '+(r+1);
   const I=cfgI[r]||{},T=cfg[r]||[];
   h+=`<section class="a-rd"><header class="a-rdh"><div class="a-num">${r<cfgNR?r+1:'F'}</div><div class="f"><div class="a-k">${n} · ${T.length} thème${T.length>1?'s':''}</div><input class="in" data-k="rn|${r}" placeholder="Nom de la manche (optionnel)" value="${esc(I.n||'')}"></div>
-   <button class="btn sm ${I.sx?'y':'gh'}" data-a="rsx" data-r="${r}" style="margin:0">${I.sx?'🔒 Nom secret · +'+BR+' pts':'Nom visible'}</button>${r<cfgNR&&cfgNR>1&&!lock?`<div class="a-rmv" role="group" aria-label="Déplacer la manche"><span>Ordre</span><button data-a="mvrd" data-r="${r}" data-d="-1" ${r?'':'disabled'} aria-label="Déplacer la manche avant"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button data-a="mvrd" data-r="${r}" data-d="1" ${r<cfgNR-1?'':'disabled'} aria-label="Déplacer la manche après"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div><button class="btn sm dg" data-a="rmrd" data-r="${r}" style="margin:0">Supprimer la manche</button>`:''}</header>
+   <button class="btn sm ${I.sx?'y':'gh'}" data-a="rsx" data-r="${r}" style="margin:0">${I.sx?'🔒 Nom mystère · +'+BR+' pts':'Nom visible'}</button>${r<cfgNR&&cfgNR>1&&!lock?`<div class="a-rmv" role="group" aria-label="Déplacer la manche"><span>Ordre</span><button data-a="mvrd" data-r="${r}" data-d="-1" ${r?'':'disabled'} aria-label="Déplacer la manche avant"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button data-a="mvrd" data-r="${r}" data-d="1" ${r<cfgNR-1?'':'disabled'} aria-label="Déplacer la manche après"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div><button class="btn sm dg" data-a="rmrd" data-r="${r}" style="margin:0">Supprimer la manche</button>`:''}</header>
    ${I.sx&&!I.n?`<p class="a-warn" style="padding:10px 18px 0;margin:0">Renseigne le nom de la manche à deviner.</p>`:''}${g.rd?.[r]?'<p class="a-lk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 11h12v9H6zM9 11V8a3 3 0 0 1 6 0v3"/></svg>Manche déjà lancée : l\'ordre des thèmes et des questions est verrouillé.</p>':''}<div class="a-rdb">`;
   T.forEach((x,i)=>{const both=x.ea&&x.et;if(openTh!==r+'_'+i){h+=thCol(x,r,i,T.length);return}
    h+=`<section class="a-theme cfg" id="th-${r}_${i}" data-row="t|${r}|${i}"><header class="a-tb ${x.sx?'sx':''}">${TG(r,i,T.length)}<span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span><button class="a-hmv" data-a="thx" data-r="${r}" data-t="${i}" aria-label="Replier le thème" aria-expanded="true">${CHEV(1)}</button><button class="rm" title="Supprimer ce thème" aria-label="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">${TRASH}</button></header>
@@ -1434,7 +1434,7 @@ function prep(){
 function rscreen(r){
  const T=th(r),I=ri(r),st=g.rd?.[r],on=g.r===r&&st==='open',over=st==='closed'||st==='validated';
  const step=st==='validated'?3:st==='closed'?2:on?1:0,TM=r===FI()?teams.filter(t=>inFinal(t.id)):teams;
- let h=`<section class="a-hero"><div class="a-num">${r<FI()?r+1:'F'}</div><div><div class="a-k">${r<FI()?'Manche':'Finale'}${I.sx?' · nom secret':''}</div><h2 class="a-t">${esc(I.n||RNf(r))}</h2><div class="a-meta">${r===FI()?'Finalistes : '+TM.map(t=>esc(t.name)).join(' vs '):teams.length+' équipe'+(teams.length>1?'s':'')} · ${T.length} thème${T.length>1?'s':''}</div></div></section>`;
+ let h=`<section class="a-hero"><div class="a-num">${r<FI()?r+1:'F'}</div><div><div class="a-k">${r<FI()?'Manche':'Finale'}${I.sx?' · nom mystère':''}</div><h2 class="a-t">${esc(I.n||RNf(r))}</h2><div class="a-meta">${r===FI()?'Finalistes : '+TM.map(t=>esc(t.name)).join(' vs '):teams.length+' équipe'+(teams.length>1?'s':'')} · ${T.length} thème${T.length>1?'s':''}</div></div></section>`;
  h+=`<div class="a-steps">${['Ouverture','En jeu','Corrections','Validée'].map((n,i)=>`<div class="a-step ${i<step?'done':i===step?'cur':''}"><i>${i<step?'✓':i+1}</i><span>${n}</span></div>`).join('')}</div>`;
  if(!T.length)return h+`<div class="c mut">Aucun thème. Ajoute-les dans Préparer.</div>`;
  h+=liveable(r)&&lvHide?`<button class="btn blk y" data-a="lventer" style="margin:0 0 16px">Revenir au mode soirée</button>`:'';
@@ -1445,7 +1445,7 @@ function rscreen(r){
    h+=`<p class="a-p">Les équipes sont sur l'écran d'attente. Ouvre la manche pour lancer le jeu.</p><button class="btn blk" data-a="launch" data-r="${r}">Ouvrir la manche</button>`}}
  if(on){
   T.forEach((x,i)=>{const o=g.th?.[`${r}_${i}`];
-   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom secret · ':''}${x.ty==='img'?'Images · '+IML[x.im]+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM · '+x.nc+' choix':x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`+(o==='open'&&x.ty==='img'&&x.im!=='cl'?imgCtl(x,`${r}_${i}`):'')+(o==='open'&&x.vid?vidCtl(x,`${r}_${i}`):'')+(o==='open'&&!x.vid&&x.ty!=='img'&&x.q.some(q=>q.dz)?dzCtl(x,`${r}_${i}`):'')});
+   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom mystère · ':''}${x.ty==='img'?'Images · '+IML[x.im]+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM · '+x.nc+' choix':x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`+(o==='open'&&x.ty==='img'&&x.im!=='cl'?imgCtl(x,`${r}_${i}`):'')+(o==='open'&&x.vid?vidCtl(x,`${r}_${i}`):'')+(o==='open'&&!x.vid&&x.ty!=='img'&&x.q.some(q=>q.dz)?dzCtl(x,`${r}_${i}`):'')});
   h+=`<button class="btn blk y" data-a="closeround" data-r="${r}" style="margin-top:12px">Clôturer la manche</button>`;
  }
  if(over)h+=`<p class="a-p" style="margin:0">Manche ${st==='closed'?'clôturée : passe aux corrections ci-dessous.':'validée.'}</p>`;
@@ -1453,10 +1453,10 @@ function rscreen(r){
  if(on)return h+`<div class="c mut">Les corrections apparaîtront ici après la clôture de la manche.</div>`;
  if(!over)return h;
  const secBlock=(key,label,name,pts)=>`<div class="a-sec"><div class="a-qh"><em>${label}</em><b>${esc(name)||'(non renseigné)'}</b></div>${TM.map(t=>{const m=getGk(t,key,name),v=t.guess?.[key]||'';return`<div class="a-ln"><div class="t"><small>${esc(t.name)}</small><span>${v?esc(v):'<i>(pas de proposition)</i>'}</span></div><button class="ab sc ${m?'on':''}" data-a="gk" data-m="${sid}|${t.id}|${key}">+${pts}</button></div>`}).join('')}</div>`;
- if(I.sx)h+=`<div class="c"><h2>Nom secret de la manche</h2>${secBlock('R'+r,'Réponse',I.n,BR)}</div>`;
+ if(I.sx)h+=`<div class="c"><h2>Nom de la manche mystère</h2>${secBlock('R'+r,'Réponse',I.n,BR)}</div>`;
  T.forEach((x,i)=>{
   const key=`${r}_${i}`;
-  h+=`<section class="a-theme"><header class="a-tb"><span class="k">Thème ${i+1}</span><h3>${esc(tn(x,i))}</h3>${x.sx?'<span class="chip yl">Secret</span>':''}${x.eb?`<span class="chip">Bonus : ${esc(bLab(x))}</span>`:''}<span class="pts">${ptsMax(x)} pts</span></header>`;
+  h+=`<section class="a-theme"><header class="a-tb"><span class="k">Thème ${i+1}</span><h3>${esc(tn(x,i))}</h3>${x.sx?'<span class="chip yl">Mystère</span>':''}${x.eb?`<span class="chip">Bonus : ${esc(bLab(x))}</span>`:''}<span class="pts">${ptsMax(x)} pts</span></header>`;
   if(x.sx)h+=`<div class="a-q">${secBlock(key,'Nom du thème',x.n,BT)}</div>`;
   x.q.forEach((q,j)=>{
    const ca=expTxt(x,q);
@@ -1765,7 +1765,7 @@ const supOf=k=>SUP.findIndex(x=>x.ks.includes(k));
 const genOf=x=>x.vid?6:x.ty==='txt'?(x.tm==='qa'?10:9):x.qm==='bz'?7:x.ty==='img'&&x.im==='bl'?8:x.ty==='img'?(x.qm==='qcm'&&!isPrg(x)?5:x.im==='ca'?3:isPrg(x)?4:2):x.qm==='qcm'?1:0;
 const supIco=k=>`<span class="g-ic g-${SUP[k].c}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SUP[k].p}"/></svg></span>`;
 const gIco=k=>`<span class="g-ic g-${GEN[k].c}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${GEN[k].p}"/></svg></span>`;
-function gSum(x){const k=genOf(x),sx=x.sx?' · secret':'';
+function gSum(x){const k=genOf(x),sx=x.sx?' · mystère':'';
  if(k===0)return[x.ea&&'Artiste',x.et&&'Titre'].filter(Boolean).join(' + ')+(x.eb?' · bonus '+bLab(x):'')+sx;
  if(k===1)return(x.nc==2?2:4)+' réponses'+sx;
  if(k===6)return'Vidéo · '+[x.ea&&'Artiste',x.et&&'Titre'].filter(Boolean).join(' + ')+(x.eb?' · bonus '+bLab(x):'')+sx;
@@ -1779,7 +1779,7 @@ const REPS=[['fld','Champs','Artiste, titre ou bonus à écrire'],['qcm','QCM','
 const isTimed=d=>(d.sup==='img'&&(d.disp==='pr'||d.disp==='bl'))||(d.sup==='mus'&&d.disp==='cov');
 const supIc=k=>`<span class="g-ic g-${SUPS[k][1]}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SUPS[k][2]}"/></svg></span>`;
 function thLab(x0){const x=normTh(x0),D=DISP[x.sup]||[],d=D.find(v=>v[0]===x.disp);
- return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:'')+(x.fx?' · '+FX[x.fx][0]:''),s:(x.qm==='bz'?'Buzzer · '+x.bp+' pts':x.qm==='qcm'?x.nc+' réponses au choix':x.ty==='txt'?'Réponse écrite · 2 pts':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom secret':'')}}
+ return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:'')+(x.fx?' · '+FX[x.fx][0]:''),s:(x.qm==='bz'?'Buzzer · '+x.bp+' pts':x.qm==='qcm'?x.nc+' réponses au choix':x.ty==='txt'?'Réponse écrite · 2 pts':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom mystère':'')}}
 let gsh=null; // volet ouvert : {r,i,step,d}
 function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d),
  grp=(t,cols,items)=>`<div class="g-grp"><span>${t}</span><div style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${items.join('')}</div></div>`,
@@ -1793,7 +1793,7 @@ function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d
   if((d.rep==='fld'||d.rep==='bz')&&d.sup!=='txt'){G.push(grp('À trouver',3,[opt('ea',1,'Artiste','',on(d.ea)),opt('et',1,'Titre','',on(d.et)),opt('eb',1,'Bonus','libellé au choix',on(d.eb))]));
    if(d.eb)G.push(`<label class="g-grp"><span>Intitulé du bonus</span><input class="in" data-k="gbl" placeholder="Ex : Année, Artiste original, Film" value="${esc(d.bl||'')}"></label>`)}
   if(d.rep==='qcm')G.push(grp('Nombre de choix',2,[opt('nc',2,'2 réponses','',on(d.nc==2)),opt('nc',4,'4 réponses','',on(d.nc!=2))]));
-  G.push(grp('Nom du thème',2,[opt('sx',0,'Visible','affiché aux équipes',on(!d.sx)),opt('sx',1,'Secret','+'+BT+' pts à deviner',d.sx?'on y':'')]));
+  G.push(grp('Nom du thème',2,[opt('sx',0,'Visible','affiché aux équipes',on(!d.sx)),opt('sx',1,'Mystère','+'+BT+' pts à deviner',d.sx?'on y':'')]));
   body=`<div class="g-cur">${supIc(d.sup)}<span class="f"><b>${SUPS[d.sup][0]}</b><small>Touche ‹ pour changer de support</small></span></div>${G.join('')}<button class="btn blk y g-ok" data-a="gok">Valider</button>`}
  return`<div class="g-ov"><button class="g-bg" data-a="gclose" aria-label="Fermer le volet"></button><div class="g-sh" role="dialog" aria-label="Type de thème"><span class="g-hd"></span>
  <div class="g-top">${gsh.step!=='sup'?'<button class="g-ib" data-a="gback" aria-label="Changer de support">‹</button>':''}<div class="f"><small>Thème ${gsh.i+1}</small><b>${gsh.step==='sup'?'Choisis le support':'Affichage et réponse'}</b></div><button class="g-ib" data-a="gclose" aria-label="Fermer">✕</button></div>${body}</div></div>`}
