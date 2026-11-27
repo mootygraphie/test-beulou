@@ -851,6 +851,9 @@ body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);backgroun
 .tv-sg i{position:relative;height:3.4cqi;border-radius:1cqi;background:rgba(255,255,255,.08);overflow:hidden}.tv-sg i::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--p);border-radius:1cqi}
 .tv-sg i em{position:relative;font-style:normal;font-weight:800;padding-left:1cqi;line-height:3.4cqi}.tv-sg strong{font:900 2.6cqi Poppins;color:var(--y);text-align:right}
 .tv-aw .tv-awl{font:800 2.6cqi Poppins;color:var(--y);text-transform:uppercase;letter-spacing:.08em;margin:1cqi 0 0}.tv-aw h1{font-size:7cqi}
+/* effets */
+.lv-fx{align-self:center;margin:0 0 10px;padding:5px 12px;border-radius:999px;background:var(--p);font:800 12px Poppins;letter-spacing:.04em}
+.tv-fx{margin:0;color:var(--y)!important;font-weight:800}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -929,7 +932,7 @@ function normTh(x){const q0=(x.q||[]).map(y=>Object.assign({a:'',t:'',b:'',r:'',
  const q=q0.map(y=>legacyImg&&!y.b?{...y,b:y.r}:y).map(y=>sup==='mus'&&disp==='cov'?{...y,im:y.cv?String(y.cv).replace(/\/\d+x\d+-/,'/500x500-'):''}:y);
  const fld=(rep==='fld'||rep==='bz')&&sup!=='txt';
  return{n:x.n||'',sup,disp,rep,vid:sup==='vid',ty:sup==='img'||timed?'img':sup==='txt'?'txt':'mus',tm:disp==='qa'?'qa':'lyr',im:sup==='mus'&&disp==='cov'?'bl':sup==='img'?disp:'cl',
-  qm:rep==='qcm'?'qcm':rep==='bz'?'bz':'cl',nc:x.nc==2?2:4,ea:fld&&ea,et:fld&&et,eb:fld&&eb,bp:+x.bp||2,bm:!!x.bm,bl,sx:!!x.sx,q:q.slice(0,QMAX),pts:sup==='txt'&&rep!=='qcm'?2:1}}
+  qm:rep==='qcm'?'qcm':rep==='bz'?'bz':'cl',nc:x.nc==2?2:4,ea:fld&&ea,et:fld&&et,eb:fld&&eb,bp:+x.bp||2,bm:!!x.bm,fx:sup==='mus'&&disp==='ext'&&FX[x.fx]?x.fx:'',bl,sx:!!x.sx,q:q.slice(0,QMAX),pts:sup==='txt'&&rep!=='qcm'?2:1}}
 const hh=s=>{let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))%1000003;return h};
 const qord=(key,j,n)=>[...Array(n).keys()].sort((a,b)=>hh(key+'|'+j+'|'+a)-hh(key+'|'+j+'|'+b));
 const qpend={};let rvw=null,renS=null,cfgNR=3,prepR=0,openTh=null,drg=null;
@@ -1125,9 +1128,9 @@ const sndBox=()=>SOK?`<div class="snd-ok"><svg width="20" height="20" viewBox="0
 async function wake(){try{if(navigator.wakeLock&&document.visibilityState==='visible')WL=await navigator.wakeLock.request('screen')}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(!ADMIN&&SOK&&g?.snd&&document.visibilityState==='visible')wake()});
 function sndSync(){if(ADMIN||!g?.snd||!SOK)return;const n=g.np;if(!n||n.at===lastNp)return;lastNp=n.at;
- if(n.st==='play'&&n.id){const off=Math.max(0,Math.min(29,(n.pos||0)+Math.min(30,Math.max(0,(Date.now()-n.at)/1000))));
-  dzGet(n.id).then(u=>{if(g.np?.at!==n.at)return;const go=()=>{try{if(off>.5)AU.currentTime=off}catch(e){}};
-   if(AU.src!==u){AU.src=u;AU.addEventListener('loadedmetadata',go,{once:true})}else go();AU.play().catch(()=>{SOK=false;render()})}).catch(()=>{})}
+ if(n.st==='play'&&n.id){const off=Math.max(0,Math.min(29,(n.pos||0)+Math.min(30,Math.max(0,(Date.now()-n.at)/1000))*(FX[n.fx]?.[1]||1)));
+  dzGet(n.id).then(u=>fxSrc(u,n.fx)).then(u=>{if(g.np?.at!==n.at)return;fxRate(n.fx);const go=()=>{try{if(off>.5)AU.currentTime=off}catch(e){}};
+   if(AU.src!==u){AU.src=u;fxRate(n.fx);AU.addEventListener('loadedmetadata',go,{once:true})}else go();AU.play().catch(()=>{SOK=false;render()})}).catch(()=>{})}
  else AU.pause()}
 const guessBox=(t,key,label,pts)=>{const k='g|'+key;return`<div class="gs"><div class="gs-l"><span><i>?</i>${label}</span><b>+${pts} pts</b></div><input class="in" data-k="${k}" autocomplete="off" placeholder="Ta proposition..." value="${esc(draft[k]??t.guess?.[key]??'')}"></div>`};
 /* tie break en direct, vu par toutes les équipes */
@@ -1238,7 +1241,7 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
    else if(x.ty==='img')m=`<div class="tv-img one">${pic(q.im,'full')}<div class="tv-side"><small>Image ${j+1} / ${N}</small>${x.qm==='qcm'?tvCh(x,key,j):''}</div></div>`;
    else if(x.ty==='txt')m=`<div class="tv-big tv-txt"><small>Question ${j+1} / ${N}</small><h2>${x.tm==='lyr'?'« '+esc(q.p)+' … »':esc(q.p)}</h2>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.tm==='lyr'?'Écrivez la suite':'Écrivez votre réponse'}</p>`}</div>`;
    else if(x.vid)m=`<div class="tv-v"><small>Question ${j+1} / ${N}</small><div class="ytslot tv-yt"></div></div>`;
-   else{const on=g.np?.st==='play'&&q.dz&&g.np.id===q.dz;m=`<div class="tv-big"><small>Question ${j+1} / ${N}</small><h1>${on?'Écoutez bien':'Question '+(j+1)}</h1><div class="tv-eq ${on?'on':''}">${'<i></i>'.repeat(11)}</div>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.ea&&x.et?'Artiste et titre':x.ea?'Artiste':'Titre'}${x.eb?' · bonus '+esc(bLab(x)):''}</p>`}</div>`}}}
+   else{const on=g.np?.st==='play'&&q.dz&&g.np.id===q.dz;m=`<div class="tv-big"><small>Question ${j+1} / ${N}</small><h1>${on?'Écoutez bien':'Question '+(j+1)}</h1>${x.fx?`<p class="tv-fx">Extrait ${x.fx==='rev'?'à l\'envers':x.fx==='slow'?'ralenti':'en voix aiguë'}</p>`:''}<div class="tv-eq ${on?'on':''}">${'<i></i>'.repeat(11)}</div>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.ea&&x.et?'Artiste et titre':x.ea?'Artiste':'Titre'}${x.eb?' · bonus '+esc(bLab(x)):''}</p>`}</div>`}}}
  else if(st==='closed')m=big(RN,'Corrections en cours','Les points arrivent, restez dans le coin');
  else if(st==='validated'){const L=place(r),an=TVSEEN!=='rk'+r;TVSEEN='rk'+r;m=`<div class="tv-rk"><small>Classement après ${r===FI()?'la finale':'la manche '+(r+1)}</small>${L.map((t,i)=>`<div class="tv-r ${an?'anim':''} p${t.pos}" style="animation-delay:${((L.length-1-i)*.8).toFixed(1)}s"><span>${t.pos}</span><b>${esc(t.name)}</b><em>${t.sc} pts</em></div>`).join('')}</div>`}
  else m=big(RN,esc(I.n||RNf(r)),'La manche va commencer');
@@ -1588,7 +1591,8 @@ function lvQ(r,t,x,key,j){const q=x.q[j],N=x.q.length,img=x.ty==='img';
   <button class="a-tgl ${ytMe?'on':''}" data-a="ytme" role="switch" aria-checked="${ytMe}"><span class="kn" aria-hidden="true"></span><span class="f"><b>Son sur mon téléphone</b><small>Coupé par défaut pour éviter l'écho avec la salle.</small></span></button>`
   :`<p class="lv-nodz">Pas de vidéo pour cette question : ajoute le lien dans Préparer.</p>`}
  else{const on=q.dz&&dzp.id===q.dz&&!AU.paused,pc=q.dz&&dzp.id===q.dz&&AU.duration?AU.currentTime/AU.duration:0;
-  if(q.dz){const id=q.dz;if(!dzFresh(id)&&!DZW[id]){DZW[id]=1;dzGet(id).catch(()=>{}).then(()=>{delete DZW[id]})}}
+  if(q.dz){const id=q.dz;if(!dzFresh(id)&&!DZW[id]){DZW[id]=1;dzGet(id).catch(()=>{}).then(()=>{delete DZW[id]})}else if(x.fx==='rev'&&dzFresh(id)&&!RVC[dzFresh(id)])revSrc(dzFresh(id)).catch(()=>{})}
+  if(x.fx)h+=`<span class="lv-fx">Effet : ${FX[x.fx][0]}</span>`;
   h+=q.dz?`<button class="lv-play ${on?'on':''}" data-a="dzplay" data-key="${key}" data-j="${j}" aria-label="${on?'Mettre en pause':'Lancer l\'extrait'}"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" class="trk"/><circle cx="60" cy="60" r="54" class="lv-prg" style="stroke-dashoffset:${339.3*(1-pc)}"/></svg><span>${on?PAUSEI:PLAYI}</span></button><p class="lv-tm"><span class="dzcur">${dzp.id===q.dz?mmss(AU.currentTime):'0:00'}</span> / 0:30${dzp.err?' · '+esc(dzp.err):''}</p>`
   :`<p class="lv-nodz">Pas d'extrait Deezer pour cette question : lance la musique de ton côté.</p>`}
  if(x.qm==='bz')h+=bzAdm(x,key,j);
@@ -1639,6 +1643,18 @@ function eqModal(names,sc){const o=document.createElement('div');o.className='ov
 /* ===== Deezer (gratuit, sans compte) : recherche + extraits de 30 s =====
    L'API publique ne renvoie pas d'en-tête CORS : on l'appelle en JSONP. Les liens d'extraits expirent : on les redemande au besoin. */
 let jsn=0,dzs=null,dzp={};const DZC={},DZW={},AU=new Audio();AU.preload='auto';
+/* effets sur l'extrait : vitesse de lecture (ralenti, voix aiguë) ou fichier retourné (à l'envers) */
+const FX={slow:['Ralenti',.75,true,'Plus lent, même voix'],chip:['Voix aiguë',1.35,false,'Plus vite et plus aigu'],rev:['À l\'envers',1,true,'L\'extrait joué à l\'envers']};
+const RVC={},RVW={};
+function fxRate(fx){const f=FX[fx]||['',1,true];AU.defaultPlaybackRate=f[1];AU.playbackRate=f[1];AU.preservesPitch=AU.webkitPreservesPitch=AU.mozPreservesPitch=f[2]}
+function wavOf(b){const nc=Math.min(2,b.numberOfChannels),n=b.length,sr=b.sampleRate,dv=new DataView(new ArrayBuffer(44+n*nc*2)),W=(o,t)=>{for(let i=0;i<t.length;i++)dv.setUint8(o+i,t.charCodeAt(i))};
+ W(0,'RIFF');dv.setUint32(4,36+n*nc*2,true);W(8,'WAVE');W(12,'fmt ');dv.setUint32(16,16,true);dv.setUint16(20,1,true);dv.setUint16(22,nc,true);dv.setUint32(24,sr,true);dv.setUint32(28,sr*nc*2,true);dv.setUint16(32,nc*2,true);dv.setUint16(34,16,true);W(36,'data');dv.setUint32(40,n*nc*2,true);
+ const C=[...Array(nc).keys()].map(c=>b.getChannelData(c));let o=44;for(let i=n-1;i>=0;i--)for(let c=0;c<nc;c++){const v=Math.max(-1,Math.min(1,C[c][i]));dv.setInt16(o,v<0?v*32768:v*32767,true);o+=2}
+ return new Blob([dv],{type:'audio/wav'})}
+function revSrc(u){if(RVC[u])return Promise.resolve(RVC[u]);if(RVW[u])return RVW[u];
+ return RVW[u]=fetch(u,{mode:'cors'}).then(r=>{if(!r.ok)throw new Error('extrait indisponible');return r.arrayBuffer()}).then(ab=>{const C=window.OfflineAudioContext||window.webkitOfflineAudioContext,cx=new C(2,44100,44100);
+  return new Promise((ok,ko)=>{const p=cx.decodeAudioData(ab,ok,ko);if(p&&p.then)p.then(ok,ko)})}).then(b=>RVC[u]=URL.createObjectURL(wavOf(b))).finally(()=>{delete RVW[u]})}
+const fxSrc=(u,fx)=>fx==='rev'?revSrc(u):Promise.resolve(u);
 function jsonp(u){return new Promise((ok,ko)=>{const cb='__dz'+(++jsn),sc=document.createElement('script'),clean=()=>{clearTimeout(tm);delete window[cb];sc.remove()},tm=setTimeout(()=>{clean();ko(new Error('Deezer ne répond pas'))},9000);
  window[cb]=d=>{clean();d&&d.error?ko(new Error(d.error.message||'erreur Deezer')):ok(d)};sc.onerror=()=>{clean();ko(new Error('connexion impossible'))};
  sc.src=u+(u.includes('?')?'&':'?')+'output=jsonp&callback='+cb;document.head.appendChild(sc)})}
@@ -1647,9 +1663,9 @@ const dzFresh=id=>{const c=DZC[id];return c&&c.exp-Date.now()/1000>90?c.u:null};
 const dzKeep=(id,u)=>{const m=/exp=(\d+)/.exec(u||'');DZC[id]={u,exp:m?+m[1]:Date.now()/1000+600}};
 const dzGet=id=>dzFresh(id)?Promise.resolve(dzFresh(id)):jsonp('https://api.deezer.com/track/'+id).then(d=>{if(!d.preview)throw new Error('pas d\'extrait pour ce morceau');dzKeep(id,d.preview);return d.preview});
 AU.ontimeupdate=()=>{const pc=Math.min(100,AU.currentTime/(AU.duration||30)*100);document.querySelectorAll('.dzbar i').forEach(e=>e.style.width=pc+'%');document.querySelectorAll('.dzcur').forEach(e=>e.textContent=mmss(AU.currentTime));document.querySelectorAll('.lv-prg').forEach(e=>e.style.strokeDashoffset=339.3*(1-pc/100))};
-const npSend=st=>{if(ADMIN&&g&&dzp.from==='pilot'&&dzp.id)gset({np:{id:dzp.id,st,pos:AU.currentTime||0,at:Date.now()}})};
+const npSend=st=>{if(ADMIN&&g&&dzp.from==='pilot'&&dzp.id)gset({np:{id:dzp.id,st,pos:AU.currentTime||0,at:Date.now(),fx:dzp.fx||''}})};
 AU.onplay=()=>{npSend('play');render()};AU.onpause=()=>{npSend('pause');render()};AU.onended=()=>{npSend('stop');render()};
-function dzPlay(id,u){if(dzp.id===id&&!AU.paused){AU.pause();return}if(AU.src!==u)AU.src=u;dzp.id=id;AU.play().catch(()=>{dzp.err='Touche encore ▶ pour lancer la lecture';render()})}
+function dzPlay(id,u,fx){if(dzp.id===id&&!AU.paused){AU.pause();return}if(fx==='rev'&&RVC[u])u=RVC[u];if(AU.src!==u)AU.src=u;fxRate(fx);dzp.id=id;dzp.fx=fx||'';AU.play().catch(()=>{dzp.err='Touche encore ▶ pour lancer la lecture';render()})}
 const DZI='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
  PLAYI='<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>',
  PAUSEI='<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
@@ -1757,7 +1773,7 @@ const REPS=[['fld','Champs','Artiste, titre ou bonus à écrire'],['qcm','QCM','
 const isTimed=d=>(d.sup==='img'&&(d.disp==='pr'||d.disp==='bl'))||(d.sup==='mus'&&d.disp==='cov');
 const supIc=k=>`<span class="g-ic g-${SUPS[k][1]}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SUPS[k][2]}"/></svg></span>`;
 function thLab(x0){const x=normTh(x0),D=DISP[x.sup]||[],d=D.find(v=>v[0]===x.disp);
- return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:''),s:(x.qm==='bz'?'Buzzer · '+x.bp+' pts':x.qm==='qcm'?x.nc+' réponses au choix':x.ty==='txt'?'Réponse écrite · 2 pts':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom secret':'')}}
+ return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:'')+(x.fx?' · '+FX[x.fx][0]:''),s:(x.qm==='bz'?'Buzzer · '+x.bp+' pts':x.qm==='qcm'?x.nc+' réponses au choix':x.ty==='txt'?'Réponse écrite · 2 pts':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom secret':'')}}
 let gsh=null; // volet ouvert : {r,i,step,d}
 function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d),
  grp=(t,cols,items)=>`<div class="g-grp"><span>${t}</span><div style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${items.join('')}</div></div>`,
@@ -1766,6 +1782,7 @@ function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d
  if(gsh.step==='sup')body=`<div class="g-grid">${Object.keys(SUPS).map(k=>`<button class="g-tile ${d.sup===k?'sel':''}" data-a="gsup" data-v="${k}">${supIc(k)}<b>${SUPS[k][0]}</b><small>${SUPS[k][3]}</small>${d.sup===k?'<i>✓</i>':''}</button>`).join('')}</div>`;
  else{const G=[],D=DISP[d.sup];
   if(D.length>1)G.push(grp('Affichage',2,D.map(([v,l,sb])=>opt('disp',v,l,sb,on(d.disp===v)))));
+  if(d.sup==='mus'&&d.disp==='ext')G.push(grp('Effet sur l\'extrait',2,[opt('fx','','Aucun','extrait normal',on(!d.fx)),...Object.entries(FX).map(([v,f])=>opt('fx',v,f[0],f[3],on(d.fx===v)))]));
   G.push(grp('Réponse',3,REPS.map(([v,l,sb])=>opt('rep',v,d.sup==='txt'&&v==='fld'?'Réponse écrite':l,timed&&v!=='fld'?'pas avec cet affichage':d.sup==='txt'&&v==='fld'?'2 pts si c\'est juste':v==='bz'?'2 pts au premier qui trouve':sb,on(d.rep===v),timed&&v!=='fld'))));
   if((d.rep==='fld'||d.rep==='bz')&&d.sup!=='txt'){G.push(grp('À trouver',3,[opt('ea',1,'Artiste','',on(d.ea)),opt('et',1,'Titre','',on(d.et)),opt('eb',1,'Bonus','libellé au choix',on(d.eb))]));
    if(d.eb)G.push(`<label class="g-grp"><span>Intitulé du bonus</span><input class="in" data-k="gbl" placeholder="Ex : Année, Artiste original, Film" value="${esc(d.bl||'')}"></label>`)}
@@ -1921,15 +1938,15 @@ document.addEventListener('click',async e=>{
  if(a==='saveinfo'){b.disabled=true;try{await gset({name:(draft.sn??g.name??'').trim(),title:(draft.stt??g.title??'').trim(),date:draft.sdt??g.date??''});draft.sn=draft.stt=draft.sdt=undefined;render()}catch(x){b.disabled=false;alert('Enregistrement impossible : '+(x.message||x))}}
  if(a==='rsx'){cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].sx=!cfgI[r].sx;render()}
  if(a==='tg'){const x=cfg[r][t],f=b.dataset.f;x[f]=!x[f];if(f!=='sx'&&f!=='eb'&&!x.ea&&!x.et)x[f]=true;render()}
- if(a==='gopen'){const n=normTh(cfg[r][t]);gsh={r,i:t,step:'sup',d:{sup:n.sup,disp:n.disp,rep:n.rep==='bz'?'fld':n.rep,ea:n.ea,et:n.et,eb:n.eb,bl:n.bl,nc:n.nc,sx:n.sx}};render()}
+ if(a==='gopen'){const n=normTh(cfg[r][t]);gsh={r,i:t,step:'sup',d:{sup:n.sup,disp:n.disp,rep:n.rep,ea:n.ea,et:n.et,eb:n.eb,bl:n.bl,nc:n.nc,sx:n.sx,fx:n.fx}};render()}
  if(a==='gclose'){gsh=null;render()}
  if(a==='gback'&&gsh){gsh.step='sup';render()}
- if(a==='gsup'&&gsh){const d=gsh.d,v=b.dataset.v;d.sup=v;if(!DISP[v].some(x=>x[0]===d.disp))d.disp=DISP[v][0][0];if(isTimed(d)&&d.rep==='qcm')d.rep='fld';gsh.step='opts';render()}
+ if(a==='gsup'&&gsh){const d=gsh.d,v=b.dataset.v;d.sup=v;if(!DISP[v].some(x=>x[0]===d.disp))d.disp=DISP[v][0][0];if(isTimed(d)&&d.rep!=='fld')d.rep='fld';gsh.step='opts';render()}
  if(a==='gset'&&gsh){const d=gsh.d,f=b.dataset.f,v=b.dataset.v;
-  if(f==='ea'||f==='et'||f==='eb'){d[f]=!d[f];if(!d.ea&&!d.et&&!d.eb)d[f]=true}else if(f==='nc')d.nc=+v;else if(f==='sx')d.sx=v==='1';
+  if(f==='ea'||f==='et'||f==='eb'){d[f]=!d[f];if(!d.ea&&!d.et&&!d.eb)d[f]=true}else if(f==='nc')d.nc=+v;else if(f==='fx')d.fx=v;else if(f==='sx')d.sx=v==='1';
   else if(f==='disp'){d.disp=v;if(isTimed(d)&&d.rep!=='fld')d.rep='fld'}else if(f==='rep'){if(!(isTimed(d)&&v!=='fld'))d.rep=v}render()}
  if(a==='gok'&&gsh){const x=cfg[gsh.r][gsh.i],d=gsh.d,was=normTh(x);
-  Object.assign(x,{sup:d.sup,disp:d.disp,rep:d.rep,ty:d.sup==='img'?'img':d.sup==='txt'?'txt':'mus',qm:d.rep==='qcm'?'qcm':d.rep==='bz'?'bz':'cl',im:d.sup==='img'?d.disp:'cl',vid:d.sup==='vid',ea:d.rep!=='qcm'&&d.ea,et:d.rep!=='qcm'&&d.et,eb:d.rep!=='qcm'&&d.eb,bl:d.bl,nc:d.nc,sx:d.sx});
+  Object.assign(x,{sup:d.sup,disp:d.disp,rep:d.rep,ty:d.sup==='img'?'img':d.sup==='txt'?'txt':'mus',qm:d.rep==='qcm'?'qcm':d.rep==='bz'?'bz':'cl',im:d.sup==='img'?d.disp:'cl',vid:d.sup==='vid',ea:d.rep!=='qcm'&&d.ea,et:d.rep!=='qcm'&&d.et,eb:d.rep!=='qcm'&&d.eb,bl:d.bl,nc:d.nc,sx:d.sx,fx:d.sup==='mus'&&d.disp==='ext'?d.fx||'':''});
   if(!x.q||!x.q.length)x.q=[0,1,2,3,4,5].map(()=>({a:'',t:'',b:'',r:'',im:'',p:''}));
   if(was.sup==='img'&&!cfg[gsh.r][gsh.i].sup_migr)x.q.forEach(q=>{if(q.r&&!q.b)q.b=q.r});gsh=null;render()}
  if(a==='mvrd'&&!started()){const k=r+(+b.dataset.d);if(k<0||k>=cfgNR||r>=cfgNR)return;[cfg[r],cfg[k]]=[cfg[k],cfg[r]];[cfgI[r],cfgI[k]]=[cfgI[k]||{},cfgI[r]||{}];
@@ -1944,7 +1961,7 @@ document.addEventListener('click',async e=>{
  if(a==='dzsel'){AU.pause();dzp={key:b.dataset.key,j:+b.dataset.j};render()}
  if(a==='dzmv'){const k=b.dataset.key,[rr,ii]=k.split('_'),x=th(+rr)[+ii],L=x.q.map((q,j)=>q.dz?j:-1).filter(j=>j>=0),p=L.indexOf(+b.dataset.j)+(+b.dataset.d);if(p<0||p>=L.length)return;AU.pause();dzp={key:k,j:L[p]};render()}
  if(a==='dzplay'){const k=b.dataset.key,j=+b.dataset.j,[rr,ii]=k.split('_'),q=th(+rr)[+ii].q[j];if(!q?.dz)return;dzp.key=k;dzp.j=j;dzp.from='pilot';dzp.err='';
-   const u=dzFresh(q.dz);if(u)dzPlay(q.dz,u);else{dzp.err='Chargement de l\'extrait…';render();dzGet(q.dz).then(v=>{dzp.err='';dzPlay(q.dz,v);render()}).catch(e=>{dzp.err=e.message;render()})}render()}
+   const fx=normTh(th(+rr)[+ii]).fx,u=dzFresh(q.dz);if(u&&(fx!=='rev'||RVC[u]))dzPlay(q.dz,u,fx);else{dzp.err=fx==='rev'?'Préparation de l\'extrait à l\'envers…':'Chargement de l\'extrait…';render();dzGet(q.dz).then(v=>fxSrc(v,fx).then(()=>v)).then(v=>{dzp.err='';dzPlay(q.dz,v,fx);render()}).catch(e=>{dzp.err=e.message;render()})}render()}
  if(a==='mvq'){const q=cfg[r][t].q,j=+b.dataset.j,k=j+(+b.dataset.d);if(k<0||k>=q.length||g.rd?.[r])return;[q[j],q[k]]=[q[k],q[j]];render()}
  if(a==='mvth'){const T=cfg[r],k=t+(+b.dataset.d);if(k<0||k>=T.length||g.rd?.[r])return;[T[t],T[k]]=[T[k],T[t]];if(openTh===r+'_'+t)openTh=r+'_'+k;else if(openTh===r+'_'+k)openTh=r+'_'+t;render()}
  if(a==='thx'){const k=r+'_'+t;openTh=openTh===k?'':k;render();if(openTh)setTimeout(()=>document.getElementById('th-'+k)?.scrollIntoView({behavior:'smooth',block:'start'}),60)}
