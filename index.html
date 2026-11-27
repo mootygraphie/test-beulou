@@ -953,6 +953,8 @@ const ptsMax=x0=>{const x=normTh(x0),n=x.q.length;return x.ty==='txt'&&x.qm!=='q
 const bLab=x=>x.bl||'Bonus';
 const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
+/* noms visibles par les équipes et la projection : jamais le nom d'un thème ou d'une manche secrète */
+const pubTn=(x,i)=>x.sx?'Thème secret':tn(x,i),pubRn=(I,r)=>I.sx?'Manche mystère':(I.n||RNf(r));
 const isSec=k=>k[0]==='R'?!!ri(+k.slice(1)).sx:!!th(+k.split('_')[0])[+k.split('_')[1]]?.sx;
 const bonus=(t,r)=>Object.entries(t.gok||{}).reduce((s,[k,v])=>{if(!v||!isSec(k))return s;const R=k[0]==='R',rr=R?+k.slice(1):+k.split('_')[0],tt=R?-1:+k.split('_')[1];return(r!=null&&rr!==r)?s:s+(R?BR:BT*(t.x2?.[rr]==tt?2:1))},0); // le x2 double aussi le nom secret du thème
 const score=(t,r)=>Object.entries(t.marks||{}).reduce((s,[k,m])=>{const[rr,tt]=k.split('_');if(r!=null&&+rr!==r)return s;const x=th(+rr)[+tt];return s+ms(m,x)*(t.x2?.[rr]==tt?2:1)},0)+bonus(t,r);
@@ -1232,9 +1234,9 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
   m=`<div class="tv-qrm"><div class="a-strip"></div><div class="tv-qrm-b"><div class="tv-qrm-l"><img src="logo.png" alt="Beulou Test" onerror="this.outerHTML='<span class=qrm-t>BEULOU TEST</span>'"><h1>${esc(g.title||g.name||'Beulou Test')}</h1><p>Scannez pour rejoindre la partie</p><span class="tv-url">${esc(url.replace(/^https?:\/\//,''))}</span></div><div class="tv-qrm-c">${QRT||'<span class="tv-qrl">QR code…</span>'}</div></div></div>`}
  else if(st==='open'){const ct=g.ct?.[r];
   if(g.cd?.[r])m=`<div class="tv-cd"><small>Fin de la manche dans</small><b class="cdn">${Math.ceil(cdLeft(r)??30)}</b><span>Finissez de répondre et pensez à cocher votre « x2 »</span></div>`;
-  else if(ct==null)m=big(RN,esc(I.n||RNf(r)),'Le premier thème arrive');
+  else if(ct==null)m=big(RN,esc(pubRn(I,r)),'Le premier thème arrive');
   else{const x=th(r)[ct],key=`${r}_${ct}`,N=x.q.length,j=Math.max(0,Math.min(N-1,g.cs?.[key]??0)),q=x.q[j],L=rcvOf(r,x,key,j);
-   top+=`<span>${RN} · Thème ${ct+1} · ${esc(tn(x,ct))}</span><span class="tv-rc">${L.filter(z=>z.ok).length}/${L.length} réponses reçues</span>`;
+   top+=`<span>${RN} · Thème ${ct+1} · ${esc(pubTn(x,ct))}</span><span class="tv-rc">${L.filter(z=>z.ok).length}/${L.length} réponses reçues</span>`;
    if(x.qm==='bz'){const{w,hand}=bzQ(key,j);m=`<div class="tv-big tv-bz"><small>Buzzer · Question ${j+1} / ${N}</small>${x.ty==='img'?`<div class="tv-bzi">${pic(q.im,'full')}</div>`:x.ty==='txt'?`<h2>${x.tm==='lyr'?'« '+esc(q.p)+' … »':esc(q.p)}</h2>`:''}${w?`<div class="tv-bzh ok"><small>Point pour</small><b>${tnm(w)}</b></div>`:hand?`<div class="tv-bzh"><small>À la main</small><b>${esc(hand.name)}</b></div>`:x.vid?'<div class="ytslot tv-yt"></div>':`<h1>À vos buzzers</h1>`}</div>`}
    else if(x.ty==='img'&&isPrg(x)){const l=Math.min(3,g.pl?.[key]??0);m=`<div class="tv-img">${prgPic(x,q.im,l,'full','')}<div class="tv-side"><small>Image ${j+1} / ${N}</small><b>${l<3?'Vaut '+PT[l]+' pts':'Image entière · 1 pt'}</b><div class="tv-pts">${PT.map((p,k)=>`<i class="${k===l?'on':k<l?'past':''}">${p}</i>`).join('')}</div></div></div>`}
    else if(x.ty==='img'&&x.im==='cl')m=`<div class="tv-grid">${x.q.map((qq,k)=>`<div><span>${k+1}</span>${pic(qq.im,'full')}</div>`).join('')}</div>`;
@@ -1244,7 +1246,7 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
    else{const on=g.np?.st==='play'&&q.dz&&g.np.id===q.dz;m=`<div class="tv-big"><small>Question ${j+1} / ${N}</small><h1>${on?'Écoutez bien':'Question '+(j+1)}</h1>${x.fx?`<p class="tv-fx">Extrait ${x.fx==='rev'?'à l\'envers':x.fx==='slow'?'ralenti':'en voix aiguë'}</p>`:''}<div class="tv-eq ${on?'on':''}">${'<i></i>'.repeat(11)}</div>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.ea&&x.et?'Artiste et titre':x.ea?'Artiste':'Titre'}${x.eb?' · bonus '+esc(bLab(x)):''}</p>`}</div>`}}}
  else if(st==='closed')m=big(RN,'Corrections en cours','Les points arrivent, restez dans le coin');
  else if(st==='validated'){const L=place(r),an=TVSEEN!=='rk'+r;TVSEEN='rk'+r;m=`<div class="tv-rk"><small>Classement après ${r===FI()?'la finale':'la manche '+(r+1)}</small>${L.map((t,i)=>`<div class="tv-r ${an?'anim':''} p${t.pos}" style="animation-delay:${((L.length-1-i)*.8).toFixed(1)}s"><span>${t.pos}</span><b>${esc(t.name)}</b><em>${t.sc} pts</em></div>`).join('')}</div>`}
- else m=big(RN,esc(I.n||RNf(r)),'La manche va commencer');
+ else m=big(RN,esc(pubRn(I,r)),'La manche va commencer');
  return`<div class="tv"><div class="tv-top">${top}</div><div class="tv-m">${m}</div></div>`}
 const tvCh=(x,key,j)=>{const C=x.q[j].c||[];return`<div class="tv-ch ${x.nc==2?'two':''}">${qord(key,j,x.nc).map((c,i)=>`<div><i>${'ABCD'[i]}</i>${esc(C[c]||'—')}</div>`).join('')}</div>`};
 let VK,NOTE=null;
@@ -1262,7 +1264,7 @@ function team(){
  const pend=g.rd?.[FI()]==='validated'&&!fin(),showPos=pos&&(g.r<0||g.rd?.[g.r]==='validated')&&!pend;
  const cdb=g.r>=0&&g.rd?.[g.r]==='open'&&g.cd?.[g.r]&&!(g.r===FI()&&!inFinal(me))?`<div class="cdb"><b>Fin de la manche dans <span class="cdn">${Math.ceil(cdLeft(g.r))}</span> s</b><span>Finis de répondre et pense à cocher ton « x2 »</span></div>`:'';
  {const ct=g.r>=0?g.ct?.[g.r]:null,vk=g.r>=0&&g.rd?.[g.r]==='open'&&ct!=null?`${g.r}|${ct}|${g.cs?.[g.r+'_'+ct]??0}`:'';
-  if(vk&&VK!==undefined&&vk!==VK){const[,c,j]=vk.split('|'),pc=VK.split('|');NOTE={txt:pc[1]!==c?'Nouveau thème : '+tn(th(g.r)[+c],+c):'Question '+(+j+1),until:Date.now()+2500};try{navigator.vibrate?.(90)}catch(e){}setTimeout(render,2600)}VK=vk}
+  if(vk&&VK!==undefined&&vk!==VK){const[,c,j]=vk.split('|'),pc=VK.split('|');NOTE={txt:pc[1]!==c?'Nouveau thème : '+pubTn(th(g.r)[+c],+c):'Question '+(+j+1),until:Date.now()+2500};try{navigator.vibrate?.(90)}catch(e){}setTimeout(render,2600)}VK=vk}
  let bar=`<div class="tbar"><div class="tm"><small>Ton équipe</small><b>${esc(t.name)}</b>${g.snd&&SOK?`<small class="sndc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>Son activé</small>`:''}</div><div class="tsc"><b>${tot}</b><small>pts</small></div>${showPos?`<div class="tpos">#${pos}</div>`:''}</div>`;
  bar+=cdb+(NOTE&&Date.now()<NOTE.until?`<div class="pnot"><span>${esc(NOTE.txt)}</span></div>`:'');
  const r=g.r,st=g.rd?.[r],I=r>=0?ri(r):{};
@@ -1443,7 +1445,7 @@ function rscreen(r){
    h+=`<p class="a-p">Les équipes sont sur l'écran d'attente. Ouvre la manche pour lancer le jeu.</p><button class="btn blk" data-a="launch" data-r="${r}">Ouvrir la manche</button>`}}
  if(on){
   T.forEach((x,i)=>{const o=g.th?.[`${r}_${i}`];
-   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom secret · ':''}${x.ty==='img'?'Images · '+IML[x.im]+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM · '+x.nc+' choix':x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`+(o==='open'&&x.ty==='img'&&x.im!=='cl'?imgCtl(x,`${r}_${i}`):'')+(o==='open'&&x.ty!=='img'&&x.q.some(q=>q.dz)?dzCtl(x,`${r}_${i}`):'')});
+   h+=`<div class="a-th ${o==='open'?'live':''}"><span class="a-tn">${i+1}</span><div class="a-tm"><b>${esc(tn(x,i))}</b><small>${x.sx?'Nom secret · ':''}${x.ty==='img'?'Images · '+IML[x.im]+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM · '+x.nc+' choix':x.ea&&x.et?'Artiste + titre':x.ea?'Artiste':'Titre'}${x.eb?' + bonus':''} · ${ptsMax(x)} pts</small></div><span class="chip ${o==='open'?'pk':''}">${o==='open'?'Ouvert':o==='closed'?'Clos':'À venir'}</span><button class="btn sm ${o==='open'?'pk':''}" data-a="topen" data-r="${r}" data-t="${i}">Ouvrir</button><button class="btn sm gh" data-a="tclose" data-r="${r}" data-t="${i}">Clore</button></div>`+(o==='open'&&x.ty==='img'&&x.im!=='cl'?imgCtl(x,`${r}_${i}`):'')+(o==='open'&&x.vid?vidCtl(x,`${r}_${i}`):'')+(o==='open'&&!x.vid&&x.ty!=='img'&&x.q.some(q=>q.dz)?dzCtl(x,`${r}_${i}`):'')});
   h+=`<button class="btn blk y" data-a="closeround" data-r="${r}" style="margin-top:12px">Clôturer la manche</button>`;
  }
  if(over)h+=`<p class="a-p" style="margin:0">Manche ${st==='closed'?'clôturée : passe aux corrections ci-dessous.':'validée.'}</p>`;
@@ -1684,6 +1686,10 @@ function dzSheet(){if(!dzs)return'';const x=cfg[dzs.r]?.[dzs.i],q=x?.q?.[dzs.j];
  <div class="dz-res">${dzs.loading?'<p class="dz-msg">Recherche…</p>':dzs.err?`<p class="dz-msg ko">${esc(dzs.err)}</p>`:R.length?R.map((t,n)=>`<div class="dz-it"><button class="dz-pk" data-a="dzpick" data-n="${n}"><img src="${esc(t.album?.cover_small||'')}" alt=""><span><b>${esc(t.title)}</b><small>${esc(t.artist?.name||'')} · ${mmss(t.duration)}${t.explicit_lyrics?' · explicite':''}</small></span></button><button class="dz-ls" data-a="dzlisten" data-n="${n}" aria-label="Écouter l'extrait de ${esc(t.title)}">${dzp.id===t.id&&!AU.paused?EQI:PLAYI}</button></div>`).join(''):(dzs.q||'').trim().length>1?'<p class="dz-msg">Aucun morceau trouvé.</p>':'<p class="dz-msg">Tape un titre ou un artiste.</p>'}</div>
  <p class="dz-note">Extraits de 30 s fournis par Deezer, sans compte ni pub. Choisir un morceau remplit ${x.qm==='qcm'?'la bonne réponse':'l\'artiste et le titre'}.</p>
  ${q.dz?'<button class="btn sm dg" data-a="dzunlink" style="margin:0">Retirer le morceau lié</button>':''}</div></div>`}
+/* lecteur vidéo sous le thème ouvert (pilotage) : choix de la question, lecture synchronisée chez les équipes et sur la projection */
+function vidCtl(x,key){const j=Math.max(0,Math.min(x.q.length-1,g.cs?.[key]??0)),q=x.q[j],y=g.yt?.k===key+'_'+j?g.yt:null,pl=y?.st==='play';
+ return`<div class="dzc"><div class="dzq" role="group" aria-label="Question à jouer">${x.q.map((qq,k)=>`<button class="${k===j?'on':''}" data-a="vsel" data-key="${key}" data-j="${k}" ${qq.yt?'':'disabled'} aria-label="Question ${k+1}">${k+1}</button>`).join('')}</div>
+ ${q.yt?`<div class="ytslot"></div><div class="lv-row"><button class="btn sm ${pl?'gh':'y'}" data-a="ytplay" data-k="${key}_${j}" data-yd="${q.yd||30}">${pl?'Pause':y?.pos?'Reprendre':'Lancer la vidéo'}</button><span class="lv-tm">${fmtS(q.ys??30)} · ${q.yd||30} s</span></div>`:'<p class="lv-nodz">Pas de vidéo pour cette question : ajoute le lien dans Préparer.</p>'}</div>`}
 /* lecteur d'extraits sous le thème ouvert (pilotage) */
 function dzCtl(x,key){const L=x.q.map((q,j)=>q.dz?j:-1).filter(j=>j>=0);let j=dzp.key===key&&x.q[dzp.j]?.dz?dzp.j:L[0];const q=x.q[j],on=dzp.id===q.dz&&!AU.paused;
  L.forEach(k=>{const id=x.q[k].dz;if(!dzFresh(id)&&!DZW[id]){DZW[id]=1;dzGet(id).catch(()=>{}).then(()=>{delete DZW[id]})}}); // on prépare les extraits pour une lecture immédiate
@@ -1958,6 +1964,7 @@ document.addEventListener('click',async e=>{
    if(x.qm==='qcm'){q.c=q.c||[];q.c[0]=ar+' - '+tr.title}else{q.a=ar;q.t=tr.title}q.dz=tr.id;q.cv=tr.album?.cover_medium||tr.album?.cover_small||'';
    if(dzp.from==='sheet')AU.pause();dzs=null;render()}}
  if(a==='dzunlink'&&dzs){const q=cfg[dzs.r][dzs.i].q[dzs.j];delete q.dz;delete q.cv;dzs=null;render()}
+ if(a==='vsel'){await gset({cs:{[b.dataset.key]:+b.dataset.j}});return}
  if(a==='dzsel'){AU.pause();dzp={key:b.dataset.key,j:+b.dataset.j};render()}
  if(a==='dzmv'){const k=b.dataset.key,[rr,ii]=k.split('_'),x=th(+rr)[+ii],L=x.q.map((q,j)=>q.dz?j:-1).filter(j=>j>=0),p=L.indexOf(+b.dataset.j)+(+b.dataset.d);if(p<0||p>=L.length)return;AU.pause();dzp={key:k,j:L[p]};render()}
  if(a==='dzplay'){const k=b.dataset.key,j=+b.dataset.j,[rr,ii]=k.split('_'),q=th(+rr)[+ii].q[j];if(!q?.dz)return;dzp.key=k;dzp.j=j;dzp.from='pilot';dzp.err='';
@@ -1990,7 +1997,7 @@ document.addEventListener('click',async e=>{
  if(a==='lventer'){lvHide=0;render()}
  if(a==='cdstart'){if(!g.cd?.[r])await gset({cd:{[r]:Date.now()}})}
  if(a==='closeround')closeRound(r);
- if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});const k=`${r}_${t}`;o[k]='open';gset({th:o,cs:{[k]:g.cs?.[k]??0},pl:{[k]:g.pl?.[k]??0}})}
+ if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});const k=`${r}_${t}`;o[k]='open';gset({th:o,ct:{[r]:t},cs:{[k]:g.cs?.[k]??0},pl:{[k]:g.pl?.[k]??0}})}
  if(a==='tclose')gset({th:{[`${r}_${t}`]:'closed'}});
  if(a==='idle')gset({r:-1});
  if(a==='mk'){const m=mk[b.dataset.m],i=+b.dataset.i;m[i]=m[i]?0:(+b.dataset.v||1);render()}
