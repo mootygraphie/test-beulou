@@ -417,7 +417,7 @@ body.dragging,body.dragging *{-webkit-user-select:none;user-select:none;cursor:g
 /* genre du thème + volet */
 .g-btn{display:flex;align-items:center;gap:12px;width:calc(100% - 28px);margin:12px 14px 4px;padding:10px 12px;border-radius:14px;border:1px solid rgba(0,232,255,.4);background:rgba(0,232,255,.08);color:#fff;text-align:left;cursor:pointer}
 .g-btn .f{flex:1;min-width:0}.g-btn b{display:block;font:800 15px Poppins}.g-btn small{display:block;font:500 12px Poppins;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.g-chev{flex:none;color:var(--c)}
-.g-ic{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center}.g-p{background:var(--p);color:#fff}.g-c{background:var(--c);color:var(--n)}.g-y{background:var(--y);color:var(--n)}
+.g-ic{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center}.g-p{background:var(--p);color:#fff}.g-c{background:var(--c);color:var(--n)}.g-g{background:var(--y);color:var(--n)}.g-y{background:var(--y);color:var(--n)}
 .g-ov{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;justify-content:flex-end;background:rgba(2,3,16,.65);animation:gfd .2s}
 .g-bg{flex:1;border:0;background:transparent;cursor:pointer}
 .g-sh{max-height:88vh;overflow-y:auto;width:100%;max-width:620px;margin:0 auto;box-sizing:border-box;background:var(--n2);border-radius:26px 26px 0 0;border-top:2px solid var(--c);box-shadow:0 -20px 50px rgba(0,0,0,.5);padding:10px 16px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;animation:gup .3s cubic-bezier(.2,1,.4,1)}
@@ -812,6 +812,17 @@ body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);backgroun
 .g-tile:disabled{opacity:.4;cursor:default}
 .a-imf{display:flex;flex-direction:column;gap:6px}.qf2{display:flex;flex-direction:column;gap:6px}
 .g-opt:disabled{opacity:.35;cursor:default}
+/* texte libre */
+.tq{position:relative;display:flex;flex-direction:column;gap:8px;padding:12px 12px 12px 46px;border-radius:16px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);margin:0 0 10px}
+.tq-n{position:absolute;left:10px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--p);display:grid;place-items:center;font:800 12px var(--fb)}
+.tq-p{margin:0;font:700 16px/1.35 var(--fb)}.tq-p b{color:var(--y);letter-spacing:.15em}
+.tq-w{display:flex;gap:5px;flex-wrap:wrap}.tq-w i{width:30px;height:5px;border-radius:3px;background:rgba(255,255,255,.22)}
+.tq-h{color:var(--mut);font-size:12px}.tq .in{margin:0}
+.qf-p{margin:0;font:800 18px/1.35 var(--fb);text-align:center}
+.lv-txt{width:100%;padding:20px 16px;border-radius:18px;background:linear-gradient(160deg,#141b5c,#060a2a);border:1.5px solid rgba(255,230,0,.5);text-align:center}
+.lv-txt small{font:700 11px Poppins;letter-spacing:.14em;text-transform:uppercase;color:var(--c)}.lv-txt p{margin:8px 0 0;font:800 22px/1.35 Poppins}.lv-txt b{color:var(--y)}
+.tv-txt h2{margin:1cqi 0;max-width:34ch;font:800 4.4cqi/1.25 var(--fb);text-wrap:balance}
+.a-txq .a-imf .a-qcm{margin-top:2px}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -890,7 +901,7 @@ function normTh(x){const q0=(x.q||[]).map(y=>Object.assign({a:'',t:'',b:'',r:'',
  const q=q0.map(y=>legacyImg&&!y.b?{...y,b:y.r}:y).map(y=>sup==='mus'&&disp==='cov'?{...y,im:y.cv?String(y.cv).replace(/\/\d+x\d+-/,'/500x500-'):''}:y);
  const fld=rep==='fld'&&sup!=='txt';
  return{n:x.n||'',sup,disp,rep,vid:sup==='vid',ty:sup==='img'||timed?'img':sup==='txt'?'txt':'mus',tm:disp==='qa'?'qa':'lyr',im:sup==='mus'&&disp==='cov'?'bl':sup==='img'?disp:'cl',
-  qm:rep==='qcm'?'qcm':rep==='bz'?'bz':'cl',nc:x.nc==2?2:4,ea:fld&&ea,et:fld&&et,eb:fld&&eb,bp:+x.bp||2,bm:!!x.bm,bl,sx:!!x.sx,q:q.slice(0,QMAX),pts:sup==='txt'?2:1}}
+  qm:rep==='qcm'?'qcm':rep==='bz'?'bz':'cl',nc:x.nc==2?2:4,ea:fld&&ea,et:fld&&et,eb:fld&&eb,bp:+x.bp||2,bm:!!x.bm,bl,sx:!!x.sx,q:q.slice(0,QMAX),pts:sup==='txt'&&rep!=='qcm'?2:1}}
 const hh=s=>{let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))%1000003;return h};
 const qord=(key,j,n)=>[...Array(n).keys()].sort((a,b)=>hh(key+'|'+j+'|'+a)-hh(key+'|'+j+'|'+b));
 const qpend={};let rvw=null,renS=null,cfgNR=3,prepR=0,openTh=null,drg=null;
@@ -907,7 +918,7 @@ const prgPic=(x,id,l,sz,cl='')=>x?.im==='bl'?`<div class="iprg blr ${cl}" style=
 const isPrg=x=>x?.im==='pr'||x?.im==='bl';
 const ms=(m,x)=>{m=m||[];if(!x)return sum(m.slice(0,2*QMAX).map(v=>v||0));let t=0;
  for(let j=0;j<QMAX;j++){const a=m[2*j]||0,b=m[2*j+1]||0;t+=x.ty==='txt'||x.qm==='qcm'||x.qm==='bz'?a*x.pts:((x.ea?a:0)+(x.et?b:0))*x.pts+(x.eb?(m[MB+j]||0):0)}return t};
-const ptsMax=x0=>{const x=normTh(x0),n=x.q.length;return x.ty==='txt'?2*n:x.qm==='bz'?x.bp*n:x.qm==='qcm'?n:((x.ea?1:0)+(x.et?1:0)+(x.eb?1:0))*n*(isPrg(x)?10:1)};
+const ptsMax=x0=>{const x=normTh(x0),n=x.q.length;return x.ty==='txt'&&x.qm!=='qcm'?2*n:x.qm==='bz'?x.bp*n:x.qm==='qcm'?n:((x.ea?1:0)+(x.et?1:0)+(x.eb?1:0))*n*(isPrg(x)?10:1)};
 const bLab=x=>x.bl||'Bonus';
 const ri=r=>g.rinfo?.[r]||{};
 const tn=(x,i)=>x.n||'Thème '+(i+1);
@@ -1053,10 +1064,11 @@ function review(t){const V=vr(),r=V.includes(rvw)?rvw:V[V.length-1],I=ri(r),ok=v
   const tot=(ms(m,x)+(x.sx&&t.gok?.[key]?BT:0))*(x2?2:1);
   h+=`<section class="rvc"><header><span>${i+1}</span><div><b>${esc(tn(x,i))}</b><small>${x.sx?(t.gok?.[key]?'Thème secret trouvé · +'+BT*(x2?2:1):'Thème secret raté'):x.ty==='img'?'Images'+(x.qm==='qcm'?' · QCM':''):x.qm==='qcm'?'QCM':'Thème '+(i+1)}${x2?' · x2':''}</small></div><em>+${spect?0:tot}</em></header>`;
   x.q.forEach((q,j)=>{let exp,mine,marks,pt;
-   if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];exp=esc(q.c?.[0]||'');mine=Q.length?esc(q.c?.[Q[Q.length-1]]||''):'';marks=ok(m[j*2]);pt=m[j*2]||0}
+   if(x.ty==='txt'&&x.qm!=='qcm'){exp=(q.p?`<span class="rvb2">${esc(q.p)}</span>`:'')+esc(q.r||'');mine=esc(A[j]||'');marks=ok(m[j*2]);pt=(m[j*2]||0)*x.pts}
+   else if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];exp=esc(q.c?.[0]||'');mine=Q.length?esc(q.c?.[Q[Q.length-1]]||''):'';marks=ok(m[j*2]);pt=m[j*2]||0}
    else{exp=esc([x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' - '))+(x.eb&&q.b?` <span class="rvb2">${esc(bLab(x))} : ${esc(q.b)}</span>`:'');mine=esc(A[j]||'')+(x.eb&&A[BO+j]?` <span class="rvb2">${esc(A[BO+j])}</span>`:'');
     marks=(x.ea?`<small>Artiste</small>${ok(m[j*2])}`:'')+(x.et?`<small>Titre</small>${ok(m[j*2+1])}`:'')+(x.eb?`<small>Bonus</small>${ok(m[MB+j])}`:'');pt=((m[j*2]||0)+(m[j*2+1]||0))*x.pts+(x.eb?(m[MB+j]||0):0)}
-   h+=`<div class="rvq">${x.ty==='img'?`<button class="rvi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:`<span class="rvn">${j+1}</span>`}<div class="f"><div class="rv-g">${exp||'—'}</div>${spect?'':(()=>{const mx=x.qm==='qcm'?1:((x.ea?1:0)+(x.et?1:0)+(x.eb?1:0))*(isPrg(x)?(t.lk?.[key]?.[j]||10):1),cl=!mine?'nr':pt>=mx?'ok':pt>0?'mid':'ko';
+   h+=`<div class="rvq">${x.ty==='img'?`<button class="rvi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:`<span class="rvn">${j+1}</span>`}<div class="f"><div class="rv-g">${exp||'—'}</div>${spect?'':(()=>{const mx=x.qm==='qcm'?1:x.ty==='txt'?x.pts:((x.ea?1:0)+(x.et?1:0)+(x.eb?1:0))*(isPrg(x)?(t.lk?.[key]?.[j]||10):1),cl=!mine?'nr':pt>=mx?'ok':pt>0?'mid':'ko';
     return`<div class="rv-m ${cl}"><i aria-hidden="true">↳</i><span>${mine||'Pas de réponse'}</span></div>`})()}${spect?'':`<div class="rvm">${marks}</div>`}</div>${spect?'':`<em class="rvp">+${pt*(x2?2:1)}</em>`}</div>`});
   h+=`</section>`});
  return h+`<button class="btn blk" data-a="rvwx" style="margin-top:6px">Retour</button>`}
@@ -1066,7 +1078,7 @@ function qcmPlay(t,x,key,s){if(s!=='open')return QH+x.q.map((q,j)=>qchoice(t,x,k
  const N=x.q.length,live=Math.max(0,Math.min(N-1,g.cs?.[key]??0)),j=qsel[key]?.at===live?Math.min(qsel[key].j,live):live;
  return`<div class="qf"><div class="qf-h"><b>Question ${j+1} <small>/ ${N}</small></b>${j<live?'<em>Question passée : tu peux encore changer</em>':''}</div>
  <div class="qf-d">${x.q.map((_,i)=>i>live?`<span>${i+1}</span>`:`<button class="${i===j?'on':''} ${(t.qa?.[key]?.[i]||[]).length?'ok':''}" data-a="qsel" data-key="${key}" data-j="${i}" data-at="${live}" aria-label="Question ${i+1}">${i+1}</button>`).join('')}</div>
- ${qchoice(t,x,key,j,s,false)}<p class="bnh">Touche ta réponse : <b>1 pt</b> si c'est la bonne. Modifiable jusqu'à la fin de la manche.</p></div>`}
+ ${x.ty==='txt'&&x.q[j].p?`<p class="qf-p">${esc(x.q[j].p)}</p>`:''}${qchoice(t,x,key,j,s,false)}<p class="bnh">Touche ta réponse : <b>1 pt</b> si c'est la bonne. Modifiable jusqu'à la fin de la manche.</p></div>`}
 const qsel={};
 function qchoice(t,x,key,j,s,num){const q=x.q[j],A=t.qa?.[key]?.[j]||[],v=A.length?A[A.length-1]:null,live=s==='open'&&!qpend[key+'|'+j],C=q.c||[];
  return`<div class="qq"><div class="qq-h">${num?`<span>${j+1}</span>`:''}${v!=null?'<b class="dn">Réponse enregistrée</b>':s==='open'?'<b class="tr">1 pt</b>':'<b class="ko">Pas de réponse</b>'}</div>
@@ -1076,6 +1088,9 @@ function qchoice(t,x,key,j,s,num){const q=x.q[j],A=t.qa?.[key]?.[j]||[],v=A.leng
 /* champs à écrire d'une question : artiste et / ou titre, puis le bonus (libellé au choix) */
 const fldIn=(t,x,key,j)=>{const kk=`a|${key}|${j}`,kb=`a|${key}|${BO+j}`;return`<div class="qf2">${x.ea||x.et?`<input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="done" placeholder="${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">`:''}${x.eb?`<input class="in bn" data-k="${kb}" autocomplete="off" enterkeyhint="done" placeholder="${esc(bLab(x))}" value="${esc(draft[kb]??t.answers?.[key]?.[BO+j]??'')}">`:''}</div>`};
 const ansOf=(t,key,j)=>[t.answers?.[key]?.[j],t.answers?.[key]?.[BO+j]].filter(v=>String(v||'').trim()).join(' · ');
+/* texte libre côté joueur : chaque vers (ou question) avec sa case réponse */
+function txtPlay(t,x,key,s){const ly=x.tm==='lyr';return x.q.map((q,j)=>{const kk=`a|${key}|${j}`,nw=String(q.r||'').trim().split(/\s+/).filter(Boolean).length;
+ return`<div class="tq"><span class="tq-n">${j+1}</span><p class="tq-p">${ly?'« '+esc(q.p)+' <b>…</b> »':esc(q.p)}</p>${ly&&nw?`<div class="tq-w" aria-label="${nw} mots à trouver">${'<i></i>'.repeat(Math.min(nw,12))}</div>`:''}<input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="${ly?'La suite…':'Ta réponse'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">${ly&&nw?`<small class="tq-h">${nw} mot${nw>1?'s':''}</small>`:''}</div>`}).join('')}
 function imgPlay(t,x,key,s){
  const Q=x.qm==='qcm',A=j=>esc(draft[`a|${key}|${j}`]??t.answers?.[key]?.[j]??''),inp=(j,ph)=>Q?qchoice(t,x,key,j,s,false):fldIn(t,x,key,j);
  const N=x.q.length,LK=t.lk?.[key]||{},cur=Math.max(0,Math.min(N-1,g.cs?.[key]??0));
@@ -1132,6 +1147,7 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
    if(x.ty==='img'&&isPrg(x)){const l=Math.min(3,g.pl?.[key]??0);m=`<div class="tv-img">${prgPic(x,q.im,l,'full','')}<div class="tv-side"><small>Image ${j+1} / ${N}</small><b>${l<3?'Vaut '+PT[l]+' pts':'Image entière · 1 pt'}</b><div class="tv-pts">${PT.map((p,k)=>`<i class="${k===l?'on':k<l?'past':''}">${p}</i>`).join('')}</div></div></div>`}
    else if(x.ty==='img'&&x.im==='cl')m=`<div class="tv-grid">${x.q.map((qq,k)=>`<div><span>${k+1}</span>${pic(qq.im,'full')}</div>`).join('')}</div>`;
    else if(x.ty==='img')m=`<div class="tv-img one">${pic(q.im,'full')}<div class="tv-side"><small>Image ${j+1} / ${N}</small>${x.qm==='qcm'?tvCh(x,key,j):''}</div></div>`;
+   else if(x.ty==='txt')m=`<div class="tv-big tv-txt"><small>Question ${j+1} / ${N}</small><h2>${x.tm==='lyr'?'« '+esc(q.p)+' … »':esc(q.p)}</h2>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.tm==='lyr'?'Écrivez la suite':'Écrivez votre réponse'}</p>`}</div>`;
    else if(x.vid)m=`<div class="tv-v"><small>Question ${j+1} / ${N}</small><div class="ytslot tv-yt"></div></div>`;
    else{const on=g.np?.st==='play'&&q.dz&&g.np.id===q.dz;m=`<div class="tv-big"><small>Question ${j+1} / ${N}</small><h1>${on?'Écoutez bien':'Question '+(j+1)}</h1><div class="tv-eq ${on?'on':''}">${'<i></i>'.repeat(11)}</div>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.ea&&x.et?'Artiste et titre':x.ea?'Artiste':'Titre'}${x.eb?' · bonus '+esc(bLab(x)):''}</p>`}</div>`}}}
  else if(st==='closed')m=big(RN,'Corrections en cours','Les points arrivent, restez dans le coin');
@@ -1189,7 +1205,7 @@ function team(){
    h+=`<div class="db">`+(x.sx?guessBox(t,key,'Nom du thème',BT):'');
    if(x.eb)h+=`<p class="bnh">Bonus : <b>${esc(bLab(x))}</b> · +1 pt par bonus trouvé</p>`;
    if(x.vid&&play&&g.ct?.[r]===i)h+=`<div class="ytslot p-yt"></div><p class="hint" style="margin:6px 0 12px">Question ${(g.cs?.[key]??0)+1} · ${g.vsnd?'son sur ton téléphone':'regarde, le son passe dans la salle'}</p>`;
-   if(x.ty==='img')h+=imgPlay(t,x,key,s);else if(x.qm==='qcm')h+=qcmPlay(t,x,key,s);else for(let j=0;j<x.q.length;j++){const kk=`a|${key}|${j}`,kb=`a|${key}|${BO+j}`;h+=`<div class="qi"><i>${j+1}</i><div class="qf">${x.ea||x.et?`<input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">`:''}${x.eb?`<input class="in bn" data-k="${kb}" autocomplete="off" enterkeyhint="next" placeholder="+1 ${esc(bLab(x))}" value="${esc(draft[kb]??t.answers?.[key]?.[BO+j]??'')}">`:''}</div></div>`}
+   if(x.ty==='txt'&&x.qm!=='qcm')h+=txtPlay(t,x,key,s);else if(x.ty==='img')h+=imgPlay(t,x,key,s);else if(x.qm==='qcm')h+=qcmPlay(t,x,key,s);else for(let j=0;j<x.q.length;j++){const kk=`a|${key}|${j}`,kb=`a|${key}|${BO+j}`;h+=`<div class="qi"><i>${j+1}</i><div class="qf">${x.ea||x.et?`<input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">`:''}${x.eb?`<input class="in bn" data-k="${kb}" autocomplete="off" enterkeyhint="next" placeholder="+1 ${esc(bLab(x))}" value="${esc(draft[kb]??t.answers?.[key]?.[BO+j]??'')}">`:''}</div></div>`}
    h+=play?`<button class="btn blk y" data-a="done" data-t="${i}">Valider ce thème</button>`:`<p class="mut" style="margin:4px 0 0">Enregistré automatiquement.</p>`;
    h+=`</div>`;
   }
@@ -1228,7 +1244,7 @@ function pfCard(){let h=`<div class="c"><h2>Vérifier la soirée</h2>`;
 async function preflight(){PF={run:1,items:[['Vérification en cours','ld','Questions, extraits, images…']]};render();
  const it=[],RN=r=>r<cfgNR?'Manche '+(r+1):'Finale',inc=[],noDz=[],dz=[],noIm=[],ims=[],noYt=[];
  for(let r=0;r<=cfgNR;r++)(cfg[r]||[]).forEach((x,i)=>{const nm=`${RN(r)} · ${tn(x,i)}`,[d,t]=thProg(x);if(d<t)inc.push(`${nm} : ${t-d} question${t-d>1?'s':''} à compléter`);if(x.sx&&!x.n)inc.push(`${nm} : nom secret à renseigner`);
-  (x.q||[]).forEach((q,j)=>{if(x.ty==='img'){if(q.im)ims.push([q.im,`${nm} · image ${j+1}`]);else noIm.push(`${nm} · image ${j+1} manquante`)}else if(x.vid){if(!q.yt)noYt.push(`${nm} · Q${j+1} : lien YouTube manquant`)}else if(q.dz)dz.push([q.dz,`${nm} · Q${j+1}`]);else noDz.push(`${nm} · Q${j+1}`)})});
+  (x.q||[]).forEach((q,j)=>{if(x.ty==='img'){if(q.im)ims.push([q.im,`${nm} · image ${j+1}`]);else noIm.push(`${nm} · image ${j+1} manquante`)}else if(x.ty==='txt'){}else if(x.vid){if(!q.yt)noYt.push(`${nm} · Q${j+1} : lien YouTube manquant`)}else if(q.dz)dz.push([q.dz,`${nm} · Q${j+1}`]);else noDz.push(`${nm} · Q${j+1}`)})});
  for(let r=0;r<cfgNR;r++)if(cfgI[r]?.sx&&!cfgI[r]?.n)inc.push(`${RN(r)} : nom secret de la manche à renseigner`);
  it.push(['Questions',inc.length?'w':'ok',inc.length?inc.length+' point'+(inc.length>1?'s':'')+' à compléter':'Toutes les questions sont remplies',inc]);
  const bad=[];for(const[id,l]of dz){try{await Promise.race([dzGet(id),new Promise((_,ko)=>setTimeout(()=>ko(new Error('délai')),8000))])}catch(e){bad.push(l+' : extrait indisponible')}}
@@ -1312,8 +1328,8 @@ function prep(){
    ${I.sx&&!I.n?`<p class="a-warn" style="padding:10px 18px 0;margin:0">Renseigne le nom de la manche à deviner.</p>`:''}${g.rd?.[r]?'<p class="a-lk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 11h12v9H6zM9 11V8a3 3 0 0 1 6 0v3"/></svg>Manche déjà lancée : l\'ordre des thèmes et des questions est verrouillé.</p>':''}<div class="a-rdb">`;
   T.forEach((x,i)=>{const both=x.ea&&x.et;if(openTh!==r+'_'+i){h+=thCol(x,r,i,T.length);return}
    h+=`<section class="a-theme cfg" id="th-${r}_${i}" data-row="t|${r}|${i}"><header class="a-tb ${x.sx?'sx':''}">${TG(r,i,T.length)}<span class="k">Thème ${i+1}</span><input class="in" data-k="n|${r}|${i}" placeholder="Nom du thème" value="${esc(x.n)}"><span class="pts">${ptsMax(x)} pts</span><button class="a-hmv" data-a="thx" data-r="${r}" data-t="${i}" aria-label="Replier le thème" aria-expanded="true">${CHEV(1)}</button><button class="rm" title="Supprimer ce thème" aria-label="Supprimer ce thème" data-a="rmth" data-r="${r}" data-t="${i}">${TRASH}</button></header>
-   ${genreBtn(x,r,i)}<div class="a-qs">${x.ty==='img'?imgRows(x,r,i):x.qm==='qcm'?qcmRows(x,r,i):''}`;
-   if(x.ty!=='img'&&x.qm!=='qcm')for(let j=0;j<(x.q||[]).length;j++){const q=x.q[j]||{a:'',t:''};
+   ${genreBtn(x,r,i)}<div class="a-qs">${x.ty==='txt'?txtRows(x,r,i):x.ty==='img'?imgRows(x,r,i):x.qm==='qcm'?qcmRows(x,r,i):''}`;
+   if(x.ty!=='img'&&x.ty!=='txt'&&x.qm!=='qcm')for(let j=0;j<(x.q||[]).length;j++){const q=x.q[j]||{a:'',t:''};
     h+=`<div class="a-qrow" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="ins ${(x.ea?1:0)+(x.et?1:0)+(x.eb?1:0)===3?'three':both||x.eb?'':'one'}">${x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a)}">`:''}${x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t)}">`:''}${x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||'')}">`:''}</div>${QX(r,i,j,x,x.vid?'':dzL(r,i,j,q)+dzBtn(r,i,j,q))}</div>`+(x.vid?ytRow(r,i,j,q):'')}
    if(x.ty!=='img'&&x.qm!=='qcm')h+=`<button class="btn sm gh a-addq" data-a="pastex" data-r="${r}" data-t="${i}">Coller une liste</button>`+(pasteK===r+'_'+i?`<div class="a-pst"><label for="pst">Une ligne par chanson : ${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}</label><textarea class="in" id="pst" rows="6" placeholder="${x.ea&&x.et?'Indochine - L\'aventurier&#10;Téléphone - Un autre monde':'Une chanson par ligne'}"></textarea><button class="btn sm y" data-a="pfill" data-r="${r}" data-t="${i}">Remplir les questions</button></div>`:'');
    h+=`${(x.q||[]).length<QMAX?`<button class="btn sm gh a-addq" data-a="addq" data-r="${r}" data-t="${i}">+ Ajouter ${x.ty==='img'?'une image':'une question'}</button>`:''}${(()=>{const last=i===T.length-1&&r===cfgNR;return`<div class="a-thf"><button class="btn gh a-next" data-a="thn" data-r="${r}" data-t="${i}">${last?'Terminer':i===T.length-1?'Manche suivante ›':'Thème suivant ›'}</button></div>`})()}</div></section>`});
@@ -1352,9 +1368,10 @@ function rscreen(r){
    const ca=expTxt(x,q);
    h+=`<div class="a-q"><div class="a-qh">${x.ty==='img'?`<button class="a-qi" data-a="zoom" data-id="${q.im||''}" aria-label="Voir l'image">${pic(q.im,'xs')}</button>`:''}<em>${x.ty==='img'?'Image':'Question'} ${j+1}</em><b>${esc(ca)||'(non renseigné)'}</b></div>`;
    TM.forEach(t=>{const m=getMk(t,key,x),v=t.answers?.[key]?.[j]||'',vb=t.answers?.[key]?.[BO+j]||'',sav=!!t.marks?.[key],
-    fa=x.ea&&q.a?fz(q.a,v):0,ft=x.et&&q.t?fz(q.t,v):0,fb=x.eb&&q.b?fz(q.b,vb+' '+v):0,fi=x.ty==='img'&&x.qm!=='qcm'&&q.r?fz(q.r,v):0,PB=f=>f===1?' pb':'',chk=!sav&&[fa,ft,fb,fi].includes(1);
+    fa=x.ea&&q.a?fz(q.a,v):0,ft=x.et&&q.t?fz(q.t,v):0,fb=x.eb&&q.b?fz(q.b,vb+' '+v):0,fi=x.ty==='txt'&&x.qm!=='qcm'&&q.r?fz(q.r,v):0,PB=f=>f===1?' pb':'',chk=!sav&&[fa,ft,fb,fi].includes(1);
     h+=`<div class="a-ln"><div class="t"><small>${esc(t.name)}${t.x2?.[r]==i?' <span class="x">x2</span>':''}${chk?' <span class="pbt">à vérifier</span>':''}</small>${x.qm==='qcm'?`<span>${(A=>A.length?esc(q.c?.[A[A.length-1]]||'—'):'<i>(pas répondu)</i>')(t.qa?.[key]?.[j]||[])}</span>`:`<span>${v?esc(v):'<i>(vide)</i>'}</span>`}${x.ty==='img'&&isPrg(x)?`<span class="bv">${t.lk?.[key]?.[j]?'Verrouillée à '+t.lk[key][j]+' pt'+(t.lk[key][j]>1?'s':''):'Pas verrouillée : 0 pt'}</span>`:''}${x.eb?`<span class="bv">${esc(bLab(x))} : ${vb?esc(vb):'<i>(vide)</i>'}</span>`:''}</div>`+
     (x.qm==='qcm'?`<button class="ab sc ${m[j*2]?'on':''}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}" data-v="1">✓</button>`:'')+
+    (x.ty==='txt'&&x.qm!=='qcm'?`<button class="ab sc ${m[j*2]?'on':''}${PB(fi)}" title="Bonne réponse" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}">${m[j*2]?'✓ ':''}Juste · 2 pts</button>`:'')+
     (isPrg(x)&&!t.lk?.[key]?.[j]&&x.qm!=='qcm'?`<span class="ab sc dis">Pas verrouillée · 0</span>`:'')+
     (x.ea&&!(isPrg(x)&&!t.lk?.[key]?.[j])?`<button class="ab ${m[j*2]?'on':''}${PB(fa)}" title="Artiste" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2}"${isPrg(x)?` data-v="${t.lk?.[key]?.[j]||0}"`:''}>${m[j*2]?'✓ ':''}Artiste</button>`:'')+
     (x.et&&!(isPrg(x)&&!t.lk?.[key]?.[j])?`<button class="ab ${m[j*2+1]?'on':''}${PB(ft)}" title="Titre" data-a="mk" data-m="${sid}|${t.id}|${key}" data-i="${j*2+1}"${isPrg(x)?` data-v="${t.lk?.[key]?.[j]||0}"`:''}>${m[j*2+1]?'✓ ':''}Titre</button>`:'')+
@@ -1440,7 +1457,7 @@ const slide=(a,label,sub,attrs)=>`<div class="sld" data-slide><i class="sl-f"></
  document.addEventListener('keydown',e=>{const k=e.target.closest?.('.sl-k');if(!k||e.key!=='Enter')return;e.preventDefault();if(Date.now()-KA<1500){KA=0;k.closest('[data-slide]').querySelector('.sl-go').click()}else{KA=Date.now();k.closest('[data-slide]').querySelector('.sl-t small').textContent='Appuie encore sur Entrée pour confirmer'}})})();
 /* maintenir pour voir la réponse (si l'écran est projeté, elle reste floue) */
 ['pointerdown','pointerup','pointercancel'].forEach(ev=>document.addEventListener(ev,e=>{if(ev==='pointerdown'){const p=e.target.closest?.('[data-peek]');if(p)p.classList.add('show')}else document.querySelectorAll('.peek.show').forEach(p=>p.classList.remove('show'))}));
-const expTxt=(x,q)=>x.qm==='bz'?[q.a,q.t].filter(Boolean).join(' · '):x.ty==='txt'?(q.r||''):x.qm==='qcm'?(q.c?.[0]||''):[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' · ')+(x.eb&&q.b?` · ${bLab(x)} : ${q.b}`:'');
+const expTxt=(x,q)=>x.qm==='bz'?[q.a,q.t].filter(Boolean).join(' · '):x.qm==='qcm'?(q.c?.[0]||''):x.ty==='txt'?(q.r||''):[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' · ')+(x.eb&&q.b?` · ${bLab(x)} : ${q.b}`:'');
 function lvQ(r,t,x,key,j){const q=x.q[j],N=x.q.length,img=x.ty==='img';
  let h=`<div class="lv-qh"><b>Question ${j+1}</b><span>/ ${N}</span><div class="lv-dots" aria-hidden="true">${x.q.map((_,i)=>`<i class="${i<j?'dn':i===j?'cu':''}"></i>`).join('')}</div></div><div class="lv-b">`;
  if(img&&isPrg(x)){const l=Math.min(3,g.pl?.[key]??0),mine=LV&&LV.key===key&&LV.j===j,el=mine?LV.el:l>=3?30:(RB[l-1]||0);
@@ -1448,6 +1465,7 @@ function lvQ(r,t,x,key,j){const q=x.q[j],N=x.q.length,img=x.ty==='img';
   <div class="lv-rk"><div>${PT.map((p,i)=>`<span style="flex:${RB[i]-(RB[i-1]||0)}">${p} pt${p>1?'s':''}</span>`).join('')}</div><i id="lvb" style="width:${(el/30*100).toFixed(1)}%"></i></div>
   <div class="lv-row"><b id="lvt">${rvTxt(el)}</b><button class="btn gh sm" data-a="lvp" data-key="${key}" data-j="${j}">${mine&&LV.run?'Pause':el>=30?'Rejouer':el?'Reprendre':'Lancer'}</button></div>`}
  else if(img)h+=`<div class="lv-img">${pic(q.im,'full')}</div>`+(x.im==='cl'?'<p class="hint">Les équipes voient toutes les images sur leur téléphone et répondent à leur rythme.</p>':'');
+ else if(x.ty==='txt')h+=`<div class="lv-txt"><small>${x.tm==='lyr'?'Les équipes écrivent la suite':'Question'}</small><p>${x.tm==='lyr'?'« '+esc(q.p)+' <b>…</b> »':esc(q.p)}</p></div>`;
  else if(x.vid){const y=g.yt?.k===key+'_'+j?g.yt:null,pl=y?.st==='play';
   h+=q.yt?`<div class="ytslot lv-yt"></div><div class="lv-row"><button class="btn ${pl?'gh':'y'}" data-a="ytplay" data-k="${key}_${j}" data-yd="${q.yd||30}">${pl?'Pause':y?.pos?'Reprendre':'Lancer la vidéo'}</button><span class="lv-tm">${fmtS(q.ys??30)} · ${q.yd||30} s</span></div>
   <button class="a-tgl ${g.vsnd?'on':''}" data-a="vsnd" role="switch" aria-checked="${!!g.vsnd}"><span class="kn" aria-hidden="true"></span><span class="f"><b>Son sur les téléphones des joueurs</b><small>${g.vsnd?'Les équipes entendent la vidéo sur leur téléphone.':'Les équipes voient la vidéo sans le son (le son passe par l\'écran projection ou ta sono).'}</small></span></button>
@@ -1559,7 +1577,7 @@ function markDirty(r,i){const set=(el,txt)=>{if(el&&el.classList.contains('ok'))
 /* bouton « supprimer cette question » (au moins une question par thème) */
 const QX=(r,i,j,x,pre='')=>{const n=(x.q||[]).length;return`<span class="a-qa">${pre}${n>1?`<button class="a-qx" data-a="rmq" data-r="${r}" data-t="${i}" data-j="${j}" aria-label="Supprimer la question ${j+1}">✕</button>`:''}</span>`};
 /* une question est-elle remplie ? (pour l'avancement des thèmes repliés) */
-function qDone(x0,q){const x=normTh(x0);if(x.ty==='txt')return!!(q.p||'').trim()&&!!(q.r||'').trim();if(x.qm==='bz')return!!((q.a||'')+(q.t||'')).trim();
+function qDone(x0,q){const x=normTh(x0);if(x.ty==='txt'&&!(q.p||'').trim())return false;if(x.ty==='txt'&&x.qm!=='qcm')return!!(q.r||'').trim();if(x.qm==='bz')return!!((q.a||'')+(q.t||'')).trim();
  const C=q.c||[];if(x.qm==='qcm'&&![...Array(x.nc).keys()].every(c=>(C[c]||'').trim()))return false;
  if(x.sup==='img'&&!q.im)return false;if(x.sup==='mus'&&x.disp==='cov'&&!q.cv)return false;if(x.qm==='qcm')return true;
  return(!x.ea||!!(q.a||'').trim())&&(!x.et||!!(q.t||'').trim())&&(!x.eb||!!(q.b||q.r||'').trim())}
@@ -1576,6 +1594,9 @@ function thCol(x,r,i,n){const[d,t]=thProg(x),ok=t&&d===t;
  return`<section class="a-theme cfg col" id="th-${r}_${i}" data-row="t|${r}|${i}">${TG(r,i,n)}<button class="a-thc" data-a="thx" data-r="${r}" data-t="${i}" aria-expanded="false"><span class="k">${i+1}</span><span class="f"><b>${esc(x.n)||'Thème '+(i+1)}</b><small>${esc(thLab(x).t)} · ${d}/${t} rempli${d>1?'es':'e'}</small><span class="pgb"><i style="width:${t?d/t*100:0}%"></i></span></span>${thSaved(r,i)?'':'<span class="unsv">À enregistrer</span>'}${ok?'<span class="okb">✓</span>':''}${CHEV(0)}</button></section>`}
 /* préparer un thème images : mode + photos avec leur réponse */
 const fldPrep=(x0,r,i,j,q)=>{const x=normTh(x0);return(x.ea?`<input class="in" data-k="q|${r}|${i}|${j}|a" placeholder="Artiste" value="${esc(q.a||'')}">`:'')+(x.et?`<input class="in" data-k="q|${r}|${i}|${j}|t" placeholder="Titre" value="${esc(q.t||'')}">`:'')+(x.eb?`<input class="in bn" data-k="q|${r}|${i}|${j}|b" placeholder="${esc(bLab(x))}" value="${esc(q.b||q.r||'')}">`:'')};
+/* texte libre : le vers (ou la question), puis la réponse ou les choix du QCM */
+function txtRows(x,r,i){const n=normTh(x),ly=n.disp==='lyr',nc=n.nc;
+ return(x.q||[]).map((q,j)=>`<div class="a-qrow a-txq" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<span class="qn">Q${j+1}</span><div class="f a-imf"><input class="in" data-k="q|${r}|${i}|${j}|p" placeholder="${ly?'Le vers affiché':'La question'}" value="${esc(q.p||'')}">${n.qm==='qcm'?`<div class="a-qcm ${nc===2?'two':''}">${[...Array(nc).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<input class="in good" data-k="q|${r}|${i}|${j}|r" placeholder="${ly?'La suite à trouver':'La réponse'}" value="${esc(q.r||'')}">`}</div>${QX(r,i,j,x)}</div>`).join('')}
 function imgRows(x,r,i){const m=['cl','ca','pr','bl'].includes(x.im)?x.im:'cl';
  return`<button class="a-bulk" data-a="bulk" data-r="${r}" data-t="${i}" data-drop="${r}|${i}|*"><b>Importer plusieurs photos</b><small>elles remplissent les cases vides dans l'ordre · sur ordinateur, glisse-les ici</small></button>${(x.q||[]).map((q,j)=>`<div class="a-iq" data-row="q|${r}|${i}|${j}">${QG(r,i,j)}<button class="a-ip ${q.im?'':'add'}" data-a="pick" data-r="${r}" data-t="${i}" data-j="${j}" data-drop="${r}|${i}|${j}" aria-label="${q.im?'Changer':'Ajouter'} la photo ${j+1}">${q.im?`${pic(q.im,'sm')}<span>Changer</span>`:`+ Photo<br>${j+1}`}</button>${x.qm==='qcm'&&m!=='pr'&&m!=='bl'?`<div class="f a-qcm ${x.nc==2?'two':''}">${[...Array(x.nc==2?2:4).keys()].map(c=>`<input class="in ${c?'':'good'}" data-k="qc|${r}|${i}|${j}|${c}" placeholder="${c?'Mauvaise réponse':'Bonne réponse'}" value="${esc(q.c?.[c]||'')}">`).join('')}</div>`:`<div class="f a-imf">${fldPrep(x,r,i,j,q)}</div>`}${QX(r,i,j,x)}</div>`).join('')}
  <p class="mut" style="margin:6px 0 0;font-size:12px">Les photos sont réduites automatiquement et enregistrées tout de suite.</p>`}
@@ -1613,23 +1634,23 @@ function gSum(x){const k=genOf(x),sx=x.sx?' · secret':'';
  return GEN[k].d+sx}
 const genreBtn=(x,r,i)=>{const L=thLab(x);return`<button class="g-btn" data-a="gopen" data-r="${r}" data-t="${i}">${supIc(normTh(x).sup)}<span class="f"><b>${esc(L.t)}</b><small>${esc(L.s)}</small></span><svg class="g-chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>${x.sx&&!x.n?'<p class="a-warn" style="margin:0 14px 8px">Renseigne le nom du thème à deviner.</p>':''}`};
 /* choix d'un thème : support, puis affichage et façon de répondre */
-const SUPS={mus:['Musique','p','M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z','Un extrait ou une pochette Deezer'],img:['Image','c','M3 4h18v16H3zM3 15l5-5 4 4 3-3 6 6','Photos importées'],vid:['Vidéo','p','M3 6h18v12H3zM10 9l5 3-5 3z','Un extrait YouTube'],txt:['Texte libre','g','M4 6h16M4 11h16M4 16h10','Bientôt']};
-const DISP={mus:[['ext','Extrait','L\'extrait Deezer se joue'],['cov','Pochette floutée','La pochette Deezer devient nette : 10, 5, 3, 1 pt']],img:[['cl','Toutes d\'un coup','Chacun avance à son rythme'],['ca','Carrousel','Une image à la fois'],['pr','Progressif','Se dévoile par cases : 10, 5, 3, 1 pt'],['bl','Floutée','Devient nette : 10, 5, 3, 1 pt']],vid:[['clip','Clip','Un extrait YouTube']],txt:[['lyr','Suite des paroles',''],['qa','Question','']]};
+const SUPS={mus:['Musique','p','M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z','Un extrait ou une pochette Deezer'],img:['Image','c','M3 4h18v16H3zM3 15l5-5 4 4 3-3 6 6','Photos importées'],vid:['Vidéo','p','M3 6h18v12H3zM10 9l5 3-5 3z','Un extrait YouTube'],txt:['Texte libre','g','M4 6h16M4 11h16M4 16h10','Paroles ou question écrite']};
+const DISP={mus:[['ext','Extrait','L\'extrait Deezer se joue'],['cov','Pochette floutée','La pochette Deezer devient nette : 10, 5, 3, 1 pt']],img:[['cl','Toutes d\'un coup','Chacun avance à son rythme'],['ca','Carrousel','Une image à la fois'],['pr','Progressif','Se dévoile par cases : 10, 5, 3, 1 pt'],['bl','Floutée','Devient nette : 10, 5, 3, 1 pt']],vid:[['clip','Clip','Un extrait YouTube']],txt:[['lyr','Suite des paroles','Un vers, on écrit la suite'],['qa','Question','Une question écrite']]};
 const REPS=[['fld','Champs','Artiste, titre ou bonus à écrire'],['qcm','QCM','2 ou 4 réponses au choix']];
 const isTimed=d=>(d.sup==='img'&&(d.disp==='pr'||d.disp==='bl'))||(d.sup==='mus'&&d.disp==='cov');
 const supIc=k=>`<span class="g-ic g-${SUPS[k][1]}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SUPS[k][2]}"/></svg></span>`;
 function thLab(x0){const x=normTh(x0),D=DISP[x.sup]||[],d=D.find(v=>v[0]===x.disp);
- return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:''),s:(x.qm==='qcm'?x.nc+' réponses au choix':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom secret':'')}}
+ return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:''),s:(x.qm==='qcm'?x.nc+' réponses au choix':x.ty==='txt'?'Réponse écrite · 2 pts':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom secret':'')}}
 let gsh=null; // volet ouvert : {r,i,step,d}
 function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d),
  grp=(t,cols,items)=>`<div class="g-grp"><span>${t}</span><div style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${items.join('')}</div></div>`,
  opt=(f,v,lab,sub,cl,dis)=>`<button class="g-opt ${cl||''}" data-a="gset" data-f="${f}" data-v="${v}" aria-pressed="${cl&&cl.includes('on')?'true':'false'}" ${dis?'disabled':''}>${lab}${sub?`<small>${sub}</small>`:''}</button>`;
  let body;
- if(gsh.step==='sup')body=`<div class="g-grid">${Object.keys(SUPS).map(k=>`<button class="g-tile ${d.sup===k?'sel':''}" data-a="gsup" data-v="${k}" ${k==='txt'?'disabled':''}>${supIc(k)}<b>${SUPS[k][0]}</b><small>${SUPS[k][3]}</small>${d.sup===k?'<i>✓</i>':''}</button>`).join('')}</div>`;
+ if(gsh.step==='sup')body=`<div class="g-grid">${Object.keys(SUPS).map(k=>`<button class="g-tile ${d.sup===k?'sel':''}" data-a="gsup" data-v="${k}">${supIc(k)}<b>${SUPS[k][0]}</b><small>${SUPS[k][3]}</small>${d.sup===k?'<i>✓</i>':''}</button>`).join('')}</div>`;
  else{const G=[],D=DISP[d.sup];
   if(D.length>1)G.push(grp('Affichage',2,D.map(([v,l,sb])=>opt('disp',v,l,sb,on(d.disp===v)))));
-  G.push(grp('Réponse',2,REPS.map(([v,l,sb])=>opt('rep',v,l,timed&&v==='qcm'?'pas avec cet affichage':sb,on(d.rep===v),timed&&v==='qcm'))));
-  if(d.rep==='fld'){G.push(grp('À trouver',3,[opt('ea',1,'Artiste','',on(d.ea)),opt('et',1,'Titre','',on(d.et)),opt('eb',1,'Bonus','libellé au choix',on(d.eb))]));
+  G.push(grp('Réponse',2,REPS.map(([v,l,sb])=>opt('rep',v,d.sup==='txt'&&v==='fld'?'Réponse écrite':l,timed&&v==='qcm'?'pas avec cet affichage':d.sup==='txt'&&v==='fld'?'2 pts si c\'est juste':sb,on(d.rep===v),timed&&v==='qcm'))));
+  if(d.rep==='fld'&&d.sup!=='txt'){G.push(grp('À trouver',3,[opt('ea',1,'Artiste','',on(d.ea)),opt('et',1,'Titre','',on(d.et)),opt('eb',1,'Bonus','libellé au choix',on(d.eb))]));
    if(d.eb)G.push(`<label class="g-grp"><span>Intitulé du bonus</span><input class="in" data-k="gbl" placeholder="Ex : Année, Artiste original, Film" value="${esc(d.bl||'')}"></label>`)}
   if(d.rep==='qcm')G.push(grp('Nombre de choix',2,[opt('nc',2,'2 réponses','',on(d.nc==2)),opt('nc',4,'4 réponses','',on(d.nc!=2))]));
   G.push(grp('Nom du thème',2,[opt('sx',0,'Visible','affiché aux équipes',on(!d.sx)),opt('sx',1,'Secret','+'+BT+' pts à deviner',d.sx?'on y':'')]));
@@ -1665,7 +1686,8 @@ function getMk(t,key,x){const k=sid+'|'+t.id+'|'+key;
   if(t.marks?.[key])mk[k]=[...t.marks[key]].map(v=>v||0);
   else{const m=[];x.q.forEach((q,j)=>{let a=0,b=0;
    if(x.qm==='qcm'){const Q=t.qa?.[key]?.[j]||[];a=Q.length&&Q[Q.length-1]===0?1:0}
-   else if(x.qm!=='bz'&&x.ty!=='txt'){const v=isPrg(x)?(t.lk?.[key]?.[j]||0):1;a=x.ea&&q.a&&fz(q.a,A[j])?v:0;b=x.et&&q.t&&fz(q.t,A[j])?v:0;m[MB+j]=x.eb&&q.b&&fz(q.b,(A[BO+j]||'')+' '+(A[j]||''))?v:0}
+   else if(x.ty==='txt'){a=q.r&&fz(q.r,A[j])?1:0}
+   else if(x.qm!=='bz'){const v=isPrg(x)?(t.lk?.[key]?.[j]||0):1;a=x.ea&&q.a&&fz(q.a,A[j])?v:0;b=x.et&&q.t&&fz(q.t,A[j])?v:0;m[MB+j]=x.eb&&q.b&&fz(q.b,(A[BO+j]||'')+' '+(A[j]||''))?v:0}
    m[2*j]=a;m[2*j+1]=b});mk[k]=m}
   for(let i=0;i<MB+QMAX;i++)mk[k][i]=mk[k][i]||0}
  return mk[k]}
