@@ -856,6 +856,60 @@ body.sk-school .btn.gh{color:var(--fg);border-color:rgba(28,37,82,.35);backgroun
 /* effets */
 .lv-fx{align-self:center;margin:0 0 10px;padding:5px 12px;border-radius:999px;background:var(--p);font:800 12px Poppins;letter-spacing:.04em}
 .tv-fx{margin:0;color:var(--y)!important;font-weight:800}
+/* ---------- chrono des questions ---------- */
+.qtc{--red:#ff2b3a;display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.qtc-t{flex:1;height:10px;border-radius:6px;background:rgba(255,255,255,.16);overflow:hidden}
+body.sk-school .qtc-t{background:rgba(28,37,82,.12)}
+.qtc-t i{display:block;height:100%;width:100%;background:var(--c);border-radius:6px;transform-origin:left}
+.qtc>b{min-width:46px;text-align:right;font:800 18px var(--fb);font-variant-numeric:tabular-nums;transform:scale(var(--grow,1));transform-origin:right center;transition:transform .2s ease-out}
+.qtc small{flex-basis:100%;order:3;margin-top:-6px;font:600 11px var(--fb);color:var(--mut)}
+.qtc{flex-wrap:wrap}
+.qtc.hot .qtc-t i,.qtc.over .qtc-t i{background:var(--red)}.qtc.hot>b,.qtc.over>b{color:var(--red)}
+.qtp{animation:qtp .9s cubic-bezier(.2,.7,.3,1)}@keyframes qtp{0%{filter:brightness(2.2)}100%{filter:none}}
+.lv-qt{margin:0 0 6px}
+/* une question à la fois */
+.oq{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:18px;background:rgba(0,0,0,.18);border:2px solid var(--c);margin:0 0 12px;transition:border-color .3s,box-shadow .3s}
+body.sk-school .oq{background:#fff}
+.oq.qt-hot{border-color:#ff2b3a;box-shadow:0 0 0 3px rgba(255,43,58,.3),0 0 24px rgba(255,43,58,.35)}
+.oq.lk{border-color:rgba(255,43,58,.6)}
+.oq .qtc{margin:0}
+.oq-h{display:flex;flex-direction:column;gap:8px}.oq-h b{font:800 22px var(--fb)}.oq-h small{font-size:14px;color:var(--mut);font-weight:600}
+.oq-d{display:flex;gap:6px}.oq-d i{flex:1;height:6px;border-radius:3px;background:rgba(127,127,127,.3)}.oq-d i.ps{background:rgba(127,127,127,.6)}.oq-d i.cu{background:var(--y)}
+.oq-a{border:0;margin:0;padding:0;min-width:0;display:flex;flex-direction:column;gap:10px}
+.oq-a .in{font-size:17px;padding:14px}.oq-a .qf2{display:flex;flex-direction:column;gap:10px}
+.oq-a:disabled{opacity:.55}
+.oq-img{border:0;padding:0;background:none;border-radius:14px;overflow:hidden;cursor:zoom-in}.oq-img .pic{width:100%;display:block}
+.oq-lk{margin:0;padding:10px 12px;border-radius:12px;background:rgba(255,43,58,.15);color:#ff5a66;font:700 13px var(--fb)}
+body.sk-school .oq-lk{color:#d62828}
+.oq-rv,.oq-end{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:16px;margin:0 0 12px;font:800 15px var(--fb)}
+.oq-rv{background:var(--y);color:var(--n)}.oq-rv span,.oq-end span{font:600 12px var(--fb);opacity:.8}
+.oq-end{background:rgba(127,127,127,.15)}
+/* projection : anneau qui grossit sur la fin */
+.tv-ck{position:absolute;right:3cqi;top:6.5cqi;width:10cqi;height:10cqi;z-index:3;transform:scale(var(--grow,1));transform-origin:top right;transition:transform .25s ease-out}
+.tv-ck svg{width:100%;height:100%;transform:rotate(-90deg)}.tv-ck circle{fill:none;stroke-width:9}
+.tv-ck .bg{stroke:rgba(127,127,127,.28)}.tv-ck .fg{stroke:var(--c);stroke-linecap:round}
+.tv-ck b{position:absolute;inset:0;display:grid;place-items:center;font:800 3.4cqi var(--fb);font-variant-numeric:tabular-nums}
+.tv-ck.hot .fg,.tv-ck.over .fg{stroke:#ff2b3a}.tv-ck.hot b,.tv-ck.over b{color:#ff2b3a}.tv-ck.hot{filter:drop-shadow(0 0 1.2cqi rgba(255,43,58,.7))}
+.tv-ck.qtc{display:block;margin:0}.tv-ck.qtc>b{position:absolute;inset:0;min-width:0;display:grid;place-items:center;text-align:center;transform:none}
+.tv.qt-hot::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;box-shadow:inset 0 0 6cqi rgba(255,43,58,.45);animation:qte 1s ease-in-out infinite}
+@keyframes qte{50%{opacity:.35}}
+/* égaliseurs selon le thème graphique (par défaut : TV Glitch) */
+.tv-eq{height:9cqi;align-items:flex-end;justify-content:center}
+.tv-eq .disc{display:none}
+.tv-eq i{width:1.3cqi;border-radius:.3cqi;background:linear-gradient(0deg,#ff0a8c,#00e8ff);box-shadow:-.25cqi 0 0 rgba(255,10,140,.75),.25cqi 0 0 rgba(0,232,255,.75);-webkit-mask:repeating-linear-gradient(0deg,#000 0 .45cqi,transparent .45cqi .6cqi);mask:repeating-linear-gradient(0deg,#000 0 .45cqi,transparent .45cqi .6cqi)}
+body.sk-s90 .tv-eq{gap:1cqi}
+body.sk-s90 .tv-eq i{width:2cqi;background:var(--p);border:.25cqi solid #0e0620;box-shadow:.45cqi .45cqi 0 #0e0620;-webkit-mask:none;mask:none;border-radius:0}
+body.sk-s90 .tv-eq i:nth-of-type(3n+2){background:var(--c)}body.sk-s90 .tv-eq i:nth-of-type(3n){background:var(--y)}body.sk-s90 .tv-eq i:nth-of-type(odd){border-radius:1cqi 1cqi 0 0}
+body.sk-sombre .tv-eq{gap:.5cqi}
+body.sk-sombre .tv-eq i{width:1.8cqi;border-radius:0;box-shadow:none;background:linear-gradient(0deg,#5c5a55 0 55%,#b9b4aa 55% 78%,#e0202c 78%) bottom/100% 9cqi;-webkit-mask:repeating-linear-gradient(0deg,#000 0 .7cqi,transparent .7cqi .95cqi);mask:repeating-linear-gradient(0deg,#000 0 .7cqi,transparent .7cqi .95cqi)}
+body.sk-soul .tv-eq{align-items:center;gap:.7cqi}
+body.sk-soul .tv-eq i{width:1cqi;border-radius:1cqi;box-shadow:none;-webkit-mask:none;mask:none;background:linear-gradient(0deg,#c8552d,#d9a441)}
+body.sk-soul .tv-eq .disc{display:block;width:9cqi;height:9cqi;border-radius:50%;margin:0 1.4cqi;flex:none;position:relative;background:radial-gradient(circle,#17120e 0 4%,#d9a441 4.5% 26%,#c8552d 26.5% 30%,#111 30.5% 100%);box-shadow:0 0 0 .3cqi #2a211a}
+body.sk-soul .tv-eq .disc::after{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 .35cqi,rgba(255,255,255,.06) .35cqi .45cqi);-webkit-mask:radial-gradient(circle,transparent 31%,#000 31.5%);mask:radial-gradient(circle,transparent 31%,#000 31.5%)}
+body.sk-soul .tv-eq.on .disc{animation:qtspin 1.8s linear infinite}@keyframes qtspin{to{transform:rotate(360deg)}}
+body.sk-school .tv-eq{gap:1.1cqi;border-bottom:.35cqi solid #1f3a93;padding:0 1cqi}
+body.sk-school .tv-eq i{width:1.8cqi;box-shadow:none;-webkit-mask:none;mask:none;background:repeating-linear-gradient(-35deg,#2549b8 0 .3cqi,transparent .3cqi .7cqi);border:.3cqi solid #2549b8;border-bottom:0;border-top-color:#d62828;border-radius:.6cqi .3cqi 0 0/.9cqi .4cqi 0 0}
+@media (prefers-reduced-motion:reduce){.qtp,.tv.qt-hot::after,body.sk-soul .tv-eq.on .disc{animation:none}.tv-ck,.qtc>b{transition:none}}
 </style></head>
 <body><div id="app">Chargement...</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -934,7 +988,7 @@ function normTh(x){const q0=(x.q||[]).map(y=>Object.assign({a:'',t:'',b:'',r:'',
  const q=q0.map(y=>legacyImg&&!y.b?{...y,b:y.r}:y).map(y=>sup==='mus'&&disp==='cov'?{...y,im:y.cv?String(y.cv).replace(/\/\d+x\d+-/,'/500x500-'):''}:y);
  const fld=(rep==='fld'||rep==='bz')&&sup!=='txt';
  return{n:x.n||'',sup,disp,rep,vid:sup==='vid',ty:sup==='img'||timed?'img':sup==='txt'?'txt':'mus',tm:disp==='qa'?'qa':'lyr',im:sup==='mus'&&disp==='cov'?'bl':sup==='img'?disp:'cl',
-  qm:rep==='qcm'?'qcm':rep==='bz'?'bz':'cl',nc:x.nc==2?2:4,ea:fld&&ea,et:fld&&et,eb:fld&&eb,bp:+x.bp||2,bm:!!x.bm,fx:sup==='mus'&&disp==='ext'&&FX[x.fx]?x.fx:'',bl,sx:!!x.sx,q:q.slice(0,QMAX),pts:sup==='txt'&&rep!=='qcm'?2:1}}
+  qm:rep==='qcm'?'qcm':rep==='bz'?'bz':'cl',nc:x.nc==2?2:4,ea:fld&&ea,et:fld&&et,eb:fld&&eb,bp:+x.bp||2,bm:!!x.bm,qt:timed?0:(x.qt==null?30:+x.qt||0),fx:sup==='mus'&&disp==='ext'&&FX[x.fx]?x.fx:'',bl,sx:!!x.sx,q:q.slice(0,QMAX),pts:sup==='txt'&&rep!=='qcm'?2:1}}
 const hh=s=>{let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))%1000003;return h};
 const qord=(key,j,n)=>[...Array(n).keys()].sort((a,b)=>hh(key+'|'+j+'|'+a)-hh(key+'|'+j+'|'+b));
 const qpend={};let rvw=null,renS=null,cfgNR=3,prepR=0,openTh=null,drg=null;
@@ -1228,7 +1282,7 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
  if(!gl||!tready)return GB+BRAND(true)+GC('Chargement','Une seconde');
  if(!g)return GB+BRAND(true)+GC('Session introuvable','Vérifie le lien');
  const r=g.r,I=r>=0?ri(r):{},RN=r===FI()?'Finale':'Manche '+(r+1),st=r>=0?g.rd?.[r]:null,url=location.origin+location.pathname+'?s='+sid;
- let top=`<span class="tv-ti">${esc(g.title||'')}</span>`,m='';
+ let top=`<span class="tv-ti">${esc(g.title||'')}</span>`,m='',ring='';
  const big=(k,t,p)=>`<div class="tv-big"><small>${k}</small><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div>`;
  if(fin())m=tvStats(g.fs||0);
  else if(g.tb&&!fin())m=`<div class="tv-tb">${tbLive()}</div>`;
@@ -1238,6 +1292,7 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
   if(g.cd?.[r])m=`<div class="tv-cd"><small>Fin de la manche dans</small><b class="cdn">${Math.ceil(cdLeft(r)??30)}</b><span>Finissez de répondre et pensez à cocher votre « x2 »</span></div>`;
   else if(ct==null)m=big(RN,esc(pubRn(I,r)),'Le premier thème arrive');
   else{const x=th(r)[ct],key=`${r}_${ct}`,N=x.q.length,j=Math.max(0,Math.min(N-1,g.cs?.[key]??0)),q=x.q[j],L=rcvOf(r,x,key,j);
+   if(!isPrg(x))ring=qtRing(x,key,j);
    top+=`<span>${RN} · Thème ${ct+1} · ${esc(pubTn(x,ct))}</span><span class="tv-rc">${L.filter(z=>z.ok).length}/${L.length} réponses reçues</span>`;
    if(x.qm==='bz'){const{w,hand}=bzQ(key,j);m=`<div class="tv-big tv-bz"><small>Buzzer · Question ${j+1} / ${N}</small>${x.ty==='img'?`<div class="tv-bzi">${pic(q.im,'full')}</div>`:x.ty==='txt'?`<h2>${x.tm==='lyr'?'« '+esc(q.p)+' … »':esc(q.p)}</h2>`:''}${w?`<div class="tv-bzh ok"><small>Point pour</small><b>${tnm(w)}</b></div>`:hand?`<div class="tv-bzh"><small>À la main</small><b>${esc(hand.name)}</b></div>`:x.vid?'<div class="ytslot tv-yt"></div>':`<h1>À vos buzzers</h1>`}</div>`}
    else if(x.ty==='img'&&isPrg(x)){const l=Math.min(3,g.pl?.[key]??0);m=`<div class="tv-img">${prgPic(x,q.im,l,'full','')}<div class="tv-side"><small>Image ${j+1} / ${N}</small><b>${l<3?'Vaut '+PT[l]+' pts':'Image entière · 1 pt'}</b><div class="tv-pts">${PT.map((p,k)=>`<i class="${k===l?'on':k<l?'past':''}">${p}</i>`).join('')}</div></div></div>`}
@@ -1245,11 +1300,11 @@ function tvScreen(){document.body.classList.add('tvm');if(!WL||WL.released)wake(
    else if(x.ty==='img')m=`<div class="tv-img one">${pic(q.im,'full')}<div class="tv-side"><small>Image ${j+1} / ${N}</small>${x.qm==='qcm'?tvCh(x,key,j):''}</div></div>`;
    else if(x.ty==='txt')m=`<div class="tv-big tv-txt"><small>Question ${j+1} / ${N}</small><h2>${x.tm==='lyr'?'« '+esc(q.p)+' … »':esc(q.p)}</h2>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.tm==='lyr'?'Écrivez la suite':'Écrivez votre réponse'}</p>`}</div>`;
    else if(x.vid)m=`<div class="tv-v"><small>Question ${j+1} / ${N}</small><div class="ytslot tv-yt"></div></div>`;
-   else{const on=g.np?.st==='play'&&q.dz&&g.np.id===q.dz;m=`<div class="tv-big"><small>Question ${j+1} / ${N}</small><h1>${on?'Écoutez bien':'Question '+(j+1)}</h1>${x.fx?`<p class="tv-fx">Extrait ${x.fx==='rev'?'à l\'envers':x.fx==='slow'?'ralenti':'en voix aiguë'}</p>`:''}<div class="tv-eq ${on?'on':''}">${'<i></i>'.repeat(11)}</div>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.ea&&x.et?'Artiste et titre':x.ea?'Artiste':'Titre'}${x.eb?' · bonus '+esc(bLab(x)):''}</p>`}</div>`}}}
+   else{const on=g.np?.st==='play'&&q.dz&&g.np.id===q.dz;m=`<div class="tv-big"><small>Question ${j+1} / ${N}</small><h1>${on?'Écoutez bien':'Question '+(j+1)}</h1>${x.fx?`<p class="tv-fx">Extrait ${x.fx==='rev'?'à l\'envers':x.fx==='slow'?'ralenti':'en voix aiguë'}</p>`:''}<div class="tv-eq ${on?'on':''}">${'<i></i>'.repeat(5)}<span class="disc"></span>${'<i></i>'.repeat(6)}</div>${x.qm==='qcm'?tvCh(x,key,j):`<p>${x.ea&&x.et?'Artiste et titre':x.ea?'Artiste':'Titre'}${x.eb?' · bonus '+esc(bLab(x)):''}</p>`}</div>`}}}
  else if(st==='closed')m=big(RN,'Corrections en cours','Les points arrivent, restez dans le coin');
  else if(st==='validated'){const L=place(r),an=TVSEEN!=='rk'+r;TVSEEN='rk'+r;m=`<div class="tv-rk"><small>Classement après ${r===FI()?'la finale':'la manche '+(r+1)}</small>${L.map((t,i)=>`<div class="tv-r ${an?'anim':''} p${t.pos}" style="animation-delay:${((L.length-1-i)*.8).toFixed(1)}s"><span>${t.pos}</span><b>${esc(t.name)}</b><em>${t.sc} pts</em></div>`).join('')}</div>`}
  else m=big(RN,esc(pubRn(I,r)),'La manche va commencer');
- return`<div class="tv"><div class="tv-top">${top}</div><div class="tv-m">${m}</div></div>`}
+ return`<div class="tv"><div class="tv-top">${top}</div>${st==='open'&&!g.cd?.[r]?ring:''}<div class="tv-m">${m}</div></div>`}
 const tvCh=(x,key,j)=>{const C=x.q[j].c||[];return`<div class="tv-ch ${x.nc==2?'two':''}">${qord(key,j,x.nc).map((c,i)=>`<div><i>${'ABCD'[i]}</i>${esc(C[c]||'—')}</div>`).join('')}</div>`};
 let VK,NOTE=null;
 function team(){
@@ -1301,8 +1356,10 @@ function team(){
    h+=`<div class="db">`+(x.sx?guessBox(t,key,'Nom du thème',BT):'');
    if(x.eb)h+=`<p class="bnh">Bonus : <b>${esc(bLab(x))}</b> · +1 pt par bonus trouvé</p>`;
    if(x.vid&&play&&g.ct?.[r]===i)h+=`<div class="ytslot p-yt"></div><p class="hint" style="margin:6px 0 12px">Question ${(g.cs?.[key]??0)+1} · ${g.vsnd?'son sur ton téléphone':'regarde, le son passe dans la salle'}</p>`;
-   if(x.qm==='bz')h+=bzPlay(t,x,key,s);else if(x.ty==='txt'&&x.qm!=='qcm')h+=txtPlay(t,x,key,s);else if(x.ty==='img')h+=imgPlay(t,x,key,s);else if(x.qm==='qcm')h+=qcmPlay(t,x,key,s);else for(let j=0;j<x.q.length;j++){const kk=`a|${key}|${j}`,kb=`a|${key}|${BO+j}`;h+=`<div class="qi"><i>${j+1}</i><div class="qf">${x.ea||x.et?`<input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">`:''}${x.eb?`<input class="in bn" data-k="${kb}" autocomplete="off" enterkeyhint="next" placeholder="+1 ${esc(bLab(x))}" value="${esc(draft[kb]??t.answers?.[key]?.[BO+j]??'')}">`:''}</div></div>`}
-   h+=x.qm==='bz'?'':play?`<button class="btn blk y" data-a="done" data-t="${i}">Valider ce thème</button>`:`<p class="mut" style="margin:4px 0 0">Enregistré automatiquement.</p>`;
+   const one=play&&g.one?.[key]&&!g.cd?.[r]&&!isPrg(x)&&x.qm!=='bz'?onePlay(t,x,key,i,r):null,rev=play&&g.one?.[key]&&!g.cd?.[r]&&!isPrg(x)&&x.qm!=='bz'&&one===null;
+   if(rev)h+=`<div class="oq-rv"><b>Fin du thème : relis tes réponses</b><span>Tu peux corriger jusqu'à l'ouverture du thème suivant.</span></div>`;
+   if(one)h+=one;else if(x.qm==='bz')h+=bzPlay(t,x,key,s);else if(x.ty==='txt'&&x.qm!=='qcm')h+=txtPlay(t,x,key,s);else if(x.ty==='img')h+=imgPlay(t,x,key,s);else if(x.qm==='qcm')h+=qcmPlay(t,x,key,s);else for(let j=0;j<x.q.length;j++){const kk=`a|${key}|${j}`,kb=`a|${key}|${BO+j}`;h+=`<div class="qi"><i>${j+1}</i><div class="qf">${x.ea||x.et?`<input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="next" placeholder="${x.ea&&x.et?'Artiste - Titre':x.ea?'Artiste':'Titre'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">`:''}${x.eb?`<input class="in bn" data-k="${kb}" autocomplete="off" enterkeyhint="next" placeholder="+1 ${esc(bLab(x))}" value="${esc(draft[kb]??t.answers?.[key]?.[BO+j]??'')}">`:''}</div></div>`}
+   h+=x.qm==='bz'||one?'':play?`<button class="btn blk y" data-a="done" data-t="${i}">Valider ce thème</button>`:`<p class="mut" style="margin:4px 0 0">Enregistré automatiquement.</p>`;
    h+=`</div>`;
   }
   h+=`</div>`;
@@ -1549,7 +1606,7 @@ function bzAdm(x,key,j){const{L,out,w,hand}=bzQ(key,j),wait=L.filter(t=>!out.inc
 function bzPlay(t,x,key,s){const N=x.q.length;
  if(s!=='open')return`<p class="bnh">Buzzer : les points arrivent avec les corrections.</p>`;
  const j=Math.max(0,Math.min(N-1,g.cs?.[key]??0)),q=x.q[j],{L,out,w,hand}=bzQ(key,j),mine=t.bzz?.[key]?.[j]!==undefined,rk=L.findIndex(z=>z.id===t.id);
- let h=`<div class="bzp"><div class="qf-h"><b>Question ${j+1} <small>/ ${N}</small></b></div>`;
+ let h=`<div class="bzp oq"><div class="qf-h"><b>Question ${j+1} <small>/ ${N}</small></b></div>${qtBar(x,key,j)}`;
  if(x.ty==='img')h+=`<div class="bzp-m">${pic(q.im,'full')}</div>`;else if(x.ty==='txt')h+=`<p class="qf-p">${x.tm==='lyr'?'« '+esc(q.p)+' … »':esc(q.p)}</p>`;
  let st;
  if(w)st=w===t.id?`<div class="bzp-s ok"><b>Bien joué !</b><span>+${x.bp} pts pour ton équipe</span></div>`:`<div class="bzp-s"><b>${tnm(w)} a trouvé</b><span>Prochaine question bientôt</span></div>`;
@@ -1558,6 +1615,44 @@ function bzPlay(t,x,key,s){const N=x.q.length;
  else if(mine)st=`<div class="bzp-s"><b>Buzzé</b><span>${rk>0?'Tu es '+(rk+1)+'e dans la file':'En attente'}${hand?' · '+esc(hand.name)+' a la main':''}</span></div>`;
  else st=`<button class="bzp-btn" data-a="buzz" data-key="${key}" data-j="${j}"><span>Buzz</span></button>${hand?`<p class="bnh">${esc(hand.name)} a la main. Buzze pour passer après.</p>`:''}`;
  return h+st+`<p class="bnh">Le plus rapide répond à voix haute : <b>${x.bp} pts</b> si c'est juste.</p></div>`}
+/* ============ CHRONO DES QUESTIONS ============
+   g.tq[key] = {j, at} : départ de la question j du thème (heure de l'admin). Pour la musique Deezer et la vidéo,
+   le chrono part au lancement de l'extrait ; sinon dès l'affichage de la question en mode soirée. */
+const QTS=[0,15,20,30,45,60];
+const needsPlay=(x,j)=>!!((x.sup==='mus'&&x.disp==='ext'&&x.q[j]?.dz)||(x.vid&&x.q[j]?.yt));
+const qtOf=(x,key,j)=>{const d=+x.qt||0;if(!d)return null;const o=g?.tq?.[key];return{d,end:o&&o.j===j?o.at+d*1000:0}};
+const qtOver=(x,key,j)=>{const T=qtOf(x,key,j);return!!(T&&T.end&&Date.now()>=T.end)};
+const qtL=T=>T.end?Math.max(0,(T.end-Date.now())/1000):T.d,qtF=T=>(qtL(T)/T.d).toFixed(3);
+const qtTxt=s=>{s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+function qtBar(x,key,j,cl=''){const T=qtOf(x,key,j);if(!T)return'';
+ return`<div class="qtc ${cl}" data-end="${T.end}" data-d="${T.d}" role="timer" aria-label="Temps restant"><div class="qtc-t"><i style="transform:scaleX(${qtF(T)})"></i></div><b>${qtTxt(qtL(T))}</b>${T.end?'':`<small>${needsPlay(x,j)?'Démarre avec l\'extrait':'En attente'}</small>`}</div>`}
+function qtRing(x,key,j){const T=qtOf(x,key,j);if(!T)return'';
+ return`<div class="tv-ck qtc ring" data-end="${T.end}" data-d="${T.d}" aria-hidden="true"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg" cx="50" cy="50" r="44" stroke-dasharray="276.5" style="stroke-dashoffset:${276.5*(1-qtF(T))}"/></svg><b>${Math.ceil(qtL(T))}</b></div>`}
+let QTV={},QTR='';
+(function qtLoop(){const now=Date.now();
+ document.querySelectorAll('.qtc').forEach(el=>{const end=+el.dataset.end,d=+el.dataset.d,left=end?Math.max(0,(end-now)/1000):d,f=left/d,sec=Math.ceil(left),hot=end&&left>0&&left<=5,over=end&&left<=0;
+  const bar=el.querySelector('.qtc-t i');if(bar)bar.style.transform=`scaleX(${f})`;
+  const fg=el.querySelector('.fg');if(fg)fg.style.strokeDashoffset=String(276.5*(1-f));
+  const b=el.querySelector('b'),txt=el.classList.contains('ring')?String(sec):qtTxt(left);if(b&&b.textContent!==txt){b.textContent=txt;if(hot){b.classList.remove('qtp');void b.offsetWidth;b.classList.add('qtp')}}
+  el.classList.toggle('hot',!!hot);el.classList.toggle('over',!!over);el.style.setProperty('--grow',hot?(1+(6-sec)*(el.classList.contains('ring')?.16:.12)).toFixed(2):1);
+  const box=el.closest('.oq,.tv,.lv-b');if(box)box.classList.toggle('qt-hot',!!hot);
+  if(hot&&!ADMIN&&!TVM){const k=end+'|'+sec;if(!QTV[k]){QTV[k]=1;try{navigator.vibrate?.(45)}catch(e){}}}});
+ const ex=[...document.querySelectorAll('.qtc[data-end]')].filter(el=>+el.dataset.end&&now>=+el.dataset.end).map(el=>el.dataset.end).join();
+ if(ex!==QTR){QTR=ex;if(ex&&typeof render==='function')render()}
+ requestAnimationFrame(qtLoop)})();
+/* une question à la fois (mode soirée) : seule la question en cours est ouverte ; tout se rouvre en fin de thème et pendant la clôture */
+function onePlay(t,x,key,i,r){const N=x.q.length,j=Math.max(0,Math.min(N-1,g.cs?.[key]??0));
+ if(g.ct?.[r]!==i)return`<div class="oq-end"><b>Thème terminé</b><span>Tu pourras revoir tes réponses à la fin de la manche.</span></div>`;
+ const T=qtOf(x,key,j),over=qtOver(x,key,j);
+ if(j===N-1&&(!T||over))return null; // fin du thème : on rouvre toute la liste
+ const q=x.q[j],Q=x.qm==='qcm';
+ let m='';
+ if(x.ty==='img')m=`<button class="oq-img" data-a="zoom" data-id="${q.im||''}" aria-label="Agrandir l'image">${pic(q.im,'full')}</button>`;
+ else if(x.ty==='txt')m=`<p class="qf-p">${x.tm==='lyr'?'« '+esc(q.p)+' <b>…</b> »':esc(q.p)}</p>`;
+ let a=Q?qchoice(t,x,key,j,over?'closed':'open',false):x.ty==='txt'?(()=>{const kk=`a|${key}|${j}`;return`<input class="in" data-k="${kk}" autocomplete="off" enterkeyhint="done" placeholder="${x.tm==='lyr'?'La suite…':'Ta réponse'}" value="${esc(draft[kk]??t.answers?.[key]?.[j]??'')}">`})():fldIn(t,x,key,j);
+ return`<div class="oq ${over?'lk':''}"><div class="oq-h"><b>Question ${j+1} <small>/ ${N}</small></b><div class="oq-d" aria-hidden="true">${x.q.map((_,k)=>`<i class="${k<j?'ps':k===j?'cu':''}"></i>`).join('')}</div></div>
+  ${qtBar(x,key,j)}${m}<fieldset class="oq-a" ${over?'disabled':''}>${a}</fieldset>
+  ${over?'<p class="oq-lk">Temps écoulé. Tu pourras revoir ta réponse à la fin du thème.</p>':`<p class="bnh">${j?'Les questions passées se rouvrent à la fin du thème.':'Réponds avant la fin du chrono.'}</p>`}</div>`}
 function answered(t,x,key,j){if(x.qm==='bz')return t.bzz?.[key]?.[j]!=null;if(x.ty==='img'&&isPrg(x))return!!t.lk?.[key]?.[j];if(x.qm==='qcm')return!!(t.qa?.[key]?.[j]||[]).length;return!!ansOf(t,key,j)}
 function rcvOf(r,x,key,j){const TM=r===FI()?teams.filter(t=>inFinal(t.id)):teams;return TM.map(t=>({t,ok:answered(t,x,key,j)}))}
 function rcvBar(r,x,key,j){const L=rcvOf(r,x,key,j),n=L.filter(z=>z.ok).length;return`<div class="lv-rcv"><b>${n}/${L.length}</b><span>réponses reçues</span><span class="lv-rcd">${L.map(z=>`<i class="${z.ok?'ok':''}" title="${esc(z.t.name)}">${esc((z.t.name||'?').replace(/^(les?|la|team)\s+/i,'').slice(0,2).toUpperCase())}</i>`).join('')}</span></div>`}
@@ -1582,7 +1677,7 @@ const slide=(a,label,sub,attrs)=>`<div class="sld" data-slide><i class="sl-f"></
 ['pointerdown','pointerup','pointercancel'].forEach(ev=>document.addEventListener(ev,e=>{if(ev==='pointerdown'){const p=e.target.closest?.('[data-peek]');if(p)p.classList.add('show')}else document.querySelectorAll('.peek.show').forEach(p=>p.classList.remove('show'))}));
 const expTxt=(x,q)=>x.qm==='qcm'?(q.c?.[0]||''):x.ty==='txt'?(q.r||''):[x.ea&&q.a,x.et&&q.t].filter(Boolean).join(' · ')+(x.eb&&q.b?` · ${bLab(x)} : ${q.b}`:'');
 function lvQ(r,t,x,key,j){const q=x.q[j],N=x.q.length,img=x.ty==='img';
- let h=`<div class="lv-qh"><b>Question ${j+1}</b><span>/ ${N}</span><div class="lv-dots" aria-hidden="true">${x.q.map((_,i)=>`<i class="${i<j?'dn':i===j?'cu':''}"></i>`).join('')}</div></div><div class="lv-b">`;
+ let h=(isPrg(x)?'':qtBar(x,key,j,'lv-qt'))+`<div class="lv-qh"><b>Question ${j+1}</b><span>/ ${N}</span><div class="lv-dots" aria-hidden="true">${x.q.map((_,i)=>`<i class="${i<j?'dn':i===j?'cu':''}"></i>`).join('')}</div></div><div class="lv-b">`;
  if(img&&isPrg(x)){const l=Math.min(3,g.pl?.[key]??0),mine=LV&&LV.key===key&&LV.j===j,el=mine?LV.el:l>=3?30:(RB[l-1]||0);
   h+=`${prgPic(x,q.im,l,'big','lv-img')}
   <div class="lv-rk"><div>${PT.map((p,i)=>`<span style="flex:${RB[i]-(RB[i-1]||0)}">${p} pt${p>1?'s':''}</span>`).join('')}</div><i id="lvb" style="width:${(el/30*100).toFixed(1)}%"></i></div>
@@ -1781,7 +1876,7 @@ const REPS=[['fld','Champs','Artiste, titre ou bonus à écrire'],['qcm','QCM','
 const isTimed=d=>(d.sup==='img'&&(d.disp==='pr'||d.disp==='bl'))||(d.sup==='mus'&&d.disp==='cov');
 const supIc=k=>`<span class="g-ic g-${SUPS[k][1]}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SUPS[k][2]}"/></svg></span>`;
 function thLab(x0){const x=normTh(x0),D=DISP[x.sup]||[],d=D.find(v=>v[0]===x.disp);
- return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:'')+(x.fx?' · '+FX[x.fx][0]:''),s:(x.qm==='bz'?'Buzzer · '+x.bp+' pts':x.qm==='qcm'?x.nc+' réponses au choix':x.ty==='txt'?'Réponse écrite · 2 pts':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom mystère':'')}}
+ return{t:SUPS[x.sup][0]+(d&&D.length>1?' · '+d[1]:'')+(x.fx?' · '+FX[x.fx][0]:''),s:(x.qt?x.qt+' s par question · ':'')+(x.qm==='bz'?'Buzzer · '+x.bp+' pts':x.qm==='qcm'?x.nc+' réponses au choix':x.ty==='txt'?'Réponse écrite · 2 pts':[x.ea&&'Artiste',x.et&&'Titre',x.eb&&bLab(x)].filter(Boolean).join(' + '))+(x.sx?' · nom mystère':'')}}
 let gsh=null; // volet ouvert : {r,i,step,d}
 function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d),
  grp=(t,cols,items)=>`<div class="g-grp"><span>${t}</span><div style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${items.join('')}</div></div>`,
@@ -1795,6 +1890,7 @@ function gSheet(){if(!gsh)return'';const d=gsh.d,on=c=>c?'on':'',timed=isTimed(d
   if((d.rep==='fld'||d.rep==='bz')&&d.sup!=='txt'){G.push(grp('À trouver',3,[opt('ea',1,'Artiste','',on(d.ea)),opt('et',1,'Titre','',on(d.et)),opt('eb',1,'Bonus','libellé au choix',on(d.eb))]));
    if(d.eb)G.push(`<label class="g-grp"><span>Intitulé du bonus</span><input class="in" data-k="gbl" placeholder="Ex : Année, Artiste original, Film" value="${esc(d.bl||'')}"></label>`)}
   if(d.rep==='qcm')G.push(grp('Nombre de choix',2,[opt('nc',2,'2 réponses','',on(d.nc==2)),opt('nc',4,'4 réponses','',on(d.nc!=2))]));
+  if(!timed)G.push(grp('Temps par question',3,QTS.map(v=>opt('qt',v,v?v+' s':'Aucun',v===30?'conseillé':'',on((d.qt??30)===v)))));
   G.push(grp('Nom du thème',2,[opt('sx',0,'Visible','affiché aux équipes',on(!d.sx)),opt('sx',1,'Mystère','+'+BT+' pts à deviner',d.sx?'on y':'')]));
   body=`<div class="g-cur">${supIc(d.sup)}<span class="f"><b>${SUPS[d.sup][0]}</b><small>Touche ‹ pour changer de support</small></span></div>${G.join('')}<button class="btn blk y g-ok" data-a="gok">Valider</button>`}
  return`<div class="g-ov"><button class="g-bg" data-a="gclose" aria-label="Fermer le volet"></button><div class="g-sh" role="dialog" aria-label="Type de thème"><span class="g-hd"></span>
@@ -1912,7 +2008,7 @@ document.addEventListener('click',async e=>{
  if(a==='nsk'){draft.nsk=b.dataset.v;render()}
  if(a==='ssk'){gset({sk:b.dataset.v})}
  if(a==='undo'&&UNDO){const s0=UNDO.snap;UNDO=null;LV=null;await sdoc().update(s0);render()}
- if(a==='ytplay'){const k=b.dataset.k,yd=+b.dataset.yd||30,y=g.yt?.k===k?g.yt:null;
+ if(a==='ytplay'){const k=b.dataset.k,yd=+b.dataset.yd||30,y=g.yt?.k===k?g.yt:null;{const m=k.match(/^(\d+_\d+)_(\d+)$/);if(m&&g.tq?.[m[1]]?.j!==+m[2]&&g.one?.[m[1]]){const[rr,ii]=m[1].split('_');if(+th(+rr)[+ii]?.qt)gset({tq:{[m[1]]:{j:+m[2],at:Date.now()}}})}}
   if(y?.st==='play')gset({yt:{k,st:'pause',pos:Math.min(yd,y.pos+(Date.now()-y.at)/1000),at:Date.now()}});else{let pos=y?.st==='pause'?y.pos:0;if(pos>=yd-.5)pos=0;gset({yt:{k,st:'play',pos,at:Date.now()}})}}
  if(a==='vsnd')gset({vsnd:!g.vsnd});
  if(a==='ytme'){ytMe=!ytMe;render()}
@@ -1946,15 +2042,15 @@ document.addEventListener('click',async e=>{
  if(a==='saveinfo'){b.disabled=true;try{await gset({name:(draft.sn??g.name??'').trim(),title:(draft.stt??g.title??'').trim(),date:draft.sdt??g.date??''});draft.sn=draft.stt=draft.sdt=undefined;render()}catch(x){b.disabled=false;alert('Enregistrement impossible : '+(x.message||x))}}
  if(a==='rsx'){cfgI[r]=cfgI[r]||{n:'',sx:false};cfgI[r].sx=!cfgI[r].sx;render()}
  if(a==='tg'){const x=cfg[r][t],f=b.dataset.f;x[f]=!x[f];if(f!=='sx'&&f!=='eb'&&!x.ea&&!x.et)x[f]=true;render()}
- if(a==='gopen'){const n=normTh(cfg[r][t]);gsh={r,i:t,step:'sup',d:{sup:n.sup,disp:n.disp,rep:n.rep,ea:n.ea,et:n.et,eb:n.eb,bl:n.bl,nc:n.nc,sx:n.sx,fx:n.fx}};render()}
+ if(a==='gopen'){const n=normTh(cfg[r][t]);gsh={r,i:t,step:'sup',d:{sup:n.sup,disp:n.disp,rep:n.rep,ea:n.ea,et:n.et,eb:n.eb,bl:n.bl,nc:n.nc,sx:n.sx,fx:n.fx,qt:n.qt}};render()}
  if(a==='gclose'){gsh=null;render()}
  if(a==='gback'&&gsh){gsh.step='sup';render()}
  if(a==='gsup'&&gsh){const d=gsh.d,v=b.dataset.v;d.sup=v;if(!DISP[v].some(x=>x[0]===d.disp))d.disp=DISP[v][0][0];if(isTimed(d)&&d.rep!=='fld')d.rep='fld';gsh.step='opts';render()}
  if(a==='gset'&&gsh){const d=gsh.d,f=b.dataset.f,v=b.dataset.v;
-  if(f==='ea'||f==='et'||f==='eb'){d[f]=!d[f];if(!d.ea&&!d.et&&!d.eb)d[f]=true}else if(f==='nc')d.nc=+v;else if(f==='fx')d.fx=v;else if(f==='sx')d.sx=v==='1';
+  if(f==='ea'||f==='et'||f==='eb'){d[f]=!d[f];if(!d.ea&&!d.et&&!d.eb)d[f]=true}else if(f==='nc')d.nc=+v;else if(f==='qt')d.qt=+v;else if(f==='fx')d.fx=v;else if(f==='sx')d.sx=v==='1';
   else if(f==='disp'){d.disp=v;if(isTimed(d)&&d.rep!=='fld')d.rep='fld'}else if(f==='rep'){if(!(isTimed(d)&&v!=='fld'))d.rep=v}render()}
  if(a==='gok'&&gsh){const x=cfg[gsh.r][gsh.i],d=gsh.d,was=normTh(x);
-  Object.assign(x,{sup:d.sup,disp:d.disp,rep:d.rep,ty:d.sup==='img'?'img':d.sup==='txt'?'txt':'mus',qm:d.rep==='qcm'?'qcm':d.rep==='bz'?'bz':'cl',im:d.sup==='img'?d.disp:'cl',vid:d.sup==='vid',ea:d.rep!=='qcm'&&d.ea,et:d.rep!=='qcm'&&d.et,eb:d.rep!=='qcm'&&d.eb,bl:d.bl,nc:d.nc,sx:d.sx,fx:d.sup==='mus'&&d.disp==='ext'?d.fx||'':''});
+  Object.assign(x,{sup:d.sup,disp:d.disp,rep:d.rep,ty:d.sup==='img'?'img':d.sup==='txt'?'txt':'mus',qm:d.rep==='qcm'?'qcm':d.rep==='bz'?'bz':'cl',im:d.sup==='img'?d.disp:'cl',vid:d.sup==='vid',ea:d.rep!=='qcm'&&d.ea,et:d.rep!=='qcm'&&d.et,eb:d.rep!=='qcm'&&d.eb,bl:d.bl,nc:d.nc,sx:d.sx,qt:d.qt??30,fx:d.sup==='mus'&&d.disp==='ext'?d.fx||'':''});
   if(!x.q||!x.q.length)x.q=[0,1,2,3,4,5].map(()=>({a:'',t:'',b:'',r:'',im:'',p:''}));
   if(was.sup==='img'&&!cfg[gsh.r][gsh.i].sup_migr)x.q.forEach(q=>{if(q.r&&!q.b)q.b=q.r});gsh=null;render()}
  if(a==='mvrd'&&!started()){const k=r+(+b.dataset.d);if(k<0||k>=cfgNR||r>=cfgNR)return;[cfg[r],cfg[k]]=[cfg[k],cfg[r]];[cfgI[r],cfgI[k]]=[cfgI[k]||{},cfgI[r]||{}];
@@ -1969,7 +2065,7 @@ document.addEventListener('click',async e=>{
  if(a==='vsel'){await gset({cs:{[b.dataset.key]:+b.dataset.j}});return}
  if(a==='dzsel'){AU.pause();dzp={key:b.dataset.key,j:+b.dataset.j};render()}
  if(a==='dzmv'){const k=b.dataset.key,[rr,ii]=k.split('_'),x=th(+rr)[+ii],L=x.q.map((q,j)=>q.dz?j:-1).filter(j=>j>=0),p=L.indexOf(+b.dataset.j)+(+b.dataset.d);if(p<0||p>=L.length)return;AU.pause();dzp={key:k,j:L[p]};render()}
- if(a==='dzplay'){const k=b.dataset.key,j=+b.dataset.j,[rr,ii]=k.split('_'),q=th(+rr)[+ii].q[j];if(!q?.dz)return;dzp.key=k;dzp.j=j;dzp.from='pilot';dzp.err='';
+ if(a==='dzplay'){const k=b.dataset.key,j=+b.dataset.j,[rr,ii]=k.split('_'),q=th(+rr)[+ii].q[j];if(!q?.dz)return;dzp.key=k;dzp.j=j;dzp.from='pilot';dzp.err='';if(g.tq?.[k]?.j!==j&&g.cs?.[k]===j&&+th(+rr)[+ii].qt)gset({tq:{[k]:{j,at:Date.now()}}});
    const fx=normTh(th(+rr)[+ii]).fx,u=dzFresh(q.dz);if(u&&(fx!=='rev'||RVC[u]))dzPlay(q.dz,u,fx);else{dzp.err=fx==='rev'?'Préparation de l\'extrait à l\'envers…':'Chargement de l\'extrait…';render();dzGet(q.dz).then(v=>fxSrc(v,fx).then(()=>v)).then(v=>{dzp.err='';dzPlay(q.dz,v,fx);render()}).catch(e=>{dzp.err=e.message;render()})}render()}
  if(a==='mvq'){const q=cfg[r][t].q,j=+b.dataset.j,k=j+(+b.dataset.d);if(k<0||k>=q.length||g.rd?.[r])return;[q[j],q[k]]=[q[k],q[j]];render()}
  if(a==='mvth'){const T=cfg[r],k=t+(+b.dataset.d);if(k<0||k>=T.length||g.rd?.[r])return;[T[t],T[k]]=[T[k],T[t]];if(openTh===r+'_'+t)openTh=r+'_'+k;else if(openTh===r+'_'+k)openTh=r+'_'+t;render()}
@@ -1991,15 +2087,15 @@ document.addEventListener('click',async e=>{
  if(a==='tbcancel'&&confirm('Annuler le tie break ? Les points de tie break seront effacés.')){await gset({tb:FV.delete(),tbp:FV.delete()});tab='3';render()}
  if(a==='tbp'){const id=b.dataset.id,d=+b.dataset.d;if(d<0&&!(g.tbp?.[id]>0))return;gset({tbp:{[id]:FV.increment(d)}})}
  if(a==='tbok'){await gset({over:true});tab='rank';render();window.scrollTo(0,0)}
- if(a==='lvth'){undoSnap('Thème '+(t+1)+' ouvert');const k=`${r}_${t}`;AU.pause();topNext=1;await gset({th:{[k]:'open'},ct:{[r]:t},cs:{[k]:0},pl:{[k]:0}});lvArm(r,t,0);window.scrollTo(0,0)}
- if(a==='lvq'){const k=`${r}_${t}`,N=th(r)[t]?.q.length||1,j=Math.max(0,Math.min(N-1,(g.cs?.[k]??0)+(+b.dataset.d)));AU.pause();await gset({cs:{[k]:j},pl:{[k]:0}});lvArm(r,t,j)}
+ if(a==='lvth'){undoSnap('Thème '+(t+1)+' ouvert');const k=`${r}_${t}`;AU.pause();topNext=1;const x0=th(r)[t];await gset({th:{[k]:'open'},ct:{[r]:t},cs:{[k]:0},pl:{[k]:0},one:{[k]:true},...(x0&&!needsPlay(x0,0)?{tq:{[k]:{j:0,at:Date.now()}}}:{})});lvArm(r,t,0);window.scrollTo(0,0)}
+ if(a==='lvq'){const k=`${r}_${t}`,N=th(r)[t]?.q.length||1,j=Math.max(0,Math.min(N-1,(g.cs?.[k]??0)+(+b.dataset.d)));AU.pause();const x0=th(r)[t];await gset({cs:{[k]:j},pl:{[k]:0},...(x0&&!needsPlay(x0,j)?{tq:{[k]:{j,at:Date.now()}}}:{})});lvArm(r,t,j)}
  if(a==='lvp'){const k=b.dataset.key,j=+b.dataset.j;if(!LV||LV.key!==k||LV.j!==j)LV={key:k,j,el:0,last:performance.now(),run:false};
   if(LV.el>=30){LV.el=0;LV.run=true;await gset({pl:{[k]:0}})}else LV.run=!LV.run;LV.last=performance.now();render()}
  if(a==='lvexit'){lvHide=1;render()}
  if(a==='lventer'){lvHide=0;render()}
  if(a==='cdstart'){if(!g.cd?.[r])await gset({cd:{[r]:Date.now()}})}
  if(a==='closeround')closeRound(r);
- if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});const k=`${r}_${t}`;o[k]='open';gset({th:o,ct:{[r]:t},cs:{[k]:g.cs?.[k]??0},pl:{[k]:g.pl?.[k]??0}})}
+ if(a==='topen'){const o={};th(r).forEach((_,i)=>{if(g.th?.[`${r}_${i}`]==='open')o[`${r}_${i}`]='closed'});const k=`${r}_${t}`;o[k]='open';gset({th:o,ct:{[r]:t},one:{[k]:false},cs:{[k]:g.cs?.[k]??0},pl:{[k]:g.pl?.[k]??0}})}
  if(a==='tclose')gset({th:{[`${r}_${t}`]:'closed'}});
  if(a==='idle')gset({r:-1});
  if(a==='mk'){const m=mk[b.dataset.m],i=+b.dataset.i;m[i]=m[i]?0:(+b.dataset.v||1);render()}
